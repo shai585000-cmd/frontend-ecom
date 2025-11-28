@@ -1,8 +1,10 @@
 import axios from 'axios';
 import useAuthStore from '../hooks/authStore';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 const apInstance = axios.create({
-    baseURL: 'http://localhost:8000/api',
+    baseURL: `${API_URL}/api`,
     timeout: 10000,
     withCredentials: true,
     headers: {
@@ -12,7 +14,7 @@ const apInstance = axios.create({
 });
 
 export const publicApi = axios.create({
-    baseURL: 'http://localhost:8000/api',
+    baseURL: `${API_URL}/api`,
     timeout: 10000,
     headers: {
         'Content-Type': 'application/json',
