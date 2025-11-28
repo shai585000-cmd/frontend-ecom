@@ -1,4 +1,3 @@
-import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import HomePage from "./pages/HomePage";
@@ -12,6 +11,7 @@ import AboutPage from "./pages/AboutPage";
 import BlogPage from "./pages/BlogPage";
 import ActualitesPage from "./pages/ActualitesPage";
 import Dashboard from "./pages/Dashboard";
+import OrdersPage from "./pages/OrdersPage";
 
 const App = () => {
   return (
@@ -32,6 +32,7 @@ const App = () => {
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/actualites" element={<ActualitesPage />} />
             <Route path="/dashboard/:id" element={<Dashboard />} />
+            <Route path="/orders" element={<OrdersPage />} />
           </Routes>
         </main>
         {/* Le Footer est affiché sur toutes les pages */}

@@ -1,8 +1,10 @@
-import React from "react";
+import Header from "../components/Common/Hearder";
+import Footer from "../components/Common/Footer";
 
 const AboutPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
+      <Header />
       <div className="max-w-6xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
         <h1 className="text-4xl md:text-5xl font-bold text-center text-green-800 mb-16 relative">
           Notre Vision de l'Agriculture Durable
@@ -81,6 +83,7 @@ const AboutPage = () => {
           </button>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

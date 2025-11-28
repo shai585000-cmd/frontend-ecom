@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { publicApi } from "../services/api";
 import { useParams } from "react-router-dom";
 import useAuthStore from "../hooks/authStore";
-import Hearder from "../components/Common/Hearder";
+import Header from "../components/Common/Hearder";
+import Footer from "../components/Common/Footer";
 
 const Dashboard = () => {
   const [data, setData] = useState(null);
@@ -36,7 +37,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <Hearder />
+      <Header />
 
       <div className="flex-grow container max-w-full bg-[#60a5fa] mx-auto px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -135,6 +136,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

@@ -1,5 +1,6 @@
-import React from "react";
 import { motion } from "framer-motion";
+import Header from "../components/Common/Hearder";
+import Footer from "../components/Common/Footer";
 
 const BlogPage = () => {
   const blogPosts = [
@@ -43,6 +44,7 @@ const BlogPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+      <Header />
       {/* Hero Section modernisé */}
       <motion.div
         initial={{ opacity: 0, y: -50 }}
@@ -110,6 +112,7 @@ const BlogPage = () => {
           ))}
         </motion.div>
       </div>
+      <Footer />
     </div>
   );
 };

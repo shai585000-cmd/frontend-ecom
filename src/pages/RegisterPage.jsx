@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { publicApi } from "../services/api";
+import Header from "../components/Common/Hearder";
+import Footer from "../components/Common/Footer";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -20,11 +22,12 @@ const RegisterPage = () => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-
   const navigate = useNavigate();
-
   const validateForm = () => {
     const newErrors = {};
+
+
+
 
     // Validation du nom et username
     if (!formData.nom_cli.trim()) newErrors.nom_cli = "Le nom est requis";
@@ -70,11 +73,21 @@ const RegisterPage = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
+    
+    // Traitement spécial pour le champ "role"
+    if (name === "commerçant") {
+      setFormData((prev) => ({
+        ...prev,
+        commerçant: value === "MERCHANT" // true si MERCHANT, false si CLIENT
+      }));
+    } else {
+      // Pour tous les autres champs, comportement normal
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+  
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
@@ -98,6 +111,7 @@ const RegisterPage = () => {
     const userData = {
       username: formData.username,
       email: formData.email,
+      commerçant: formData.commerçant,
       password: formData.password,
       nom_cli: formData.nom_cli,
       numero_cli: formData.numero_cli,
@@ -131,8 +145,10 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md mx-auto">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+      <Header />
+      <div className="py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md mx-auto">
         <h1 className="text-4xl font-extrabold text-gray-900 text-center mb-8">
           Créez votre compte
         </h1>
@@ -194,8 +210,8 @@ const RegisterPage = () => {
               Type de compte
             </label>
             <select
-              name="role"
-              value={formData.role}
+              name="commerçant"
+              value={formData.commerçant}
               onChange={handleChange}
               className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500"
             >
@@ -324,7 +340,9 @@ const RegisterPage = () => {
 
           {error && <p className="text-red-500 text-sm mt-4">{error}</p>}
         </form>
+        </div>
       </div>
+      <Footer />
     </div>
   );
 };

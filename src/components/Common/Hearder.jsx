@@ -40,6 +40,10 @@ const Hearder = () => {
   // Condition simplifiée pour le dashboard
   const showDashboard = user?.commerçant;
   console.log(cartItems);
+
+
+
+
   return (
     <header className="flex flex-wrap justify-between sticky top-0 items-center px-2 sm:px-4 md:px-8 py-2 sm:py-4 bg-gray-100 animate__animated animate__fadeIn">
       {/* Logo */}
@@ -87,7 +91,7 @@ const Hearder = () => {
         {isAuthenticated ? (
           <div className="flex items-center gap-2 sm:gap-4">
             <span className="text-gray-700 text-sm sm:text-base hidden sm:block">
-              Bonjour, {user?.nom_cli}
+              Bonjour {user?.username}
             </span>
             <button
               onClick={handleLogout}
