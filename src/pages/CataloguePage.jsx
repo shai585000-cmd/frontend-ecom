@@ -100,11 +100,22 @@ const CataloguePage = () => {
     });
   };
 
-  const getImageUrl = (image) => {
+  // Import de la fonction utilitaire pour les images
+  const getImageUrlHelper = (image) => {
     if (!image) return '/placeholder.jpg';
-    if (image.startsWith('http')) return image;
+    if (image.startsWith('http://') || image.startsWith('https://')) return image;
+    // Gerer les URLs externes stockees dans ImageField Django
+    if (image.includes('https%3A') || image.includes('https:/') || image.includes('http%3A') || image.includes('http:/')) {
+      let url = image;
+      if (url.startsWith('/media/')) url = url.substring(7);
+      url = decodeURIComponent(url);
+      if (url.startsWith('https:/') && !url.startsWith('https://')) url = url.replace('https:/', 'https://');
+      if (url.startsWith('http:/') && !url.startsWith('http://')) url = url.replace('http:/', 'http://');
+      return url;
+    }
     return `${import.meta.env.VITE_API_URL}${image}`;
   };
+  const getImageUrl = getImageUrlHelper;
 
   if (loading) {
     return (

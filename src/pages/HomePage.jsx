@@ -22,6 +22,21 @@ const HomePage = () => {
     addToCart(product);
   };
 
+  // Fonction pour gerer les URLs d'images
+  const getImageUrl = (image) => {
+    if (!image) return '/placeholder.jpg';
+    if (image.startsWith('http://') || image.startsWith('https://')) return image;
+    if (image.includes('https%3A') || image.includes('https:/') || image.includes('http%3A') || image.includes('http:/')) {
+      let url = image;
+      if (url.startsWith('/media/')) url = url.substring(7);
+      url = decodeURIComponent(url);
+      if (url.startsWith('https:/') && !url.startsWith('https://')) url = url.replace('https:/', 'https://');
+      if (url.startsWith('http:/') && !url.startsWith('http://')) url = url.replace('http:/', 'http://');
+      return url;
+    }
+    return `${import.meta.env.VITE_API_URL}${image}`;
+  };
+
   useEffect(() => {
     AOS.init({
       duration: 1000,
@@ -144,18 +159,10 @@ const HomePage = () => {
                     {promo.image && (
                       <div className="relative h-56 overflow-hidden">
                         <img
-                          src={
-                            promo.image?.startsWith("http")
-                              ? promo.image
-                              : `${import.meta.env.VITE_API_URL}${promo.image}`
-                          }
+                          src={getImageUrl(promo.image)}
                           alt={promo.name}
                           className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                           onError={(e) => {
-                            console.error(
-                              "Erreur de chargement de l'image:",
-                              promo.image
-                            );
                             e.target.src = "/placeholder.png";
                           }}
                         />
@@ -238,20 +245,10 @@ const HomePage = () => {
                     {product.image && (
                       <div className="relative h-56 overflow-hidden">
                         <img
-                          src={
-                            product.image?.startsWith("http")
-                              ? product.image
-                              : `${import.meta.env.VITE_API_URL}${
-                                  product.image
-                                }`
-                          }
+                          src={getImageUrl(product.image)}
                           alt={product.name}
                           className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                           onError={(e) => {
-                            console.error(
-                              "Erreur de chargement de l'image:",
-                              product.image
-                            );
                             e.target.src = "/placeholder.png";
                           }}
                         />

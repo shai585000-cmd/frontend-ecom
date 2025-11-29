@@ -14,6 +14,21 @@ const ProducPage = () => {
   const [loading, setLoading] = useState(true);
   const handleAddToCart = useCartStore((state) => state.addToCart);
 
+  // Fonction pour gerer les URLs d'images
+  const getImageUrl = (image) => {
+    if (!image) return '/placeholder.jpg';
+    if (image.startsWith('http://') || image.startsWith('https://')) return image;
+    if (image.includes('https%3A') || image.includes('https:/') || image.includes('http%3A') || image.includes('http:/')) {
+      let url = image;
+      if (url.startsWith('/media/')) url = url.substring(7);
+      url = decodeURIComponent(url);
+      if (url.startsWith('https:/') && !url.startsWith('https://')) url = url.replace('https:/', 'https://');
+      if (url.startsWith('http:/') && !url.startsWith('http://')) url = url.replace('http:/', 'http://');
+      return url;
+    }
+    return `${import.meta.env.VITE_API_URL}${image}`;
+  };
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -58,11 +73,7 @@ const ProducPage = () => {
             transition={{ type: "spring", stiffness: 300 }}
           >
             <img
-              src={
-                product.image?.startsWith("http")
-                  ? product.image
-                  : `${import.meta.env.VITE_API_URL}${product.image}`
-              }
+              src={getImageUrl(product.image)}
               alt={product.title}
               className="w-full h-[500px] object-cover rounded-2xl shadow-2xl"
             />

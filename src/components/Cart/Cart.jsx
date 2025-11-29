@@ -11,6 +11,21 @@ const Cart = () => {
   const decrementQuantity = useCartStore((state) => state.decrementQuantity);
   const getTotalPrice = useCartStore((state) => state.getTotalPrice);
 
+  // Fonction pour gerer les URLs d'images
+  const getImageUrl = (image) => {
+    if (!image) return '/placeholder.jpg';
+    if (image.startsWith('http://') || image.startsWith('https://')) return image;
+    if (image.includes('https%3A') || image.includes('https:/') || image.includes('http%3A') || image.includes('http:/')) {
+      let url = image;
+      if (url.startsWith('/media/')) url = url.substring(7);
+      url = decodeURIComponent(url);
+      if (url.startsWith('https:/') && !url.startsWith('https://')) url = url.replace('https:/', 'https://');
+      if (url.startsWith('http:/') && !url.startsWith('http://')) url = url.replace('http:/', 'http://');
+      return url;
+    }
+    return `${import.meta.env.VITE_API_URL}${image}`;
+  };
+
   // Animations variants
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -124,11 +139,7 @@ const Cart = () => {
                   className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden flex-shrink-0"
                 >
                   <img
-                    src={
-                      product.image?.startsWith("http")
-                        ? product.image
-                        : `${import.meta.env.VITE_API_URL}${product.image}`
-                    }
+                    src={getImageUrl(product.image)}
                     alt={product.name}
                     className="w-full h-full object-cover"
                   />
