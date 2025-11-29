@@ -108,6 +108,23 @@ const Cart = () => {
     >
       <Header />
       <div className="max-w-4xl mx-auto">
+        {/* Bouton retour */}
+        <motion.div 
+          initial={{ x: -20, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          className="mb-4"
+        >
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Retour a l&apos;accueil
+          </Link>
+        </motion.div>
+
         <motion.h1
           initial={{ y: -50 }}
           animate={{ y: 0 }}
