@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Banniere from "../components/Home/Banniere";
-import apInstance from "../services/api";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Footer from "../components/Common/Footer";
@@ -123,14 +122,12 @@ const HomePage = () => {
               className="transform hover:-translate-y-2 transition-all duration-300"
               data-aos="fade-up"
             >
-              <Link to={`/products/${category.id}`}>
-                <div className="bg-white rounded-xl shadow-lg hover:shadow-2xl p-6 transition-all duration-300 border border-gray-100">
+              <Link to={`/produit?category=${category.id}`}>
+                <div className="bg-white rounded-xl shadow-lg hover:shadow-2xl p-6 transition-all duration-300 border border-gray-100 cursor-pointer">
                   <h2 className="text-xl md:text-2xl font-semibold text-gray-800 text-center">
                     {category.name}
                   </h2>
-                  <div className="w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-600 mt-4 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300">
-                    aaa
-                  </div>
+                  <div className="w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-600 mt-4 rounded"></div>
                 </div>
               </Link>
             </div>

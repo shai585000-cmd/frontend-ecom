@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { Search, Filter, Grid, List, ChevronDown, ShoppingCart, Loader } from 'lucide-react';
 import { publicApi } from '../services/api';
 import useCartStore from '../hooks/useCartStore';
@@ -9,12 +9,15 @@ import Footer from '../components/Common/Footer';
 const PRODUCTS_PER_PAGE = 12;
 
 const CataloguePage = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const categoryFromUrl = searchParams.get('category') || '';
+  
   const [allProducts, setAllProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState(categoryFromUrl);
   const [sortBy, setSortBy] = useState('');
   const [viewMode, setViewMode] = useState('grid');
   const [showFilters, setShowFilters] = useState(false);
@@ -42,6 +45,23 @@ const CataloguePage = () => {
     fetchData();
   }, []);
 
+  // Synchroniser selectedCategory avec l'URL
+  useEffect(() => {
+    if (categoryFromUrl && categoryFromUrl !== selectedCategory) {
+      setSelectedCategory(categoryFromUrl);
+    }
+  }, [categoryFromUrl]);
+
+  // Mettre a jour l'URL quand la categorie change
+  const handleCategoryChange = (categoryId) => {
+    setSelectedCategory(categoryId);
+    if (categoryId) {
+      setSearchParams({ category: categoryId });
+    } else {
+      setSearchParams({});
+    }
+  };
+
   // Reset visible count when filters change
   useEffect(() => {
     setVisibleCount(PRODUCTS_PER_PAGE);
@@ -52,7 +72,9 @@ const CataloguePage = () => {
     .filter(product => {
       const matchesSearch = product.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            product.title?.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = !selectedCategory || product.category === parseInt(selectedCategory);
+      // Verifier categorie (le champ peut etre category ou categorie selon l'API)
+      const productCategoryId = product.categorie?.id || product.categorie || product.category;
+      const matchesCategory = !selectedCategory || productCategoryId === parseInt(selectedCategory);
       return matchesSearch && matchesCategory;
     })
     .sort((a, b) => {
@@ -171,7 +193,7 @@ const CataloguePage = () => {
               <div className="relative">
                 <select
                   value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  onChange={(e) => handleCategoryChange(e.target.value)}
                   className="appearance-none pl-4 pr-10 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 bg-white"
                 >
                   <option value="">Toutes les categories</option>
@@ -220,7 +242,7 @@ const CataloguePage = () => {
             <div className="md:hidden mt-4 pt-4 border-t space-y-4">
               <select
                 value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
+                onChange={(e) => handleCategoryChange(e.target.value)}
                 className="w-full p-3 border border-gray-200 rounded-lg"
               >
                 <option value="">Toutes les categories</option>
@@ -252,7 +274,7 @@ const CataloguePage = () => {
           <div className="bg-white rounded-xl p-12 text-center">
             <p className="text-gray-500 text-lg">Aucun produit trouve</p>
             <button
-              onClick={() => { setSearchTerm(''); setSelectedCategory(''); }}
+              onClick={() => { setSearchTerm(''); handleCategoryChange(''); }}
               className="mt-4 text-green-500 hover:underline"
             >
               Reinitialiser les filtres
