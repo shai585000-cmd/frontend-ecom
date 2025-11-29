@@ -12,6 +12,8 @@ import BlogPage from "./pages/BlogPage";
 import ActualitesPage from "./pages/ActualitesPage";
 import Dashboard from "./pages/Dashboard";
 import OrdersPage from "./pages/OrdersPage";
+import OrderDetailPage from "./pages/OrderDetailPage";
+import CataloguePage from "./pages/CataloguePage";
 
 const App = () => {
   return (
@@ -33,6 +35,8 @@ const App = () => {
             <Route path="/actualites" element={<ActualitesPage />} />
             <Route path="/dashboard/:id" element={<Dashboard />} />
             <Route path="/orders" element={<OrdersPage />} />
+            <Route path="/orders/:id" element={<OrderDetailPage />} />
+            <Route path="/produit" element={<CataloguePage />} />
           </Routes>
         </main>
         {/* Le Footer est affiché sur toutes les pages */}

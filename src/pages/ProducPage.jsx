@@ -4,6 +4,7 @@ import { publicApi } from "../services/api";
 import useCartStore from "../hooks/useCartStore";
 import Header from "../components/Common/Hearder";
 import Footer from "../components/Common/Footer";
+import ReviewSection from "../components/Reviews/ReviewSection";
 import { motion } from "framer-motion";
 
 const ProducPage = () => {
@@ -103,6 +104,16 @@ const ProducPage = () => {
               Ajouter au panier
             </motion.button>
           </div>
+        </motion.div>
+
+        {/* Section Avis */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="mt-12"
+        >
+          <ReviewSection productId={parseInt(id)} />
         </motion.div>
       </motion.div>
       <Footer />

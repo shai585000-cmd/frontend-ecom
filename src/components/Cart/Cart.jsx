@@ -66,7 +66,7 @@ const Cart = () => {
           >
             <FaShoppingCart className="w-24 h-24 text-gray-300 mx-auto mb-4" />
           </motion.div>
-          <h1 className="text-3xl font-bold text-gray-700 mb-4">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-700 mb-4">
             Votre panier est vide
           </h1>
           <p className="text-gray-500 mb-8">
@@ -117,11 +117,11 @@ const Cart = () => {
                 animate="visible"
                 exit="exit"
                 layout
-                className="flex items-center gap-4 p-4 mb-4 border-b last:border-b-0 hover:bg-gray-50 rounded-xl transition-all duration-300"
+                className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-3 sm:p-4 mb-4 border-b last:border-b-0 hover:bg-gray-50 rounded-xl transition-all duration-300"
               >
                 <motion.div
-                  whileHover={{ scale: 1.1 }}
-                  className="w-24 h-24 rounded-lg overflow-hidden"
+                  whileHover={{ scale: 1.05 }}
+                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden flex-shrink-0"
                 >
                   <img
                     src={
@@ -134,45 +134,42 @@ const Cart = () => {
                   />
                 </motion.div>
 
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-800">
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-800 truncate">
                     {product.name}
                   </h3>
-                  <p className="text-gray-500">{product.description}</p>
-                  <div className="mt-2 flex items-center gap-4">
-                    <span className="text-xl font-bold text-blue-600">
-                      {product.price} Fcfa
+                  <p className="text-gray-500 text-sm line-clamp-1 hidden sm:block">{product.description}</p>
+                  <div className="mt-1 sm:mt-2">
+                    <span className="text-lg sm:text-xl font-bold text-blue-600">
+                      {product.price.toLocaleString()} Fcfa
                     </span>
                   </div>
                 </div>
 
-                <div className="flex flex-col items-center gap-4">
-                  <div className="flex items-center gap-3">
+                <div className="flex items-center justify-between w-full sm:w-auto sm:flex-col gap-2 sm:gap-4">
+                  <div className="flex items-center gap-2 sm:gap-3 bg-gray-100 rounded-full px-2 py-1">
                     <motion.button
-                      whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                       onClick={() => decrementQuantity(product.id)}
-                      className="p-2 rounded-full hover:bg-gray-100"
+                      className="p-1.5 sm:p-2 rounded-full hover:bg-gray-200"
                     >
-                      <FaMinus className="text-gray-500" />
+                      <FaMinus className="text-gray-500 text-xs sm:text-sm" />
                     </motion.button>
-                    <span className="font-semibold">{product.quantity}</span>
+                    <span className="font-semibold w-6 text-center">{product.quantity}</span>
                     <motion.button
-                      whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                       onClick={() => incrementQuantity(product.id)}
-                      className="p-2 rounded-full hover:bg-gray-100"
+                      className="p-1.5 sm:p-2 rounded-full hover:bg-gray-200"
                     >
-                      <FaPlus className="text-gray-500" />
+                      <FaPlus className="text-gray-500 text-xs sm:text-sm" />
                     </motion.button>
                   </div>
                   <motion.button
-                    whileHover={{ scale: 1.1, color: "#EF4444" }}
                     whileTap={{ scale: 0.9 }}
                     onClick={() => removeFromCart(product.id)}
-                    className="text-red-500 transition-colors duration-300"
+                    className="text-red-500 p-2 hover:bg-red-50 rounded-full transition-colors"
                   >
-                    <FaTrash />
+                    <FaTrash size={14} />
                   </motion.button>
                 </div>
               </motion.div>

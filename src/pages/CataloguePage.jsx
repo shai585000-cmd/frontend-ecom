@@ -1,0 +1,346 @@
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { Link } from 'react-router-dom';
+import { Search, Filter, Grid, List, ChevronDown, ShoppingCart, Loader } from 'lucide-react';
+import { publicApi } from '../services/api';
+import useCartStore from '../hooks/useCartStore';
+import Header from '../components/Common/Hearder';
+import Footer from '../components/Common/Footer';
+
+const PRODUCTS_PER_PAGE = 12;
+
+const CataloguePage = () => {
+  const [allProducts, setAllProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [sortBy, setSortBy] = useState('');
+  const [viewMode, setViewMode] = useState('grid');
+  const [showFilters, setShowFilters] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(PRODUCTS_PER_PAGE);
+  
+  const observerRef = useRef(null);
+  
+  const addToCart = useCartStore((state) => state.addToCart);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [productsRes, categoriesRes] = await Promise.all([
+          publicApi.get('/produits/products/'),
+          publicApi.get('/home/categories/')
+        ]);
+        setAllProducts(productsRes.data);
+        setCategories(categoriesRes.data);
+      } catch (error) {
+        console.error('Erreur:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  // Reset visible count when filters change
+  useEffect(() => {
+    setVisibleCount(PRODUCTS_PER_PAGE);
+  }, [searchTerm, selectedCategory, sortBy]);
+
+  // Filtrer et trier les produits
+  const filteredProducts = allProducts
+    .filter(product => {
+      const matchesSearch = product.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           product.title?.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = !selectedCategory || product.category === parseInt(selectedCategory);
+      return matchesSearch && matchesCategory;
+    })
+    .sort((a, b) => {
+      switch (sortBy) {
+        case 'price_asc':
+          return parseFloat(a.price) - parseFloat(b.price);
+        case 'price_desc':
+          return parseFloat(b.price) - parseFloat(a.price);
+        case 'name':
+          return (a.name || a.title || '').localeCompare(b.name || b.title || '');
+        default:
+          return 0;
+      }
+    });
+
+  // Produits visibles (pour le scroll infini)
+  const visibleProducts = filteredProducts.slice(0, visibleCount);
+  const hasMore = visibleCount < filteredProducts.length;
+
+  // Intersection Observer pour le scroll infini
+  const lastProductRef = useCallback((node) => {
+    if (loadingMore) return;
+    if (observerRef.current) observerRef.current.disconnect();
+    
+    observerRef.current = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && hasMore) {
+        setLoadingMore(true);
+        setTimeout(() => {
+          setVisibleCount(prev => prev + PRODUCTS_PER_PAGE);
+          setLoadingMore(false);
+        }, 300);
+      }
+    });
+    
+    if (node) observerRef.current.observe(node);
+  }, [loadingMore, hasMore]);
+
+  const handleAddToCart = (product) => {
+    addToCart({
+      id: product.id,
+      name: product.name || product.title,
+      price: parseFloat(product.price),
+      image: product.image,
+      quantity: 1
+    });
+  };
+
+  const getImageUrl = (image) => {
+    if (!image) return '/placeholder.jpg';
+    if (image.startsWith('http')) return image;
+    return `${import.meta.env.VITE_API_URL}${image}`;
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="flex justify-center items-center py-20">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+      
+      {/* Hero Section */}
+      <div className="bg-gradient-to-r from-green-600 to-green-400 text-white py-12">
+        <div className="max-w-7xl mx-auto px-4">
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">Notre Catalogue</h1>
+          <p className="text-green-100">Decouvrez notre selection de produits de qualite</p>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        {/* Barre de recherche et filtres */}
+        <div className="bg-white rounded-xl shadow-sm p-4 mb-6">
+          <div className="flex flex-col md:flex-row gap-4">
+            {/* Recherche */}
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              <input
+                type="text"
+                placeholder="Rechercher un produit..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              />
+            </div>
+
+            {/* Bouton filtres mobile */}
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="md:hidden flex items-center gap-2 px-4 py-3 border border-gray-200 rounded-lg"
+            >
+              <Filter size={20} />
+              Filtres
+            </button>
+
+            {/* Filtres desktop */}
+            <div className="hidden md:flex gap-4">
+              {/* Categorie */}
+              <div className="relative">
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="appearance-none pl-4 pr-10 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 bg-white"
+                >
+                  <option value="">Toutes les categories</option>
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              </div>
+
+              {/* Tri */}
+              <div className="relative">
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="appearance-none pl-4 pr-10 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 bg-white"
+                >
+                  <option value="">Trier par</option>
+                  <option value="price_asc">Prix croissant</option>
+                  <option value="price_desc">Prix decroissant</option>
+                  <option value="name">Nom A-Z</option>
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              </div>
+
+              {/* Vue */}
+              <div className="flex border border-gray-200 rounded-lg overflow-hidden">
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={`p-3 ${viewMode === 'grid' ? 'bg-green-500 text-white' : 'bg-white text-gray-600'}`}
+                >
+                  <Grid size={20} />
+                </button>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`p-3 ${viewMode === 'list' ? 'bg-green-500 text-white' : 'bg-white text-gray-600'}`}
+                >
+                  <List size={20} />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Filtres mobile */}
+          {showFilters && (
+            <div className="md:hidden mt-4 pt-4 border-t space-y-4">
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="w-full p-3 border border-gray-200 rounded-lg"
+              >
+                <option value="">Toutes les categories</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>{cat.name}</option>
+                ))}
+              </select>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="w-full p-3 border border-gray-200 rounded-lg"
+              >
+                <option value="">Trier par</option>
+                <option value="price_asc">Prix croissant</option>
+                <option value="price_desc">Prix decroissant</option>
+                <option value="name">Nom A-Z</option>
+              </select>
+            </div>
+          )}
+        </div>
+
+        {/* Resultats */}
+        <div className="mb-4 text-gray-600">
+          {filteredProducts.length} produit(s) trouve(s)
+        </div>
+
+        {/* Grille de produits */}
+        {filteredProducts.length === 0 ? (
+          <div className="bg-white rounded-xl p-12 text-center">
+            <p className="text-gray-500 text-lg">Aucun produit trouve</p>
+            <button
+              onClick={() => { setSearchTerm(''); setSelectedCategory(''); }}
+              className="mt-4 text-green-500 hover:underline"
+            >
+              Reinitialiser les filtres
+            </button>
+          </div>
+        ) : viewMode === 'grid' ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            {visibleProducts.map((product, index) => (
+              <div 
+                key={product.id} 
+                ref={index === visibleProducts.length - 1 ? lastProductRef : null}
+                className="bg-white rounded-xl shadow-sm overflow-hidden group hover:shadow-lg transition-shadow"
+              >
+                <Link to={`/products/${product.id}`}>
+                  <div className="aspect-square overflow-hidden">
+                    <img
+                      src={getImageUrl(product.image)}
+                      alt={product.name || product.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                </Link>
+                <div className="p-4">
+                  <Link to={`/products/${product.id}`}>
+                    <h3 className="font-medium text-gray-800 mb-1 line-clamp-2 hover:text-green-600">
+                      {product.name || product.title}
+                    </h3>
+                  </Link>
+                  <p className="text-green-600 font-bold mb-3">
+                    {parseFloat(product.price).toLocaleString()} Fcfa
+                  </p>
+                  <button
+                    onClick={() => handleAddToCart(product)}
+                    className="w-full py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition flex items-center justify-center gap-2"
+                  >
+                    <ShoppingCart size={18} />
+                    <span className="hidden sm:inline">Ajouter</span>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {visibleProducts.map((product, index) => (
+              <div 
+                key={product.id} 
+                ref={index === visibleProducts.length - 1 ? lastProductRef : null}
+                className="bg-white rounded-xl shadow-sm overflow-hidden flex"
+              >
+                <Link to={`/products/${product.id}`} className="w-32 h-32 md:w-48 md:h-48 flex-shrink-0">
+                  <img
+                    src={getImageUrl(product.image)}
+                    alt={product.name || product.title}
+                    className="w-full h-full object-cover"
+                  />
+                </Link>
+                <div className="flex-1 p-4 flex flex-col justify-between">
+                  <div>
+                    <Link to={`/products/${product.id}`}>
+                      <h3 className="font-medium text-gray-800 text-lg hover:text-green-600">
+                        {product.name || product.title}
+                      </h3>
+                    </Link>
+                    <p className="text-gray-500 text-sm mt-1 line-clamp-2">
+                      {product.description}
+                    </p>
+                  </div>
+                  <div className="flex items-center justify-between mt-4">
+                    <p className="text-green-600 font-bold text-lg">
+                      {parseFloat(product.price).toLocaleString()} Fcfa
+                    </p>
+                    <button
+                      onClick={() => handleAddToCart(product)}
+                      className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition flex items-center gap-2"
+                    >
+                      <ShoppingCart size={18} />
+                      Ajouter
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Indicateur de chargement */}
+        {loadingMore && (
+          <div className="flex justify-center py-8">
+            <Loader className="animate-spin text-green-500" size={32} />
+          </div>
+        )}
+
+
+      </div>
+
+      <Footer />
+    </div>
+  );
+};
+
+export default CataloguePage;

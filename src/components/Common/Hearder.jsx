@@ -90,6 +90,12 @@ const Hearder = () => {
         {/* Auth section */}
         {isAuthenticated ? (
           <div className="flex items-center gap-2 sm:gap-4">
+            <Link
+              to="/orders"
+              className="text-gray-700 text-sm sm:text-base hover:text-green-500 transition-colors hidden sm:block"
+            >
+              Mes commandes
+            </Link>
             <span className="text-gray-700 text-sm sm:text-base hidden sm:block">
               Bonjour {user?.username}
             </span>
@@ -97,7 +103,7 @@ const Hearder = () => {
               onClick={handleLogout}
               className="bg-red-500 text-white py-1 sm:py-2 px-2 sm:px-4 text-sm sm:text-base rounded-lg hover:bg-red-600 transition-colors"
             >
-              <Link to="/">Déconnexion</Link>
+              <Link to="/">Deconnexion</Link>
             </button>
           </div>
         ) : (
@@ -133,6 +139,14 @@ const Hearder = () => {
                 <Link to={item.path}>{item.name}</Link>
               </li>
             ))}
+            {isAuthenticated && (
+              <li
+                className="text-center transition-all transform hover:scale-105 hover:text-green-500 duration-300 ease-in-out"
+                onClick={() => setIsOpen(false)}
+              >
+                <Link to="/orders">Mes commandes</Link>
+              </li>
+            )}
           </ul>
         </nav>
       )}
