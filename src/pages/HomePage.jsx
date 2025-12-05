@@ -7,6 +7,7 @@ import Hearder from "../components/Common/Hearder";
 import { publicApi } from "../services/api";
 import useCartStore from "../hooks/useCartStore";
 import { Link } from "react-router-dom";
+import WishlistButton from "../components/Common/WishlistButton";
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
@@ -38,9 +39,9 @@ const HomePage = () => {
 
   useEffect(() => {
     AOS.init({
-      duration: 1000,
+      duration: 100,
       once: true,
-      offset: 100,
+      offset: 30,
     });
 
     const fetchProducts = async () => {
@@ -87,7 +88,7 @@ const HomePage = () => {
           <p className="text-xl mb-4">{error}</p>
           <button
             onClick={() => window.location.reload()}
-            className="mt-4 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full hover:from-blue-600 hover:to-indigo-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+            className="mt-4 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full hover:from-blue-600 hover:to-indigo-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
           >
             Réessayer
           </button>
@@ -119,11 +120,11 @@ const HomePage = () => {
           {categories.map((category) => (
             <div
               key={category.id}
-              className="transform hover:-translate-y-2 transition-all duration-300"
+              className="transform hover:-translate-y-2 transition-all duration-200"
               data-aos="fade-up"
             >
               <Link to={`/produit?category=${category.id}`}>
-                <div className="bg-white rounded-xl shadow-lg hover:shadow-2xl p-6 transition-all duration-300 border border-gray-100 cursor-pointer">
+                <div className="bg-white rounded-xl shadow-lg hover:shadow-2xl p-6 transition-all duration-200 border border-gray-100 cursor-pointer">
                   <h2 className="text-xl md:text-2xl font-semibold text-gray-800 text-center">
                     {category.name}
                   </h2>
@@ -149,16 +150,16 @@ const HomePage = () => {
               {promotions.map((promo, index) => (
                 <div
                   key={promo.id}
-                  className="group bg-white rounded-xl shadow-md overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+                  className="group bg-white rounded-xl shadow-md overflow-hidden hover:shadow-2xl transition-all duration-200 transform hover:-translate-y-2"
                   data-aos="fade-up"
-                  data-aos-delay={index * 100}
+                  data-aos-delay={index * 50}
                 >
                     {promo.image && (
                       <div className="relative h-56 overflow-hidden">
                         <img
                           src={getImageUrl(promo.image)}
                           alt={promo.name}
-                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"
                           onError={(e) => {
                             e.target.src = "/placeholder.png";
                           }}
@@ -178,7 +179,7 @@ const HomePage = () => {
                     </h3>
                     </Link>
 
-                    <p className="text-sm text-gray-600 mb-4 line-clamp-2 hover:line-clamp-none transition-all duration-300">
+                    <p className="text-sm text-gray-600 mb-4 line-clamp-2 hover:line-clamp-none transition-all duration-200">
                       {promo.description}
                     </p>
 
@@ -202,7 +203,7 @@ const HomePage = () => {
 
                       <button
                         onClick={() => handleAddToCart(promo)}
-                        className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transform hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg"
+                        className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg"
                       >
                         Ajouter
                       </button>
@@ -235,16 +236,16 @@ const HomePage = () => {
               {products.map((product, index) => (
                 <div
                   key={product.id}
-                  className="group bg-white rounded-xl shadow-md overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+                  className="group bg-white rounded-xl shadow-md overflow-hidden hover:shadow-2xl transition-all duration-200 transform hover:-translate-y-2"
                   data-aos="fade-up"
-                  data-aos-delay={index * 100}
+                  data-aos-delay={index * 50}
                 >
                     {product.image && (
                       <div className="relative h-56 overflow-hidden">
                         <img
                           src={getImageUrl(product.image)}
                           alt={product.name}
-                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"
                           onError={(e) => {
                             e.target.src = "/placeholder.png";
                           }}
@@ -254,6 +255,10 @@ const HomePage = () => {
                             Promo
                           </div>
                         )}
+                        {/* Bouton Wishlist */}
+                        <div className="absolute top-3 left-3">
+                          <WishlistButton product={product} size={20} />
+                        </div>
                       </div>
                     )}
                   <div className="p-6">
@@ -264,7 +269,7 @@ const HomePage = () => {
                     </Link>
 
 
-                    <p className="text-sm text-gray-600 mb-4 line-clamp-2 hover:line-clamp-none transition-all duration-300">
+                    <p className="text-sm text-gray-600 mb-4 line-clamp-2 hover:line-clamp-none transition-all duration-200">
                       {product.description}
                     </p>
 
@@ -288,13 +293,13 @@ const HomePage = () => {
 
                       <button
                         onClick={() => handleAddToCart(product)}
-                        className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transform hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg"
+                        className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg"
                       >
                         Ajouter
                       </button>
                     </div>
                   </div>
-                  <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+                  <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></div>
                 </div>
               ))}
             </div>

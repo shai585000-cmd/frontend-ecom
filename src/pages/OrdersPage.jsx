@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Package, ChevronRight, Clock, CheckCircle, Truck, XCircle, RefreshCw } from 'lucide-react';
+import PropTypes from 'prop-types';
+import { Package, ChevronRight, Clock, CheckCircle, Truck, XCircle, RefreshCw, PackageCheck, Loader2 } from 'lucide-react';
 import { getOrders, cancelOrder } from '../services/orderService';
 import useAuthStore from '../hooks/authStore';
 import Header from '../components/Common/Hearder';
+import toast from 'react-hot-toast';
 
 const OrdersPage = () => {
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(null);
   const [cancellingId, setCancellingId] = useState(null);
 
@@ -22,17 +25,97 @@ const OrdersPage = () => {
     fetchOrders();
   }, [isAuthenticated, navigate]);
 
-  const fetchOrders = async () => {
+  const fetchOrders = async (isRefresh = false) => {
     try {
-      setLoading(true);
+      if (isRefresh) {
+        setRefreshing(true);
+      } else {
+        setLoading(true);
+      }
       const data = await getOrders();
       setOrders(data);
+      if (isRefresh) {
+        toast.success('Commandes actualisees');
+      }
     } catch (err) {
       console.error('Erreur lors du chargement des commandes:', err);
       setError('Impossible de charger vos commandes');
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
+  };
+
+  // Etapes de progression
+  const orderSteps = [
+    { status: 'pending', label: 'En attente', icon: Clock },
+    { status: 'confirmed', label: 'Confirmee', icon: CheckCircle },
+    { status: 'processing', label: 'Traitement', icon: RefreshCw },
+    { status: 'shipped', label: 'Expediee', icon: Truck },
+    { status: 'delivered', label: 'Livree', icon: PackageCheck },
+  ];
+
+  const getStepIndex = (status) => {
+    if (status === 'cancelled' || status === 'refunded') return -1;
+    return orderSteps.findIndex(s => s.status === status);
+  };
+
+  const OrderProgressBar = ({ status }) => {
+    const currentStep = getStepIndex(status);
+    
+    if (currentStep === -1) {
+      return (
+        <div className="flex items-center gap-2 py-3 text-red-600">
+          <XCircle size={18} />
+          <span className="text-sm font-medium">
+            {status === 'cancelled' ? 'Commande annulee' : 'Commande remboursee'}
+          </span>
+        </div>
+      );
+    }
+
+    return (
+      <div className="py-3">
+        <div className="flex items-center justify-between relative">
+          {/* Ligne de progression */}
+          <div className="absolute top-4 left-0 right-0 h-0.5 bg-gray-200 -z-10">
+            <div 
+              className="h-full bg-green-500 transition-all duration-500"
+              style={{ width: `${(currentStep / (orderSteps.length - 1)) * 100}%` }}
+            />
+          </div>
+          
+          {orderSteps.map((step, index) => {
+            const isCompleted = index <= currentStep;
+            const isCurrent = index === currentStep;
+            const StepIcon = step.icon;
+            
+            return (
+              <div key={step.status} className="flex flex-col items-center">
+                <div 
+                  className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
+                    isCompleted 
+                      ? 'bg-green-500 text-white' 
+                      : 'bg-gray-200 text-gray-400'
+                  } ${isCurrent ? 'ring-2 ring-green-300 ring-offset-2' : ''}`}
+                >
+                  <StepIcon size={16} />
+                </div>
+                <span className={`text-xs mt-1 hidden sm:block ${
+                  isCompleted ? 'text-green-600 font-medium' : 'text-gray-400'
+                }`}>
+                  {step.label}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
+  OrderProgressBar.propTypes = {
+    status: PropTypes.string.isRequired,
   };
 
   const handleCancelOrder = async (orderId) => {
@@ -106,7 +189,21 @@ const OrdersPage = () => {
     <div className="min-h-screen bg-gradient-to-r from-blue-50 to-indigo-50">
       <Header />
       <div className="max-w-4xl mx-auto p-4 md:p-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-8">Mes Commandes</h1>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Mes Commandes</h1>
+          <button
+            onClick={() => fetchOrders(true)}
+            disabled={refreshing}
+            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition disabled:opacity-50"
+          >
+            {refreshing ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <RefreshCw className="w-4 h-4" />
+            )}
+            Actualiser
+          </button>
+        </div>
 
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
@@ -171,6 +268,11 @@ const OrdersPage = () => {
                       </div>
                     ))}
                   </div>
+                </div>
+
+                {/* Barre de progression */}
+                <div className="px-4">
+                  <OrderProgressBar status={order.status} />
                 </div>
 
                 {/* Adresse de livraison */}

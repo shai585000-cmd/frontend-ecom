@@ -1,32 +1,37 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import toast from "react-hot-toast";
 
 const useCartStore = create(
   persist(
     (set, get) => ({
       cart: [],
       getCart: () => get().cart,
-      getCartLength: () => get().cart.reduce((total, product) => total + product.quantity, 0), // Calcule le nombre total d'articles
+      getCartLength: () => get().cart.reduce((total, product) => total + product.quantity, 0),
+      
       addToCart: (product) => {
         set((state) => {
           const cart = [...state.cart];
           const productIndex = cart.findIndex((item) => item.id === product.id);
           
           if (productIndex >= 0) {
-            // Si le produit est déjà dans le panier, on incrémente la quantité
             cart[productIndex].quantity += 1;
+            toast.success(`Quantite mise a jour: ${cart[productIndex].quantity}`);
           } else {
-            // Si le produit n'est pas dans le panier, on l'ajoute avec une quantité de 1
             cart.push({ ...product, quantity: 1 });
+            toast.success('Produit ajoute au panier!');
           }
           return { cart };
         });
       },
-      removeFromCart: (productId) =>
+      
+      removeFromCart: (productId) => {
         set((state) => ({
           cart: state.cart.filter((product) => product.id !== productId),
-        })),
-      // Nouvelle fonction pour décrémenter la quantité
+        }));
+        toast.success('Produit retire du panier');
+      },
+      
       decrementQuantity: (productId) => {
         set((state) => {
           const cart = [...state.cart];
@@ -34,10 +39,9 @@ const useCartStore = create(
           
           if (productIndex >= 0) {
             if (cart[productIndex].quantity > 1) {
-              // Si la quantité est supérieure à 1, on la décrémente
               cart[productIndex].quantity -= 1;
             } else {
-              // Si la quantité est égale à 1, on supprime le produit
+              toast.success('Produit retire du panier');
               return { cart: cart.filter((product) => product.id !== productId) };
             }
           }
@@ -45,31 +49,35 @@ const useCartStore = create(
           return { cart };
         });
       },
-      // Nouvelle fonction pour incrémenter la quantité
+      
       incrementQuantity: (productId) => {
         set((state) => {
           const cart = [...state.cart];
           const productIndex = cart.findIndex((item) => item.id === productId);
           
           if (productIndex >= 0) {
-            // On incrémente la quantité
             cart[productIndex].quantity += 1;
           }
           
           return { cart };
         });
       },
-      clearCart: () => set({ cart: [] }),
+      
+      clearCart: () => {
+        set({ cart: [] });
+        toast.success('Panier vide');
+      },
+      
       getTotalPrice: () => {
         const cart = get().cart || [];
         return cart
-          .map((product) => (product.price || 0) * product.quantity) // Calculer le prix total en fonction de la quantité
+          .map((product) => (product.price || 0) * product.quantity)
           .reduce((total, price) => total + price, 0);
       },
     }),
     {
-      name: "cart-storage", // Clé dans localStorage
-      getStorage: () => localStorage, // Définit le stockage (localStorage par défaut)
+      name: "cart-storage",
+      getStorage: () => localStorage,
     }
   )
 );

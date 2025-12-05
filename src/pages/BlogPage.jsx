@@ -5,18 +5,28 @@ import Footer from "../components/Common/Footer";
 const BlogPage = () => {
   const blogPosts = [
     {
-      titre: "L'Agriculture Durable en 2024 : Tendances et Innovations",
+      titre: "Les Smartphones en 2024 : Tendances et Innovations",
       date: "20 Mars 2024",
       description:
-        "Explorez les dernières innovations en agriculture durable : de l'agriculture de précision aux techniques agroécologiques pour une production plus respectueuse de l'environnement...",
-      categorie: "Agriculture",
+        "Explorez les dernières innovations en matière de smartphones : processeurs plus puissants, écrans pliables, et technologies d&apos;IA embarquées pour une expérience utilisateur révolutionnaire...",
+      categorie: "Technologie",
+      image: "https://images.unsplash.com/photo-1511707171634-5f897ff02ff9?q=80&w=1480&auto=format&fit=crop"
     },
     {
-      titre: "la culture de la pomme de terre",
+      titre: "Guide d&apos;achat : Comment choisir son prochain smartphone?",
       date: "15 Mars 2024",
       description:
-        "Découvrez les meilleures pratiques pour développer avec React...",
-      categorie: "Développement",
+        "Découvrez nos conseils d&apos;experts pour choisir le smartphone qui correspond parfaitement à vos besoins et votre budget. Critères essentiels et erreurs à éviter...",
+      categorie: "Guide d&apos;achat",
+      image: "https://images.unsplash.com/photo-1616348436168-de43ad0db179?q=80&w=1481&auto=format&fit=crop"
+    },
+    {
+      titre: "Les meilleurs accessoires pour protéger votre téléphone",
+      date: "10 Mars 2024",
+      description:
+        "Protégez votre investissement avec notre sélection des meilleures coques, protections d&apos;écran et autres accessoires indispensables pour votre smartphone...",
+      categorie: "Accessoires",
+      image: "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?q=80&w=1567&auto=format&fit=crop"
     },
   ];
 
@@ -50,7 +60,7 @@ const BlogPage = () => {
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="bg-gradient-to-r from-green-600 via-green-600 to-green-600 py-20"
+        className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 py-20"
       >
         <div className="container mx-auto px-4">
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-200">
@@ -88,7 +98,7 @@ const BlogPage = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300" />
               </div>
               <div className="p-8">
-                <span className="px-4 py-1 bg-blue-100 text-blue-600 rounded-full text-sm font-semibold">
+                <span className="px-4 py-1 bg-indigo-100 text-indigo-600 rounded-full text-sm font-semibold">
                   {post.categorie}
                 </span>
                 <h2 className="text-2xl font-bold mt-4 mb-3 text-gray-800">
@@ -101,7 +111,7 @@ const BlogPage = () => {
                   <span className="text-gray-500 text-sm">{post.date}</span>
                   <motion.button
                     whileHover={{ x: 5 }}
-                    className="text-blue-600 hover:text-blue-800 font-medium flex items-center gap-2"
+                    className="text-indigo-600 hover:text-indigo-800 font-medium flex items-center gap-2"
                   >
                     Lire plus
                     <span className="transform transition-transform">→</span>

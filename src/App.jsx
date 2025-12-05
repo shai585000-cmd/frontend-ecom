@@ -14,6 +14,9 @@ import Dashboard from "./pages/Dashboard";
 import OrdersPage from "./pages/OrdersPage";
 import OrderDetailPage from "./pages/OrderDetailPage";
 import CataloguePage from "./pages/CataloguePage";
+import WhatsAppButton from "./components/Common/WhatsAppButton";
+import NotFoundPage from "./pages/NotFoundPage";
+import WishlistPage from "./pages/WishlistPage";
 
 const App = () => {
   return (
@@ -37,9 +40,16 @@ const App = () => {
             <Route path="/orders" element={<OrdersPage />} />
             <Route path="/orders/:id" element={<OrderDetailPage />} />
             <Route path="/produit" element={<CataloguePage />} />
+            <Route path="/wishlist" element={<WishlistPage />} />
+            
+            {/* Route 404 - Doit être en dernier */}
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
         {/* Le Footer est affiché sur toutes les pages */}
+        
+        {/* Bouton WhatsApp flottant - Remplacer par votre numéro */}
+        <WhatsAppButton phoneNumber="2250170629746" />
       </div>
     </Router>
   );

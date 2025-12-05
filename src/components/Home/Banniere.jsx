@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import apInstance from '../../services/api';
 import { publicApi } from '../../services/api';
 
 const Banniere = () => {
@@ -10,6 +9,7 @@ const Banniere = () => {
     const fetchBanniere = async () => {
       try {
         const response = await publicApi.get("/home/banner");
+        console.log("Bannières reçues:", response.data);
         setBanniere(response.data);
       } catch (error) {
         console.error("Erreur lors de la récupération de la bannière :", error);
@@ -35,21 +35,29 @@ const Banniere = () => {
             className="flex transition-transform duration-1000 ease-in-out"
             style={{ transform: `translateX(-${currentIndex * 100}%)` }}
           >
-            {banniere.map(({ image, title }, index) => (
-              <div key={index} className="w-full flex-shrink-0 bg-gray-900 text-white">
+            {banniere.map((banner, index) => (
+              <div key={index} className="w-full flex-shrink-0 bg-gray-900 text-white relative">
                 <img
-                  src={image}
-                  alt={title || 'Bannière'}
+                  src={banner.image}
+                  alt={banner.title || 'Bannière'}
                   className="w-full h-[400px] object-cover"
+                  onError={(e) => {
+                    console.error("Erreur chargement image:", banner.image);
+                    e.target.style.display = 'none';
+                  }}
                 />
-                <div className="absolute bottom-0 left-0 p-5 text-xl bg-black bg-opacity-50">
-                  <p>{title}</p>
-                </div>
+                {banner.title && (
+                  <div className="absolute bottom-0 left-0 right-0 p-5 text-xl bg-black bg-opacity-50">
+                    <p>{banner.title}</p>
+                  </div>
+                )}
               </div>
             ))}
           </div>
         ) : (
-          <p>Chargement...</p>
+          <div className="flex items-center justify-center h-[400px] bg-gray-100">
+            <p className="text-gray-500">Chargement des bannières...</p>
+          </div>
         )}
       </section>
 

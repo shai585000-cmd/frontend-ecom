@@ -5,6 +5,7 @@ import { publicApi } from '../services/api';
 import useCartStore from '../hooks/useCartStore';
 import Header from '../components/Common/Hearder';
 import Footer from '../components/Common/Footer';
+import WishlistButton from '../components/Common/WishlistButton';
 
 const PRODUCTS_PER_PAGE = 12;
 
@@ -144,7 +145,7 @@ const CataloguePage = () => {
       <div className="min-h-screen bg-gray-50">
         <Header />
         <div className="flex justify-center items-center py-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
         </div>
       </div>
     );
@@ -155,10 +156,10 @@ const CataloguePage = () => {
       <Header />
       
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-green-600 to-green-400 text-white py-12">
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-500 text-white py-12">
         <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">Notre Catalogue</h1>
-          <p className="text-green-100">Decouvrez notre selection de produits de qualite</p>
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">Notre Catalogue Tech</h1>
+          <p className="text-blue-100">Découvrez notre sélection de smartphones et accessoires de dernière génération</p>
         </div>
       </div>
 
@@ -174,7 +175,7 @@ const CataloguePage = () => {
                 placeholder="Rechercher un produit..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
 
@@ -194,7 +195,7 @@ const CataloguePage = () => {
                 <select
                   value={selectedCategory}
                   onChange={(e) => handleCategoryChange(e.target.value)}
-                  className="appearance-none pl-4 pr-10 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 bg-white"
+                  className="appearance-none pl-4 pr-10 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white"
                 >
                   <option value="">Toutes les categories</option>
                   {categories.map((cat) => (
@@ -209,7 +210,7 @@ const CataloguePage = () => {
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="appearance-none pl-4 pr-10 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 bg-white"
+                  className="appearance-none pl-4 pr-10 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white"
                 >
                   <option value="">Trier par</option>
                   <option value="price_asc">Prix croissant</option>
@@ -223,13 +224,13 @@ const CataloguePage = () => {
               <div className="flex border border-gray-200 rounded-lg overflow-hidden">
                 <button
                   onClick={() => setViewMode('grid')}
-                  className={`p-3 ${viewMode === 'grid' ? 'bg-green-500 text-white' : 'bg-white text-gray-600'}`}
+                  className={`p-3 ${viewMode === 'grid' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600'}`}
                 >
                   <Grid size={20} />
                 </button>
                 <button
                   onClick={() => setViewMode('list')}
-                  className={`p-3 ${viewMode === 'list' ? 'bg-green-500 text-white' : 'bg-white text-gray-600'}`}
+                  className={`p-3 ${viewMode === 'list' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600'}`}
                 >
                   <List size={20} />
                 </button>
@@ -275,7 +276,7 @@ const CataloguePage = () => {
             <p className="text-gray-500 text-lg">Aucun produit trouve</p>
             <button
               onClick={() => { setSearchTerm(''); handleCategoryChange(''); }}
-              className="mt-4 text-green-500 hover:underline"
+              className="mt-4 text-blue-600 hover:underline"
             >
               Reinitialiser les filtres
             </button>
@@ -289,26 +290,30 @@ const CataloguePage = () => {
                 className="bg-white rounded-xl shadow-sm overflow-hidden group hover:shadow-lg transition-shadow"
               >
                 <Link to={`/products/${product.id}`}>
-                  <div className="aspect-square overflow-hidden">
+                  <div className="aspect-square overflow-hidden relative">
                     <img
                       src={getImageUrl(product.image)}
                       alt={product.name || product.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
+                    {/* Bouton Wishlist */}
+                    <div className="absolute top-2 right-2">
+                      <WishlistButton product={product} size={20} />
+                    </div>
                   </div>
                 </Link>
                 <div className="p-4">
                   <Link to={`/products/${product.id}`}>
-                    <h3 className="font-medium text-gray-800 mb-1 line-clamp-2 hover:text-green-600">
+                    <h3 className="font-medium text-gray-800 mb-1 line-clamp-2 hover:text-blue-600">
                       {product.name || product.title}
                     </h3>
                   </Link>
-                  <p className="text-green-600 font-bold mb-3">
+                  <p className="text-indigo-600 font-bold mb-3">
                     {parseFloat(product.price).toLocaleString()} Fcfa
                   </p>
                   <button
                     onClick={() => handleAddToCart(product)}
-                    className="w-full py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition flex items-center justify-center gap-2"
+                    className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center justify-center gap-2"
                   >
                     <ShoppingCart size={18} />
                     <span className="hidden sm:inline">Ajouter</span>
@@ -325,17 +330,21 @@ const CataloguePage = () => {
                 ref={index === visibleProducts.length - 1 ? lastProductRef : null}
                 className="bg-white rounded-xl shadow-sm overflow-hidden flex"
               >
-                <Link to={`/products/${product.id}`} className="w-32 h-32 md:w-48 md:h-48 flex-shrink-0">
+                <Link to={`/products/${product.id}`} className="w-32 h-32 md:w-48 md:h-48 flex-shrink-0 relative">
                   <img
                     src={getImageUrl(product.image)}
                     alt={product.name || product.title}
                     className="w-full h-full object-cover"
                   />
+                  {/* Bouton Wishlist */}
+                  <div className="absolute top-2 right-2">
+                    <WishlistButton product={product} size={18} />
+                  </div>
                 </Link>
                 <div className="flex-1 p-4 flex flex-col justify-between">
                   <div>
                     <Link to={`/products/${product.id}`}>
-                      <h3 className="font-medium text-gray-800 text-lg hover:text-green-600">
+                      <h3 className="font-medium text-gray-800 text-lg hover:text-blue-600">
                         {product.name || product.title}
                       </h3>
                     </Link>
@@ -344,12 +353,12 @@ const CataloguePage = () => {
                     </p>
                   </div>
                   <div className="flex items-center justify-between mt-4">
-                    <p className="text-green-600 font-bold text-lg">
+                    <p className="text-indigo-600 font-bold text-lg">
                       {parseFloat(product.price).toLocaleString()} Fcfa
                     </p>
                     <button
                       onClick={() => handleAddToCart(product)}
-                      className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition flex items-center gap-2"
+                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2"
                     >
                       <ShoppingCart size={18} />
                       Ajouter
@@ -364,7 +373,7 @@ const CataloguePage = () => {
         {/* Indicateur de chargement */}
         {loadingMore && (
           <div className="flex justify-center py-8">
-            <Loader className="animate-spin text-green-500" size={32} />
+            <Loader className="animate-spin text-blue-600" size={32} />
           </div>
         )}
 
