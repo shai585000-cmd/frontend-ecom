@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { CheckCircle, Truck, ChevronRight, Smartphone, Banknote, Trash2 } from 'lucide-react';
+import { CheckCircle, Truck, ChevronRight, Smartphone, Banknote, Trash2, MessageCircle } from 'lucide-react';
 import useCartStore from "../hooks/useCartStore";
 import useAuthStore from "../hooks/authStore";
 import { Link, useNavigate } from 'react-router-dom';
@@ -7,6 +7,9 @@ import { createOrder } from '../services/orderService';
 import { createPayment } from '../services/paymentService';
 import { getShippingZones, getShippingFeeByCity } from '../services/shippingService';
 import Header from '../components/Common/Hearder';
+
+// Numéro WhatsApp du propriétaire (format international sans +)
+const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || "2250170629746";
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
@@ -144,6 +147,42 @@ const CheckoutPage = () => {
     }
   };
 
+  // Générer le message WhatsApp avec les détails de la commande
+  const generateWhatsAppMessage = (order) => {
+    const items = order.items?.map(item => 
+      `- ${item.product_name || item.name} x${item.quantity} = ${parseFloat(item.subtotal || item.price * item.quantity).toLocaleString()} Fcfa`
+    ).join('\n') || '';
+
+    const message = `🛒 *NOUVELLE COMMANDE*
+
+📋 *Référence:* ${order.order_number}
+
+📦 *Articles:*
+${items}
+
+💰 *Total:* ${parseFloat(order.total_amount).toLocaleString()} Fcfa
+
+📍 *Livraison:*
+Adresse: ${order.shipping_address || shippingForm.shipping_address}
+Ville: ${order.shipping_city || shippingForm.shipping_city}
+Téléphone: ${order.shipping_phone || shippingForm.shipping_phone}
+${order.notes || shippingForm.notes ? `Notes: ${order.notes || shippingForm.notes}` : ''}
+
+💳 *Paiement:* ${paymentMethod === 'cash' ? 'À la livraison' : 'Mobile Money'}
+
+Merci de confirmer ma commande! 🙏`;
+
+    return encodeURIComponent(message);
+  };
+
+  // Ouvrir WhatsApp avec les détails de la commande
+  const openWhatsApp = () => {
+    if (!orderData) return;
+    const message = generateWhatsAppMessage(orderData);
+    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
   // Page de confirmation
   if (isComplete && orderData) {
     return (
@@ -176,11 +215,24 @@ const CheckoutPage = () => {
               </p>
             )}
 
+            {/* Bouton WhatsApp */}
+            <button
+              onClick={openWhatsApp}
+              className="w-full py-3 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600 flex items-center justify-center gap-2 mb-4"
+            >
+              <MessageCircle size={20} />
+              Contacter sur WhatsApp
+            </button>
+
+            <p className="text-xs text-gray-500 mb-4">
+              Cliquez pour envoyer les détails de votre commande au vendeur
+            </p>
+
             <div className="flex flex-col sm:flex-row gap-3">
               <Link to="/orders" className="flex-1 py-3 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200">
                 Mes commandes
               </Link>
-              <Link to="/" className="flex-1 py-3 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600">
+              <Link to="/" className="flex-1 py-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600">
                 Accueil
               </Link>
             </div>
