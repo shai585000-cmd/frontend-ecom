@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { CheckCircle, Truck, ChevronRight, Smartphone, Banknote, Trash2, MessageCircle } from 'lucide-react';
 import useCartStore from "../hooks/useCartStore";
-import useAuthStore from "../hooks/authStore";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { createOrder } from '../services/orderService';
 import { createPayment } from '../services/paymentService';
 import { getShippingZones, getShippingFeeByCity } from '../services/shippingService';
@@ -12,7 +11,6 @@ import Header from '../components/Common/Hearder';
 const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || "2250170629746";
 
 const CheckoutPage = () => {
-  const navigate = useNavigate();
   const [paymentMethod, setPaymentMethod] = useState('cash');
   const [isProcessing, setIsProcessing] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
@@ -36,7 +34,6 @@ const CheckoutPage = () => {
   const removeFromCart = useCartStore((state) => state.removeFromCart);
   const getTotalPrice = useCartStore((state) => state.getTotalPrice);
   const clearCart = useCartStore((state) => state.clearCart);
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   const subtotal = getTotalPrice();
   const total = subtotal + shippingFee;
@@ -104,10 +101,6 @@ const CheckoutPage = () => {
     e.preventDefault();
     setError(null);
 
-    if (!isAuthenticated) {
-      navigate('/login', { state: { from: '/checkout' } });
-      return;
-    }
     if (!validateForm()) return;
     if (cart.length === 0) {
       setError("Panier vide");
