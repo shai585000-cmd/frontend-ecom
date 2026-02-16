@@ -13,12 +13,13 @@ const CataloguePage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const categoryFromUrl = searchParams.get('category') || '';
   const promoFilter = searchParams.get('promo') === 'true';
+  const searchFromUrl = searchParams.get('search') || '';
   
   const [allProducts, setAllProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(searchFromUrl);
   const [selectedCategory, setSelectedCategory] = useState(categoryFromUrl);
   const [sortBy, setSortBy] = useState('');
   const [viewMode, setViewMode] = useState('grid');
@@ -57,7 +58,14 @@ const CataloguePage = () => {
     if (categoryFromUrl && categoryFromUrl !== selectedCategory) {
       setSelectedCategory(categoryFromUrl);
     }
-  }, [categoryFromUrl]);
+  }, [categoryFromUrl, selectedCategory]);
+
+  // Synchroniser searchTerm avec l'URL
+  useEffect(() => {
+    if (searchFromUrl !== searchTerm) {
+      setSearchTerm(searchFromUrl);
+    }
+  }, [searchFromUrl]);
 
   // Mettre a jour l'URL quand la categorie change
   const handleCategoryChange = (categoryId) => {
