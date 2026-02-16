@@ -147,24 +147,24 @@ const CheckoutPage = () => {
         `- ${item.name} x${item.quantity} = ${(item.price * item.quantity).toLocaleString()} Fcfa`
       ).join('\n');
 
-      const whatsappMessage = `🛒 *NOUVELLE COMMANDE*
+      const whatsappMessage = `*NOUVELLE COMMANDE*
 
-📋 *Référence:* ${orderResponse.order_number}
+*Reference:* ${orderResponse.order_number}
 
-📦 *Articles:*
+*Articles:*
 ${items}
 
-💰 *Total:* ${parseFloat(orderResponse.total_amount).toLocaleString()} Fcfa
+*Total:* ${parseFloat(orderResponse.total_amount).toLocaleString()} Fcfa
 
-📍 *Livraison:*
+*Livraison:*
 Adresse: ${orderResponse.shipping_address || shippingForm.shipping_address}
 Ville: ${orderResponse.shipping_city || shippingForm.shipping_city}
-Téléphone: ${orderResponse.shipping_phone || shippingForm.shipping_phone}
+Telephone: ${orderResponse.shipping_phone || shippingForm.shipping_phone}
 ${orderResponse.notes || shippingForm.notes ? `Notes: ${orderResponse.notes || shippingForm.notes}` : ''}
 
-💳 *Paiement:* ${paymentMethod === 'cash' ? 'À la livraison' : 'Mobile Money'}
+*Paiement:* ${paymentMethod === 'cash' ? 'A la livraison' : 'Mobile Money'}
 
-Merci de confirmer ma commande! 🙏`;
+Merci de confirmer ma commande!`;
 
       const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMessage)}`;
       
@@ -185,24 +185,24 @@ Merci de confirmer ma commande! 🙏`;
       `- ${item.product_name || item.name} x${item.quantity} = ${parseFloat(item.subtotal || item.price * item.quantity).toLocaleString()} Fcfa`
     ).join('\n') || '';
 
-    const message = `🛒 *NOUVELLE COMMANDE*
+    const message = `*NOUVELLE COMMANDE*
 
-📋 *Référence:* ${order.order_number}
+*Reference:* ${order.order_number}
 
-📦 *Articles:*
+*Articles:*
 ${items}
 
-💰 *Total:* ${parseFloat(order.total_amount).toLocaleString()} Fcfa
+*Total:* ${parseFloat(order.total_amount).toLocaleString()} Fcfa
 
-📍 *Livraison:*
+*Livraison:*
 Adresse: ${order.shipping_address || shippingForm.shipping_address}
 Ville: ${order.shipping_city || shippingForm.shipping_city}
-Téléphone: ${order.shipping_phone || shippingForm.shipping_phone}
+Telephone: ${order.shipping_phone || shippingForm.shipping_phone}
 ${order.notes || shippingForm.notes ? `Notes: ${order.notes || shippingForm.notes}` : ''}
 
-💳 *Paiement:* ${paymentMethod === 'cash' ? 'À la livraison' : 'Mobile Money'}
+*Paiement:* ${paymentMethod === 'cash' ? 'A la livraison' : 'Mobile Money'}
 
-Merci de confirmer ma commande! 🙏`;
+Merci de confirmer ma commande!`;
 
     return encodeURIComponent(message);
   };
