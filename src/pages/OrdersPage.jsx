@@ -142,7 +142,7 @@ const OrdersPage = () => {
         return <Clock className="w-5 h-5 text-yellow-500" />;
       case 'confirmed':
       case 'processing':
-        return <RefreshCw className="w-5 h-5 text-blue-500" />;
+        return <RefreshCw className="w-5 h-5 text-red-500" />;
       case 'shipped':
         return <Truck className="w-5 h-5 text-purple-500" />;
       case 'delivered':
@@ -179,7 +179,7 @@ const OrdersPage = () => {
       <div className="min-h-screen bg-gradient-to-r from-blue-50 to-indigo-50">
         <Header />
         <div className="flex items-center justify-center py-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500"></div>
         </div>
       </div>
     );
@@ -218,7 +218,7 @@ const OrdersPage = () => {
             <p className="text-gray-500 mb-6">Vous n&apos;avez pas encore passé de commande</p>
             <Link
               to="/"
-              className="inline-block px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+              className="inline-block px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
             >
               Découvrir nos produits
             </Link>
@@ -241,7 +241,7 @@ const OrdersPage = () => {
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Total</p>
-                    <p className="font-bold text-blue-600">
+                    <p className="font-bold text-red-600">
                       {parseFloat(order.total_amount).toLocaleString()} Fcfa
                     </p>
                   </div>

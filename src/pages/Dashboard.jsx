@@ -43,7 +43,7 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Panneau de gauche */}
           <div className="">
-            <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg p-4 text-white shadow-lg">
+            <div className="bg-gradient-to-r from-red-600 to-blue-700 rounded-lg p-4 text-white shadow-lg">
               <h2 className="text-xl font-bold">Administration</h2>
             </div>
 
@@ -103,7 +103,7 @@ const Dashboard = () => {
                   key={item}
                   className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow"
                 >
-                  <div className="text-blue-600 font-semibold">
+                  <div className="text-red-600 font-semibold">
                     Métrique {item}
                   </div>
                   <div className="text-2xl font-bold mt-2">0</div>

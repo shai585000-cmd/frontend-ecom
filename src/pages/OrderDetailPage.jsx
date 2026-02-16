@@ -61,7 +61,7 @@ const OrderDetailPage = () => {
       <div className="min-h-screen bg-gray-50">
         <Header />
         <div className="flex justify-center items-center py-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500"></div>
         </div>
       </div>
     );
@@ -74,7 +74,7 @@ const OrderDetailPage = () => {
         <div className="max-w-2xl mx-auto p-6 mt-8">
           <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
             <p className="text-red-600 mb-4">{error || 'Commande introuvable'}</p>
-            <Link to="/orders" className="text-blue-500 hover:underline">
+            <Link to="/orders" className="text-red-500 hover:underline">
               Retour aux commandes
             </Link>
           </div>
@@ -103,7 +103,7 @@ const OrderDetailPage = () => {
         <div className="bg-white rounded-lg shadow p-6 mb-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Package className="text-blue-500" size={24} />
+              <Package className="text-red-500" size={24} />
               <div>
                 <p className="text-sm text-gray-500">Statut de la commande</p>
                 <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>
@@ -161,7 +161,7 @@ const OrderDetailPage = () => {
         {/* Articles */}
         <div className="bg-white rounded-lg shadow p-6 mb-6">
           <div className="flex items-center gap-2 mb-4">
-            <Truck className="text-blue-500" size={20} />
+            <Truck className="text-red-500" size={20} />
             <h2 className="font-semibold">Articles commandes</h2>
           </div>
           <div className="divide-y">
@@ -183,7 +183,7 @@ const OrderDetailPage = () => {
           <div className="border-t pt-4 mt-4">
             <div className="flex justify-between items-center text-lg font-bold">
               <span>Total</span>
-              <span className="text-blue-600">{parseFloat(order.total_amount).toLocaleString()} Fcfa</span>
+              <span className="text-red-600">{parseFloat(order.total_amount).toLocaleString()} Fcfa</span>
             </div>
           </div>
         </div>

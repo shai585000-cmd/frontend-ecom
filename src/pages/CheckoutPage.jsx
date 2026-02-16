@@ -235,7 +235,7 @@ Merci de confirmer ma commande!`;
             </div>
 
             {paymentData?.payment?.payment_method === 'cash' && (
-              <p className="text-sm text-blue-600 mb-4">
+              <p className="text-sm text-red-600 mb-4">
                 Payez {parseFloat(orderData.total_amount).toLocaleString()} Fcfa a la livraison
               </p>
             )}
@@ -257,7 +257,7 @@ Merci de confirmer ma commande!`;
               <Link to="/orders" className="flex-1 py-3 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200">
                 Mes commandes
               </Link>
-              <Link to="/" className="flex-1 py-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600">
+              <Link to="/" className="flex-1 py-3 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600">
                 Accueil
               </Link>
             </div>
@@ -398,7 +398,7 @@ Merci de confirmer ma commande!`;
           {/* Mode livraison */}
           <div className="bg-white rounded-xl shadow p-4">
             <div className="flex items-center gap-3">
-              <Truck className="text-blue-500" size={24} />
+              <Truck className="text-red-500" size={24} />
               <div className="flex-1">
                 <p className="font-medium">Livraison standard</p>
                 <p className="text-xs text-gray-500">24-48h</p>

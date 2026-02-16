@@ -90,7 +90,7 @@ const Cart = () => {
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Link
               to="/"
-              className="inline-block px-8 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 shadow-lg"
+              className="inline-block px-8 py-3 bg-gradient-to-r from-red-500 to-red-700 text-white rounded-full hover:from-red-600 hover:to-indigo-700 transition-all duration-300 shadow-lg"
             >
               Continuer mes achats
             </Link>
@@ -116,7 +116,7 @@ const Cart = () => {
         >
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors"
+            className="inline-flex items-center gap-2 text-gray-600 hover:text-red-600 transition-colors"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -132,7 +132,7 @@ const Cart = () => {
           className="text-3xl font-bold text-gray-800 mb-8 text-center"
         >
           Mon Panier{" "}
-          <span className="text-blue-600">({cart.length} articles)</span>
+          <span className="text-red-600">({cart.length} articles)</span>
         </motion.h1>
         <motion.div
           variants={containerVariants}
@@ -168,7 +168,7 @@ const Cart = () => {
                   </h3>
                   <p className="text-gray-500 text-sm line-clamp-1 hidden sm:block">{product.description}</p>
                   <div className="mt-1 sm:mt-2">
-                    <span className="text-lg sm:text-xl font-bold text-blue-600">
+                    <span className="text-lg sm:text-xl font-bold text-red-600">
                       {product.price.toLocaleString()} Fcfa
                     </span>
                   </div>
@@ -217,7 +217,7 @@ const Cart = () => {
               key={getTotalPrice()}
               initial={{ scale: 1.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              className="text-2xl font-bold text-blue-600"
+              className="text-2xl font-bold text-red-600"
             >
               {getTotalPrice()} Fcfa
             </motion.span>
@@ -227,7 +227,7 @@ const Cart = () => {
             <motion.div whileHover={{ scale: 1.02 }}>
               <Link
                 to="/checkout"
-                className="block w-full py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl text-center font-semibold hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 shadow-md hover:shadow-lg"
+                className="block w-full py-4 bg-gradient-to-r from-red-500 to-red-700 text-white rounded-xl text-center font-semibold hover:from-red-600 hover:to-indigo-700 transition-all duration-300 shadow-md hover:shadow-lg"
               >
                 Procéder au paiement
               </Link>

@@ -60,7 +60,7 @@ const BlogPage = () => {
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 py-20"
+        className="bg-gradient-to-r from-red-600 via-indigo-600 to-blue-700 py-20"
       >
         <div className="container mx-auto px-4">
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-200">

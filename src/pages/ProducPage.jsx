@@ -252,15 +252,15 @@ const ProducPage = () => {
             {/* Informations supplémentaires */}
             <div className="space-y-3 bg-blue-50 rounded-xl p-4 border border-blue-200">
               <div className="flex items-start gap-3">
-                <Phone size={20} className="text-blue-600 mt-1 flex-shrink-0" />
+                <Phone size={20} className="text-red-600 mt-1 flex-shrink-0" />
                 <div className="text-sm text-gray-700">
                   <span className="font-semibold">Besoin d&apos;aide pour commander ?</span>
                   <br />
-                  Appelez-nous au <span className="font-bold text-blue-600">25 20 00 61 61</span>
+                  Appelez-nous au <span className="font-bold text-red-600">25 20 00 61 61</span>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <Truck size={20} className="text-blue-600 mt-1 flex-shrink-0" />
+                <Truck size={20} className="text-red-600 mt-1 flex-shrink-0" />
                 <div className="text-sm text-gray-700">
                   Payez moins de frais en choisissant la livraison dans nos agences.
                   <br />

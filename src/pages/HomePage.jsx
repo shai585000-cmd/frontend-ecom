@@ -5,7 +5,7 @@ import { publicApi } from "../services/api";
 import useCartStore from "../hooks/useCartStore";
 import { Link } from "react-router-dom";
 import WishlistButton from "../components/Common/WishlistButton";
-import { ShoppingCart, ChevronRight, Truck, Shield, Headphones, CreditCard } from "lucide-react";
+import { ShoppingCart, ChevronRight, Truck, Shield, Headphones, CreditCard, Smartphone, Monitor, Flame, Gift } from "lucide-react";
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
@@ -59,10 +59,10 @@ const HomePage = () => {
 
   // Solutions/Categories cards data
   const solutionCards = [
-    { title: "Smartphones Premium", desc: "Les derniers modèles iPhone & Samsung", icon: "📱", link: "/produit?category=1", bg: "from-gray-800 to-gray-900" },
-    { title: "Accessoires Tech", desc: "Coques, chargeurs, écouteurs...", icon: "🎧", link: "/produit?category=3", bg: "from-purple-500 to-purple-600" },
-    { title: "Ordinateurs", desc: "Laptops et PC performants", icon: "💻", link: "/produit?category=2", bg: "from-green-500 to-green-600" },
-    { title: "Promotions", desc: "Jusqu'à -50% sur une sélection", icon: "🔥", link: "/produit?promo=true", bg: "from-red-500 to-red-600" },
+    { title: "Smartphones Premium", desc: "Les derniers modèles iPhone & Samsung", icon: <Smartphone className="w-8 h-8 text-white" />, link: "/produit?category=1", bg: "from-gray-800 to-gray-900" },
+    { title: "Accessoires Tech", desc: "Coques, chargeurs, écouteurs...", icon: <Headphones className="w-8 h-8 text-white" />, link: "/produit?category=3", bg: "from-purple-500 to-purple-600" },
+    { title: "Ordinateurs", desc: "Laptops et PC performants", icon: <Monitor className="w-8 h-8 text-white" />, link: "/produit?category=2", bg: "from-green-500 to-green-600" },
+    { title: "Promotions", desc: "Jusqu'à -50% sur une sélection", icon: <Flame className="w-8 h-8 text-white" />, link: "/produit?promo=true", bg: "from-red-500 to-red-600" },
   ];
 
   if (loading) {
@@ -111,7 +111,7 @@ const HomePage = () => {
           <div className="container mx-auto px-4 py-16 md:py-24 relative z-10">
             <div className="max-w-3xl">
               <span className="inline-block bg-red-600 text-white text-sm font-semibold px-4 py-1 rounded-full mb-4">
-                🎉 Nouveautés 2024
+                Nouveautés 2024
               </span>
               <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">
                 Découvrez les meilleurs
@@ -204,8 +204,8 @@ const HomePage = () => {
         <section className="py-8 sm:py-12 bg-gray-50">
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between mb-8">
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">
-                🔥 Vente Chaude
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 flex items-center gap-2">
+                <Flame className="w-6 h-6 text-red-500" /> Vente Chaude
               </h2>
               <Link to="/produit" className="text-red-600 hover:text-red-700 font-medium flex items-center gap-1">
                 Voir tout <ChevronRight size={18} />
@@ -307,8 +307,8 @@ const HomePage = () => {
           <section className="py-8 sm:py-12 bg-gray-50">
             <div className="container mx-auto px-4">
               <div className="flex items-center justify-between mb-8">
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
-                  🎁 Offres Spéciales
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-800 flex items-center gap-2">
+                  <Gift className="w-6 h-6 text-red-500" /> Offres Spéciales
                 </h2>
                 <Link to="/produit?promo=true" className="text-red-600 hover:text-red-700 font-medium flex items-center gap-1">
                   Voir tout <ChevronRight size={18} />

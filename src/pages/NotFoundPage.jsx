@@ -29,7 +29,7 @@ const NotFoundPage = () => {
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <Link
             to="/"
-            className="flex items-center gap-2 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition-all transform hover:scale-105 shadow-lg"
+            className="flex items-center gap-2 px-6 py-3 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg transition-all transform hover:scale-105 shadow-lg"
           >
             <Home size={20} />
             Retour a l&apos;accueil
@@ -53,25 +53,25 @@ const NotFoundPage = () => {
           <div className="flex flex-wrap gap-3 justify-center">
             <Link
               to="/"
-              className="px-4 py-2 bg-white rounded-full text-sm text-gray-600 hover:text-blue-500 hover:bg-blue-50 transition-colors border border-gray-200"
+              className="px-4 py-2 bg-white rounded-full text-sm text-gray-600 hover:text-red-500 hover:bg-blue-50 transition-colors border border-gray-200"
             >
               Accueil
             </Link>
             <Link
               to="/produit"
-              className="px-4 py-2 bg-white rounded-full text-sm text-gray-600 hover:text-blue-500 hover:bg-blue-50 transition-colors border border-gray-200"
+              className="px-4 py-2 bg-white rounded-full text-sm text-gray-600 hover:text-red-500 hover:bg-blue-50 transition-colors border border-gray-200"
             >
               Catalogue
             </Link>
             <Link
               to="/cart"
-              className="px-4 py-2 bg-white rounded-full text-sm text-gray-600 hover:text-blue-500 hover:bg-blue-50 transition-colors border border-gray-200"
+              className="px-4 py-2 bg-white rounded-full text-sm text-gray-600 hover:text-red-500 hover:bg-blue-50 transition-colors border border-gray-200"
             >
               Panier
             </Link>
             <Link
               to="/a-propos"
-              className="px-4 py-2 bg-white rounded-full text-sm text-gray-600 hover:text-blue-500 hover:bg-blue-50 transition-colors border border-gray-200"
+              className="px-4 py-2 bg-white rounded-full text-sm text-gray-600 hover:text-red-500 hover:bg-blue-50 transition-colors border border-gray-200"
             >
               A propos
             </Link>

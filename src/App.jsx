@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import HomePage from "./pages/HomePage";
+import GoogleCallbackPage from "./pages/GoogleCallbackPage";
 import ProductPage from "./pages/ProducPage";
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
@@ -41,6 +42,7 @@ const App = () => {
             <Route path="/orders/:id" element={<OrderDetailPage />} />
             <Route path="/produit" element={<CataloguePage />} />
             <Route path="/wishlist" element={<WishlistPage />} />
+            <Route path="/auth/callback" element={<GoogleCallbackPage />} />
             
             {/* Route 404 - Doit être en dernier */}
             <Route path="*" element={<NotFoundPage />} />

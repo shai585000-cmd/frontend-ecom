@@ -150,7 +150,7 @@ const ReviewSection = ({ productId }) => {
       {isAuthenticated && canUserReview && !showForm && !success && (
         <button
           onClick={() => setShowForm(true)}
-          className="w-full sm:w-auto mb-6 px-6 py-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition"
+          className="w-full sm:w-auto mb-6 px-6 py-3 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600 transition"
         >
           Laisser un avis
         </button>
@@ -184,7 +184,7 @@ const ReviewSection = ({ productId }) => {
               value={formData.title}
               onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
               placeholder="Resumez votre avis"
-              className="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-red-500"
             />
           </div>
 
@@ -195,7 +195,7 @@ const ReviewSection = ({ productId }) => {
               onChange={(e) => setFormData(prev => ({ ...prev, comment: e.target.value }))}
               placeholder="Partagez votre experience..."
               rows={4}
-              className="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-red-500"
             />
           </div>
 
@@ -214,7 +214,7 @@ const ReviewSection = ({ productId }) => {
             <button
               type="submit"
               disabled={submitting}
-              className="flex-1 sm:flex-none px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 flex items-center justify-center gap-2"
+              className="flex-1 sm:flex-none px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {submitting ? 'Envoi...' : (
                 <>

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, ShoppingCart, Heart, User, LogOut, Package, Settings, ChevronDown, Menu, X } from "lucide-react";
+import { Search, ShoppingCart, Heart, User, LogOut, Package, Settings, ChevronDown, Menu, X, Gift, Smartphone, Monitor, Headphones, Flame } from "lucide-react";
 import useAuthStore from "../../hooks/authStore";
 import { logoutUser } from "../../services/authService";
 import useCartStore from "../../hooks/useCartStore";
@@ -61,12 +61,12 @@ const Hearder = () => {
   };
 
   const productCategories = [
-    { name: "Tous les produits", path: "/produit" },
-    { name: "🎁 Nouveautés", path: "/produit?category=new" },
-    { name: "📱 Smartphones", path: "/produit?category=1" },
-    { name: "💻 Ordinateurs", path: "/produit?category=2" },
-    { name: "🎧 Accessoires", path: "/produit?category=3" },
-    { name: "🔥 Promotions", path: "/produit?promo=true" },
+    { name: "Tous les produits", path: "/produit", icon: null },
+    { name: "Nouveautés", path: "/produit?category=new", icon: <Gift size={16} className="text-red-500" /> },
+    { name: "Smartphones", path: "/produit?category=1", icon: <Smartphone size={16} className="text-red-500" /> },
+    { name: "Ordinateurs", path: "/produit?category=2", icon: <Monitor size={16} className="text-red-500" /> },
+    { name: "Accessoires", path: "/produit?category=3", icon: <Headphones size={16} className="text-red-500" /> },
+    { name: "Promotions", path: "/produit?promo=true", icon: <Flame size={16} className="text-red-500" /> },
   ];
 
   const showDashboard = user?.commerçant;
@@ -147,9 +147,9 @@ const Hearder = () => {
                         key={cat.name}
                         to={cat.path}
                         onClick={() => setProductsMenuOpen(false)}
-                        className="block px-4 py-2.5 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
+                        className="flex items-center gap-2 px-4 py-2.5 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
                       >
-                        {cat.name}
+                        {cat.icon} {cat.name}
                       </Link>
                     ))}
                   </div>
@@ -276,7 +276,7 @@ const Hearder = () => {
               ) : (
                 <Link
                   to="/login"
-                  className="hidden md:flex items-center gap-2 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                  className="hidden md:flex items-center gap-2 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors font-medium"
                 >
                   <User size={18} />
                   Connexion
@@ -304,12 +304,12 @@ const Hearder = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Rechercher un produit..."
-                  className="w-full py-3 px-4 pr-12 rounded-lg border border-gray-200 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
+                  className="w-full py-3 px-4 pr-12 rounded-lg border border-gray-200 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-blue-200"
                   autoFocus
                 />
                 <button
                   type="submit"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-blue-600 hover:text-blue-700"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-red-600 hover:text-red-700"
                 >
                   <Search size={20} />
                 </button>
@@ -337,9 +337,9 @@ const Hearder = () => {
                     <Link
                       to={cat.path}
                       onClick={() => setIsOpen(false)}
-                      className="block py-3 px-4 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors"
+                      className="flex items-center gap-2 py-3 px-4 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors"
                     >
-                      {cat.name}
+                      {cat.icon} {cat.name}
                     </Link>
                   </li>
                 ))}
