@@ -139,6 +139,40 @@ const CheckoutPage = () => {
       setPaymentData(paymentResponse);
       setIsComplete(true);
       clearCart();
+      
+      // Redirection automatique vers WhatsApp avec les détails de la commande
+      const items = orderResponse.items?.map(item => 
+        `- ${item.product_name || item.name} x${item.quantity} = ${parseFloat(item.subtotal || item.price * item.quantity).toLocaleString()} Fcfa`
+      ).join('\n') || cart.map(item => 
+        `- ${item.name} x${item.quantity} = ${(item.price * item.quantity).toLocaleString()} Fcfa`
+      ).join('\n');
+
+      const whatsappMessage = `🛒 *NOUVELLE COMMANDE*
+
+📋 *Référence:* ${orderResponse.order_number}
+
+📦 *Articles:*
+${items}
+
+💰 *Total:* ${parseFloat(orderResponse.total_amount).toLocaleString()} Fcfa
+
+📍 *Livraison:*
+Adresse: ${orderResponse.shipping_address || shippingForm.shipping_address}
+Ville: ${orderResponse.shipping_city || shippingForm.shipping_city}
+Téléphone: ${orderResponse.shipping_phone || shippingForm.shipping_phone}
+${orderResponse.notes || shippingForm.notes ? `Notes: ${orderResponse.notes || shippingForm.notes}` : ''}
+
+💳 *Paiement:* ${paymentMethod === 'cash' ? 'À la livraison' : 'Mobile Money'}
+
+Merci de confirmer ma commande! 🙏`;
+
+      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMessage)}`;
+      
+      // Ouvrir WhatsApp automatiquement après un court délai
+      setTimeout(() => {
+        window.open(whatsappUrl, '_blank');
+      }, 500);
+      
     } catch (err) {
       console.error('Erreur:', err);
       setError(err.response?.data?.error || "Erreur lors de la commande");
