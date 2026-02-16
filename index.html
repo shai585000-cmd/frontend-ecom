@@ -1,12 +1,48 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ivoire market</title>
+    <title>TECHSTORE - Votre boutique tech en ligne</title>
+    <meta name="description" content="TECHSTORE - Smartphones, accessoires et produits tech au meilleur prix" />
+    <meta name="theme-color" content="#2563eb" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #60a5fa 100%);
+        min-height: 100vh;
+      }
+      #root {
+        min-height: 100vh;
+      }
+      /* Loading animation */
+      .loading-screen {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      }
+      .loading-screen::after {
+        content: "TECHSTORE";
+        font-family: system-ui, -apple-system, sans-serif;
+        font-size: 2rem;
+        font-weight: bold;
+        color: white;
+        animation: pulse 1.5s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="loading-screen"></div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
