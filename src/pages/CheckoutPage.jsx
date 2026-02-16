@@ -168,10 +168,8 @@ Merci de confirmer ma commande! 🙏`;
 
       const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMessage)}`;
       
-      // Ouvrir WhatsApp automatiquement après un court délai
-      setTimeout(() => {
-        window.open(whatsappUrl, '_blank');
-      }, 500);
+      // Redirection directe vers WhatsApp (évite le blocage popup)
+      window.location.href = whatsappUrl;
       
     } catch (err) {
       console.error('Erreur:', err);
