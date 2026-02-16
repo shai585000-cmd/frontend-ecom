@@ -12,6 +12,7 @@ const PRODUCTS_PER_PAGE = 12;
 const CataloguePage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const categoryFromUrl = searchParams.get('category') || '';
+  const promoFilter = searchParams.get('promo') === 'true';
   
   const [allProducts, setAllProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -76,7 +77,9 @@ const CataloguePage = () => {
       // Verifier categorie (le champ peut etre category ou categorie selon l'API)
       const productCategoryId = product.categorie?.id || product.categorie || product.category;
       const matchesCategory = !selectedCategory || productCategoryId === parseInt(selectedCategory);
-      return matchesSearch && matchesCategory;
+      // Filtrer par promotion si promo=true dans l'URL
+      const matchesPromo = !promoFilter || product.is_on_sale || product.discount_percentage > 0 || product.old_price > product.price;
+      return matchesSearch && matchesCategory && matchesPromo;
     })
     .sort((a, b) => {
       switch (sortBy) {
@@ -156,10 +159,17 @@ const CataloguePage = () => {
       <Header />
       
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-500 text-white py-12">
+      <div className={`bg-gradient-to-r ${promoFilter ? 'from-red-600 to-orange-500' : 'from-blue-600 to-indigo-500'} text-white py-12`}>
         <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">Notre Catalogue Tech</h1>
-          <p className="text-blue-100">Découvrez notre sélection de smartphones et accessoires de dernière génération</p>
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">
+            {promoFilter ? 'Offres Promotionnelles' : 'Notre Catalogue Tech'}
+          </h1>
+          <p className={promoFilter ? 'text-orange-100' : 'text-blue-100'}>
+            {promoFilter 
+              ? 'Profitez de nos meilleures offres et réductions exceptionnelles !'
+              : 'Découvrez notre sélection de smartphones et accessoires de dernière génération'
+            }
+          </p>
         </div>
       </div>
 
