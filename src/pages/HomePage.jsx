@@ -59,7 +59,7 @@ const HomePage = () => {
 
   // Solutions/Categories cards data
   const solutionCards = [
-    { title: "Smartphones Premium", desc: "Les derniers modèles iPhone & Samsung", icon: "📱", link: "/produit?category=1", bg: "from-blue-500 to-blue-600" },
+    { title: "Smartphones Premium", desc: "Les derniers modèles iPhone & Samsung", icon: "📱", link: "/produit?category=1", bg: "from-gray-800 to-gray-900" },
     { title: "Accessoires Tech", desc: "Coques, chargeurs, écouteurs...", icon: "🎧", link: "/produit?category=3", bg: "from-purple-500 to-purple-600" },
     { title: "Ordinateurs", desc: "Laptops et PC performants", icon: "💻", link: "/produit?category=2", bg: "from-green-500 to-green-600" },
     { title: "Promotions", desc: "Jusqu'à -50% sur une sélection", icon: "🔥", link: "/produit?promo=true", bg: "from-red-500 to-red-600" },
@@ -71,7 +71,7 @@ const HomePage = () => {
         <Hearder />
         <div className="flex-grow flex justify-center items-center bg-gray-50">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-600 border-t-transparent mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-16 w-16 border-4 border-red-600 border-t-transparent mx-auto mb-4"></div>
             <p className="text-gray-600">Chargement...</p>
           </div>
         </div>
@@ -88,7 +88,7 @@ const HomePage = () => {
             <p className="text-red-500 text-xl mb-4">{error}</p>
             <button
               onClick={() => window.location.reload()}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
             >
               Réessayer
             </button>
@@ -110,12 +110,12 @@ const HomePage = () => {
           </div>
           <div className="container mx-auto px-4 py-16 md:py-24 relative z-10">
             <div className="max-w-3xl">
-              <span className="inline-block bg-blue-600 text-white text-sm font-semibold px-4 py-1 rounded-full mb-4">
+              <span className="inline-block bg-red-600 text-white text-sm font-semibold px-4 py-1 rounded-full mb-4">
                 🎉 Nouveautés 2024
               </span>
               <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">
                 Découvrez les meilleurs
-                <span className="text-blue-600"> smartphones</span> du marché
+                <span className="text-red-500"> smartphones</span> du marché
               </h1>
               <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-6 sm:mb-8">
                 iPhone 15, Samsung Galaxy S24, et bien plus encore. Livraison gratuite et garantie 12 mois.
@@ -123,7 +123,7 @@ const HomePage = () => {
               <div className="flex flex-wrap gap-4">
                 <Link
                   to="/produit"
-                  className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 sm:px-6 md:px-8 py-3 md:py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-sm sm:text-base"
+                  className="inline-flex items-center gap-2 bg-red-600 text-white px-4 sm:px-6 md:px-8 py-3 md:py-4 rounded-lg font-semibold hover:bg-red-700 transition-colors text-sm sm:text-base"
                 >
                   Explorer les produits
                   <ChevronRight size={20} />
@@ -144,8 +144,8 @@ const HomePage = () => {
           <div className="container mx-auto px-4 py-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
               <div className="flex items-center gap-2 sm:gap-3">
-                <div className="p-2 sm:p-3 bg-blue-100 rounded-full flex-shrink-0">
-                  <Truck className="text-blue-600 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+                <div className="p-2 sm:p-3 bg-red-100 rounded-full flex-shrink-0">
+                  <Truck className="text-red-600 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
                 </div>
                 <div>
                   <p className="font-semibold text-gray-800 text-xs sm:text-sm md:text-base">Livraison Gratuite</p>
@@ -153,8 +153,8 @@ const HomePage = () => {
                 </div>
               </div>
               <div className="flex items-center gap-2 sm:gap-3">
-                <div className="p-2 sm:p-3 bg-blue-100 rounded-full flex-shrink-0">
-                  <Shield className="text-blue-600 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+                <div className="p-2 sm:p-3 bg-red-100 rounded-full flex-shrink-0">
+                  <Shield className="text-red-600 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
                 </div>
                 <div>
                   <p className="font-semibold text-gray-800 text-xs sm:text-sm md:text-base">Garantie 12 mois</p>
@@ -162,8 +162,8 @@ const HomePage = () => {
                 </div>
               </div>
               <div className="flex items-center gap-2 sm:gap-3">
-                <div className="p-2 sm:p-3 bg-blue-100 rounded-full flex-shrink-0">
-                  <Headphones className="text-blue-600 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+                <div className="p-2 sm:p-3 bg-red-100 rounded-full flex-shrink-0">
+                  <Headphones className="text-red-600 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
                 </div>
                 <div>
                   <p className="font-semibold text-gray-800 text-xs sm:text-sm md:text-base">Support 24/7</p>
@@ -171,8 +171,8 @@ const HomePage = () => {
                 </div>
               </div>
               <div className="flex items-center gap-2 sm:gap-3">
-                <div className="p-2 sm:p-3 bg-blue-100 rounded-full flex-shrink-0">
-                  <CreditCard className="text-blue-600 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+                <div className="p-2 sm:p-3 bg-red-100 rounded-full flex-shrink-0">
+                  <CreditCard className="text-red-600 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
                 </div>
                 <div>
                   <p className="font-semibold text-gray-800 text-xs sm:text-sm md:text-base">Paiement Sécurisé</p>
@@ -191,7 +191,7 @@ const HomePage = () => {
                 <Link
                   key={cat.id}
                   to={`/produit?category=${cat.id}`}
-                  className="flex-shrink-0 px-6 py-3 bg-gray-100 hover:bg-blue-600 hover:text-white rounded-full font-medium transition-colors"
+                  className="flex-shrink-0 px-6 py-3 bg-gray-100 hover:bg-red-600 hover:text-white rounded-full font-medium transition-colors"
                 >
                   {cat.name}
                 </Link>
@@ -207,7 +207,7 @@ const HomePage = () => {
               <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">
                 🔥 Vente Chaude
               </h2>
-              <Link to="/produit" className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1">
+              <Link to="/produit" className="text-red-600 hover:text-red-700 font-medium flex items-center gap-1">
                 Voir tout <ChevronRight size={18} />
               </Link>
             </div>
@@ -239,7 +239,7 @@ const HomePage = () => {
                   
                   <div className="p-2 sm:p-4">
                     <Link to={`/products/${product.id}`}>
-                      <h3 className="font-medium text-gray-800 text-xs sm:text-sm line-clamp-2 hover:text-blue-600 transition-colors mb-1 sm:mb-2">
+                      <h3 className="font-medium text-gray-800 text-xs sm:text-sm line-clamp-2 hover:text-red-600 transition-colors mb-1 sm:mb-2">
                         {product.name}
                       </h3>
                     </Link>
@@ -248,7 +248,7 @@ const HomePage = () => {
                       <div>
                         {product.promotion && product.promotion_price ? (
                           <div className="flex flex-col">
-                            <span className="text-blue-600 font-bold text-xs sm:text-sm">
+                            <span className="text-red-600 font-bold text-xs sm:text-sm">
                               {parseInt(product.promotion_price).toLocaleString()} Fcfa
                             </span>
                             <span className="text-[10px] sm:text-xs text-gray-400 line-through">
@@ -256,14 +256,14 @@ const HomePage = () => {
                             </span>
                           </div>
                         ) : (
-                          <span className="text-blue-600 font-bold text-xs sm:text-sm">
+                          <span className="text-red-600 font-bold text-xs sm:text-sm">
                             {parseInt(product.price).toLocaleString()} Fcfa
                           </span>
                         )}
                       </div>
                       <button
                         onClick={() => handleAddToCart(product)}
-                        className="p-1.5 sm:p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                        className="p-1.5 sm:p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
                       >
                         <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
                       </button>
@@ -310,7 +310,7 @@ const HomePage = () => {
                 <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
                   🎁 Offres Spéciales
                 </h2>
-                <Link to="/produit?promo=true" className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1">
+                <Link to="/produit?promo=true" className="text-red-600 hover:text-red-700 font-medium flex items-center gap-1">
                   Voir tout <ChevronRight size={18} />
                 </Link>
               </div>
@@ -337,7 +337,7 @@ const HomePage = () => {
                     
                     <div className="p-2 sm:p-4">
                       <Link to={`/products/${promo.id}`}>
-                        <h3 className="font-medium text-gray-800 text-xs sm:text-sm line-clamp-2 hover:text-blue-600 transition-colors mb-1 sm:mb-2">
+                        <h3 className="font-medium text-gray-800 text-xs sm:text-sm line-clamp-2 hover:text-red-600 transition-colors mb-1 sm:mb-2">
                           {promo.name}
                         </h3>
                       </Link>
@@ -359,7 +359,7 @@ const HomePage = () => {
         )}
 
         {/* Newsletter Section */}
-        <section className="py-16 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+        <section className="py-16 bg-gradient-to-r from-gray-900 to-red-600 text-white">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-2xl md:text-3xl font-bold mb-4">
               Abonnez-vous à notre newsletter

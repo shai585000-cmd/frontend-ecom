@@ -87,7 +87,7 @@ const Hearder = () => {
   return (
     <>
       {/* Barre d'annonce */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center py-2 text-sm font-medium overflow-hidden">
+      <div className="bg-gradient-to-r from-gray-900 to-red-600 text-white text-center py-2 text-sm font-medium overflow-hidden">
         <div className="whitespace-nowrap overflow-hidden">
           <span className="animate-marquee">
             {announcements.length > 0 ? (
@@ -105,7 +105,7 @@ const Hearder = () => {
                 ))}
               </>
             ) : (
-              <>🔥 Bienvenue sur TECH STORE 🔥</>
+              <>🔥 Bienvenue sur INFOTEK 🔥</>
             )}
           </span>
         </div>
@@ -119,14 +119,14 @@ const Hearder = () => {
             {/* Logo */}
             <Link to="/" className="flex-shrink-0">
               <div className="text-2xl md:text-3xl font-bold">
-                <span className="text-blue-600">TECH</span>
-                <span className="text-gray-800">STORE</span>
+                <span className="text-gray-900">INFO</span>
+                <span className="text-red-600">TEK</span>
               </div>
             </Link>
 
             {/* Navigation desktop */}
             <nav className="hidden lg:flex items-center space-x-8">
-              <Link to="/" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
+              <Link to="/" className="text-gray-700 hover:text-red-600 font-medium transition-colors">
                 Accueil
               </Link>
               
@@ -134,7 +134,7 @@ const Hearder = () => {
               <div className="relative" ref={productsMenuRef}>
                 <button
                   onClick={() => setProductsMenuOpen(!productsMenuOpen)}
-                  className="flex items-center gap-1 text-gray-700 hover:text-blue-600 font-medium transition-colors"
+                  className="flex items-center gap-1 text-gray-700 hover:text-red-600 font-medium transition-colors"
                 >
                   Produits
                   <ChevronDown size={16} className={`transition-transform ${productsMenuOpen ? 'rotate-180' : ''}`} />
@@ -147,7 +147,7 @@ const Hearder = () => {
                         key={cat.name}
                         to={cat.path}
                         onClick={() => setProductsMenuOpen(false)}
-                        className="block px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                        className="block px-4 py-2.5 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
                       >
                         {cat.name}
                       </Link>
@@ -156,10 +156,10 @@ const Hearder = () => {
                 )}
               </div>
 
-              <Link to="/a-propos" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
+              <Link to="/a-propos" className="text-gray-700 hover:text-red-600 font-medium transition-colors">
                 À propos
               </Link>
-              <Link to="/contact" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
+              <Link to="/contact" className="text-gray-700 hover:text-red-600 font-medium transition-colors">
                 Contact
               </Link>
             </nav>
@@ -169,13 +169,13 @@ const Hearder = () => {
               {/* Recherche */}
               <button
                 onClick={() => setSearchOpen(!searchOpen)}
-                className="p-2 text-gray-600 hover:text-blue-600 transition-colors"
+                className="p-2 text-gray-600 hover:text-red-600 transition-colors"
               >
                 <Search size={22} />
               </button>
 
               {/* Wishlist */}
-              <Link to="/wishlist" className="relative p-2 text-gray-600 hover:text-blue-600 transition-colors">
+              <Link to="/wishlist" className="relative p-2 text-gray-600 hover:text-red-600 transition-colors">
                 <Heart size={22} />
                 {wishlistCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium">
@@ -185,10 +185,10 @@ const Hearder = () => {
               </Link>
 
               {/* Panier */}
-              <Link to="/cart" className="relative p-2 text-gray-600 hover:text-blue-600 transition-colors">
+              <Link to="/cart" className="relative p-2 text-gray-600 hover:text-red-600 transition-colors">
                 <ShoppingCart size={22} />
                 {cartItems > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium">
+                  <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium">
                     {cartItems}
                   </span>
                 )}
@@ -199,7 +199,7 @@ const Hearder = () => {
                 <div className="relative" ref={profileMenuRef}>
                   <button
                     onClick={() => setProfileMenuOpen(!profileMenuOpen)}
-                    className="flex items-center gap-2 p-2 text-gray-600 hover:text-blue-600 transition-colors"
+                    className="flex items-center gap-2 p-2 text-gray-600 hover:text-red-600 transition-colors"
                   >
                     <User size={22} />
                     <span className="hidden md:inline text-sm font-medium">{user?.nom_cli || 'Mon compte'}</span>
@@ -217,7 +217,7 @@ const Hearder = () => {
                         <Link
                           to="/profile"
                           onClick={() => setProfileMenuOpen(false)}
-                          className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                          className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
                         >
                           <User size={18} />
                           Mon profil
@@ -226,7 +226,7 @@ const Hearder = () => {
                         <Link
                           to="/orders"
                           onClick={() => setProfileMenuOpen(false)}
-                          className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                          className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
                         >
                           <Package size={18} />
                           Mes commandes
@@ -235,7 +235,7 @@ const Hearder = () => {
                         <Link
                           to="/wishlist"
                           onClick={() => setProfileMenuOpen(false)}
-                          className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                          className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
                         >
                           <Heart size={18} />
                           Mes favoris
@@ -250,7 +250,7 @@ const Hearder = () => {
                           <Link
                             to={`/dashboard/${user?.id}`}
                             onClick={() => setProfileMenuOpen(false)}
-                            className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                            className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
                           >
                             <Settings size={18} />
                             Dashboard
@@ -327,7 +327,7 @@ const Hearder = () => {
                   <Link
                     to="/"
                     onClick={() => setIsOpen(false)}
-                    className="block py-3 px-4 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors"
+                    className="block py-3 px-4 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors"
                   >
                     Accueil
                   </Link>
@@ -337,7 +337,7 @@ const Hearder = () => {
                     <Link
                       to={cat.path}
                       onClick={() => setIsOpen(false)}
-                      className="block py-3 px-4 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors"
+                      className="block py-3 px-4 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors"
                     >
                       {cat.name}
                     </Link>
@@ -347,7 +347,7 @@ const Hearder = () => {
                   <Link
                     to="/a-propos"
                     onClick={() => setIsOpen(false)}
-                    className="block py-3 px-4 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors"
+                    className="block py-3 px-4 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors"
                   >
                     À propos
                   </Link>
@@ -357,7 +357,7 @@ const Hearder = () => {
                     <Link
                       to="/login"
                       onClick={() => setIsOpen(false)}
-                      className="block py-3 px-4 bg-blue-600 text-white text-center rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                      className="block py-3 px-4 bg-red-600 text-white text-center rounded-lg hover:bg-red-700 transition-colors font-medium"
                     >
                       Connexion
                     </Link>
