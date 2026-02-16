@@ -38,11 +38,17 @@ apInstance.interceptors.request.use(
     }
 );
 
+// Routes qui ne nécessitent pas d'authentification
+const publicRoutes = ['/orders/'];
+
 // Intercepteur de réponse pour gérer le refresh du token
 apInstance.interceptors.response.use(
     (response) => response,
     async (error) => {
         const originalRequest = error.config;
+        
+        // Vérifier si c'est une route publique (ne pas rediriger vers login)
+        const isPublicRoute = publicRoutes.some(route => originalRequest.url?.includes(route));
         
         // Si erreur 401 et pas déjà en train de retry
         if (error.response?.status === 401 && !originalRequest._retry) {
@@ -75,15 +81,17 @@ apInstance.interceptors.response.use(
                         }
                     });
                 } catch (refreshError) {
-                    // Si le refresh échoue, déconnecter l'utilisateur
-                    console.error('Refresh token expiré, déconnexion...');
-                    useAuthStore.getState().clearAuth();
-                    localStorage.removeItem('auth-storage');
-                    window.location.href = '/login';
+                    // Si le refresh échoue et ce n'est pas une route publique, déconnecter
+                    if (!isPublicRoute) {
+                        console.error('Refresh token expiré, déconnexion...');
+                        useAuthStore.getState().clearAuth();
+                        localStorage.removeItem('auth-storage');
+                        window.location.href = '/login';
+                    }
                     return Promise.reject(refreshError);
                 }
-            } else {
-                // Pas de refresh token, rediriger vers login
+            } else if (!isPublicRoute) {
+                // Pas de refresh token et pas une route publique, rediriger vers login
                 window.location.href = '/login';
             }
         }

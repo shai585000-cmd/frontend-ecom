@@ -1,9 +1,9 @@
-import apInstance from './api';
+import apInstance, { publicApi } from './api';
 
 
-// Créer une commande à partir du panier
+// Créer une commande à partir du panier (fonctionne avec ou sans authentification)
 export const createOrder = async (orderData) => {
-    const response = await apInstance.post('/orders/', orderData);
+    const response = await publicApi.post('/orders/', orderData);
     return response.data;
 };
 
