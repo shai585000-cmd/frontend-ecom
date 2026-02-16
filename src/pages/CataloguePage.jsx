@@ -78,7 +78,7 @@ const CataloguePage = () => {
       const productCategoryId = product.categorie?.id || product.categorie || product.category;
       const matchesCategory = !selectedCategory || productCategoryId === parseInt(selectedCategory);
       // Filtrer par promotion si promo=true dans l'URL
-      const matchesPromo = !promoFilter || product.is_on_sale || product.discount_percentage > 0 || product.old_price > product.price;
+      const matchesPromo = !promoFilter || product.promotion === true;
       return matchesSearch && matchesCategory && matchesPromo;
     })
     .sort((a, b) => {
