@@ -71,7 +71,7 @@ const HomePage = () => {
         <Hearder />
         <div className="flex-grow flex justify-center items-center bg-gray-50">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-4 border-orange-500 border-t-transparent mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-600 border-t-transparent mx-auto mb-4"></div>
             <p className="text-gray-600">Chargement...</p>
           </div>
         </div>
@@ -88,7 +88,7 @@ const HomePage = () => {
             <p className="text-red-500 text-xl mb-4">{error}</p>
             <button
               onClick={() => window.location.reload()}
-              className="px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               Réessayer
             </button>
@@ -110,12 +110,12 @@ const HomePage = () => {
           </div>
           <div className="container mx-auto px-4 py-16 md:py-24 relative z-10">
             <div className="max-w-3xl">
-              <span className="inline-block bg-orange-500 text-white text-sm font-semibold px-4 py-1 rounded-full mb-4">
+              <span className="inline-block bg-blue-600 text-white text-sm font-semibold px-4 py-1 rounded-full mb-4">
                 🎉 Nouveautés 2024
               </span>
               <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
                 Découvrez les meilleurs
-                <span className="text-orange-500"> smartphones</span> du marché
+                <span className="text-blue-600"> smartphones</span> du marché
               </h1>
               <p className="text-lg md:text-xl text-gray-300 mb-8">
                 iPhone 15, Samsung Galaxy S24, et bien plus encore. Livraison gratuite et garantie 12 mois.
@@ -123,7 +123,7 @@ const HomePage = () => {
               <div className="flex flex-wrap gap-4">
                 <Link
                   to="/produit"
-                  className="inline-flex items-center gap-2 bg-orange-500 text-white px-8 py-4 rounded-lg font-semibold hover:bg-orange-600 transition-colors"
+                  className="inline-flex items-center gap-2 bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
                 >
                   Explorer les produits
                   <ChevronRight size={20} />
@@ -144,8 +144,8 @@ const HomePage = () => {
           <div className="container mx-auto px-4 py-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               <div className="flex items-center gap-3">
-                <div className="p-3 bg-orange-100 rounded-full">
-                  <Truck className="text-orange-500" size={24} />
+                <div className="p-3 bg-blue-100 rounded-full">
+                  <Truck className="text-blue-600" size={24} />
                 </div>
                 <div>
                   <p className="font-semibold text-gray-800">Livraison Gratuite</p>
@@ -153,8 +153,8 @@ const HomePage = () => {
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <div className="p-3 bg-orange-100 rounded-full">
-                  <Shield className="text-orange-500" size={24} />
+                <div className="p-3 bg-blue-100 rounded-full">
+                  <Shield className="text-blue-600" size={24} />
                 </div>
                 <div>
                   <p className="font-semibold text-gray-800">Garantie 12 mois</p>
@@ -162,8 +162,8 @@ const HomePage = () => {
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <div className="p-3 bg-orange-100 rounded-full">
-                  <Headphones className="text-orange-500" size={24} />
+                <div className="p-3 bg-blue-100 rounded-full">
+                  <Headphones className="text-blue-600" size={24} />
                 </div>
                 <div>
                   <p className="font-semibold text-gray-800">Support 24/7</p>
@@ -171,8 +171,8 @@ const HomePage = () => {
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <div className="p-3 bg-orange-100 rounded-full">
-                  <CreditCard className="text-orange-500" size={24} />
+                <div className="p-3 bg-blue-100 rounded-full">
+                  <CreditCard className="text-blue-600" size={24} />
                 </div>
                 <div>
                   <p className="font-semibold text-gray-800">Paiement Sécurisé</p>
@@ -191,7 +191,7 @@ const HomePage = () => {
                 <Link
                   key={cat.id}
                   to={`/produit?category=${cat.id}`}
-                  className="flex-shrink-0 px-6 py-3 bg-gray-100 hover:bg-orange-500 hover:text-white rounded-full font-medium transition-colors"
+                  className="flex-shrink-0 px-6 py-3 bg-gray-100 hover:bg-blue-600 hover:text-white rounded-full font-medium transition-colors"
                 >
                   {cat.name}
                 </Link>
@@ -207,7 +207,7 @@ const HomePage = () => {
               <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
                 🔥 Vente Chaude
               </h2>
-              <Link to="/produit" className="text-orange-500 hover:text-orange-600 font-medium flex items-center gap-1">
+              <Link to="/produit" className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1">
                 Voir tout <ChevronRight size={18} />
               </Link>
             </div>
@@ -239,7 +239,7 @@ const HomePage = () => {
                   
                   <div className="p-4">
                     <Link to={`/products/${product.id}`}>
-                      <h3 className="font-medium text-gray-800 text-sm line-clamp-2 hover:text-orange-500 transition-colors mb-2">
+                      <h3 className="font-medium text-gray-800 text-sm line-clamp-2 hover:text-blue-600 transition-colors mb-2">
                         {product.name}
                       </h3>
                     </Link>
@@ -248,7 +248,7 @@ const HomePage = () => {
                       <div>
                         {product.promotion && product.promotion_price ? (
                           <div className="flex flex-col">
-                            <span className="text-orange-500 font-bold">
+                            <span className="text-blue-600 font-bold">
                               {parseInt(product.promotion_price).toLocaleString()} Fcfa
                             </span>
                             <span className="text-xs text-gray-400 line-through">
@@ -256,14 +256,14 @@ const HomePage = () => {
                             </span>
                           </div>
                         ) : (
-                          <span className="text-orange-500 font-bold">
+                          <span className="text-blue-600 font-bold">
                             {parseInt(product.price).toLocaleString()} Fcfa
                           </span>
                         )}
                       </div>
                       <button
                         onClick={() => handleAddToCart(product)}
-                        className="p-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
+                        className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                       >
                         <ShoppingCart size={18} />
                       </button>
@@ -310,7 +310,7 @@ const HomePage = () => {
                 <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
                   🎁 Offres Spéciales
                 </h2>
-                <Link to="/produit?promo=true" className="text-orange-500 hover:text-orange-600 font-medium flex items-center gap-1">
+                <Link to="/produit?promo=true" className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1">
                   Voir tout <ChevronRight size={18} />
                 </Link>
               </div>
@@ -337,7 +337,7 @@ const HomePage = () => {
                     
                     <div className="p-4">
                       <Link to={`/products/${promo.id}`}>
-                        <h3 className="font-medium text-gray-800 text-sm line-clamp-2 hover:text-orange-500 transition-colors mb-2">
+                        <h3 className="font-medium text-gray-800 text-sm line-clamp-2 hover:text-blue-600 transition-colors mb-2">
                           {promo.name}
                         </h3>
                       </Link>
@@ -359,7 +359,7 @@ const HomePage = () => {
         )}
 
         {/* Newsletter Section */}
-        <section className="py-16 bg-gradient-to-r from-orange-500 to-orange-600 text-white">
+        <section className="py-16 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-2xl md:text-3xl font-bold mb-4">
               Abonnez-vous à notre newsletter
@@ -377,7 +377,7 @@ const HomePage = () => {
                 type="submit"
                 className="px-8 py-3 bg-gray-900 text-white rounded-lg font-semibold hover:bg-gray-800 transition-colors"
               >
-                S'abonner
+                S&apos;abonner
               </button>
             </form>
           </div>
