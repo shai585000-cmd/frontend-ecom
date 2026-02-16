@@ -113,24 +113,24 @@ const HomePage = () => {
               <span className="inline-block bg-blue-600 text-white text-sm font-semibold px-4 py-1 rounded-full mb-4">
                 🎉 Nouveautés 2024
               </span>
-              <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+              <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">
                 Découvrez les meilleurs
                 <span className="text-blue-600"> smartphones</span> du marché
               </h1>
-              <p className="text-lg md:text-xl text-gray-300 mb-8">
+              <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-6 sm:mb-8">
                 iPhone 15, Samsung Galaxy S24, et bien plus encore. Livraison gratuite et garantie 12 mois.
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link
                   to="/produit"
-                  className="inline-flex items-center gap-2 bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                  className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 sm:px-6 md:px-8 py-3 md:py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-sm sm:text-base"
                 >
                   Explorer les produits
                   <ChevronRight size={20} />
                 </Link>
                 <Link
                   to="/produit?promo=true"
-                  className="inline-flex items-center gap-2 bg-white/10 text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/20 transition-colors border border-white/20"
+                  className="inline-flex items-center gap-2 bg-white/10 text-white px-4 sm:px-6 md:px-8 py-3 md:py-4 rounded-lg font-semibold hover:bg-white/20 transition-colors border border-white/20 text-sm sm:text-base"
                 >
                   Voir les promos
                 </Link>
@@ -142,41 +142,41 @@ const HomePage = () => {
         {/* Features Bar */}
         <section className="bg-white border-b">
           <div className="container mx-auto px-4 py-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              <div className="flex items-center gap-3">
-                <div className="p-3 bg-blue-100 rounded-full">
-                  <Truck className="text-blue-600" size={24} />
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="p-2 sm:p-3 bg-blue-100 rounded-full flex-shrink-0">
+                  <Truck className="text-blue-600 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-800">Livraison Gratuite</p>
-                  <p className="text-sm text-gray-500">Dès 50 000 FCFA</p>
+                  <p className="font-semibold text-gray-800 text-xs sm:text-sm md:text-base">Livraison Gratuite</p>
+                  <p className="text-xs sm:text-sm text-gray-500">Dès 50 000 FCFA</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
-                <div className="p-3 bg-blue-100 rounded-full">
-                  <Shield className="text-blue-600" size={24} />
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="p-2 sm:p-3 bg-blue-100 rounded-full flex-shrink-0">
+                  <Shield className="text-blue-600 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-800">Garantie 12 mois</p>
-                  <p className="text-sm text-gray-500">Sur tous les produits</p>
+                  <p className="font-semibold text-gray-800 text-xs sm:text-sm md:text-base">Garantie 12 mois</p>
+                  <p className="text-xs sm:text-sm text-gray-500">Sur tous les produits</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
-                <div className="p-3 bg-blue-100 rounded-full">
-                  <Headphones className="text-blue-600" size={24} />
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="p-2 sm:p-3 bg-blue-100 rounded-full flex-shrink-0">
+                  <Headphones className="text-blue-600 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-800">Support 24/7</p>
-                  <p className="text-sm text-gray-500">Assistance dédiée</p>
+                  <p className="font-semibold text-gray-800 text-xs sm:text-sm md:text-base">Support 24/7</p>
+                  <p className="text-xs sm:text-sm text-gray-500">Assistance dédiée</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
-                <div className="p-3 bg-blue-100 rounded-full">
-                  <CreditCard className="text-blue-600" size={24} />
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="p-2 sm:p-3 bg-blue-100 rounded-full flex-shrink-0">
+                  <CreditCard className="text-blue-600 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-800">Paiement Sécurisé</p>
-                  <p className="text-sm text-gray-500">Mobile Money & CB</p>
+                  <p className="font-semibold text-gray-800 text-xs sm:text-sm md:text-base">Paiement Sécurisé</p>
+                  <p className="text-xs sm:text-sm text-gray-500">Mobile Money & CB</p>
                 </div>
               </div>
             </div>
@@ -201,10 +201,10 @@ const HomePage = () => {
         </section>
 
         {/* Vente Chaude / Hot Sales */}
-        <section className="py-12 bg-gray-50">
+        <section className="py-8 sm:py-12 bg-gray-50">
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">
                 🔥 Vente Chaude
               </h2>
               <Link to="/produit" className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1">
@@ -237,9 +237,9 @@ const HomePage = () => {
                     </div>
                   </Link>
                   
-                  <div className="p-4">
+                  <div className="p-2 sm:p-4">
                     <Link to={`/products/${product.id}`}>
-                      <h3 className="font-medium text-gray-800 text-sm line-clamp-2 hover:text-blue-600 transition-colors mb-2">
+                      <h3 className="font-medium text-gray-800 text-xs sm:text-sm line-clamp-2 hover:text-blue-600 transition-colors mb-1 sm:mb-2">
                         {product.name}
                       </h3>
                     </Link>
@@ -248,24 +248,24 @@ const HomePage = () => {
                       <div>
                         {product.promotion && product.promotion_price ? (
                           <div className="flex flex-col">
-                            <span className="text-blue-600 font-bold">
+                            <span className="text-blue-600 font-bold text-xs sm:text-sm">
                               {parseInt(product.promotion_price).toLocaleString()} Fcfa
                             </span>
-                            <span className="text-xs text-gray-400 line-through">
+                            <span className="text-[10px] sm:text-xs text-gray-400 line-through">
                               {parseInt(product.price).toLocaleString()} Fcfa
                             </span>
                           </div>
                         ) : (
-                          <span className="text-blue-600 font-bold">
+                          <span className="text-blue-600 font-bold text-xs sm:text-sm">
                             {parseInt(product.price).toLocaleString()} Fcfa
                           </span>
                         )}
                       </div>
                       <button
                         onClick={() => handleAddToCart(product)}
-                        className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                        className="p-1.5 sm:p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                       >
-                        <ShoppingCart size={18} />
+                        <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
                       </button>
                     </div>
                   </div>
@@ -276,23 +276,23 @@ const HomePage = () => {
         </section>
 
         {/* Solutions Section */}
-        <section className="py-12 bg-white">
+        <section className="py-8 sm:py-12 bg-white">
           <div className="container mx-auto px-4">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-800 text-center mb-8">
               Nos Solutions
             </h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
               {solutionCards.map((card, index) => (
                 <Link
                   key={index}
                   to={card.link}
-                  className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${card.bg} p-6 text-white hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1`}
+                  className={`group relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br ${card.bg} p-4 sm:p-6 text-white hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1`}
                 >
-                  <div className="text-4xl mb-4">{card.icon}</div>
-                  <h3 className="text-xl font-bold mb-2">{card.title}</h3>
-                  <p className="text-white/80 text-sm mb-4">{card.desc}</p>
-                  <span className="inline-flex items-center gap-1 text-sm font-semibold">
+                  <div className="text-2xl sm:text-4xl mb-2 sm:mb-4">{card.icon}</div>
+                  <h3 className="text-sm sm:text-xl font-bold mb-1 sm:mb-2">{card.title}</h3>
+                  <p className="text-white/80 text-xs sm:text-sm mb-2 sm:mb-4 line-clamp-2">{card.desc}</p>
+                  <span className="inline-flex items-center gap-1 text-xs sm:text-sm font-semibold">
                     ACHETER <ChevronRight size={16} />
                   </span>
                   <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-white/10 rounded-full"></div>
@@ -304,7 +304,7 @@ const HomePage = () => {
 
         {/* Promotions Section */}
         {promotions.length > 0 && (
-          <section className="py-12 bg-gray-50">
+          <section className="py-8 sm:py-12 bg-gray-50">
             <div className="container mx-auto px-4">
               <div className="flex items-center justify-between mb-8">
                 <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
@@ -335,9 +335,9 @@ const HomePage = () => {
                       </div>
                     </Link>
                     
-                    <div className="p-4">
+                    <div className="p-2 sm:p-4">
                       <Link to={`/products/${promo.id}`}>
-                        <h3 className="font-medium text-gray-800 text-sm line-clamp-2 hover:text-blue-600 transition-colors mb-2">
+                        <h3 className="font-medium text-gray-800 text-xs sm:text-sm line-clamp-2 hover:text-blue-600 transition-colors mb-1 sm:mb-2">
                           {promo.name}
                         </h3>
                       </Link>
@@ -346,7 +346,7 @@ const HomePage = () => {
                         <span className="text-red-500 font-bold">
                           {parseInt(promo.promotion_price).toLocaleString()} Fcfa
                         </span>
-                        <span className="text-xs text-gray-400 line-through">
+                        <span className="text-[10px] sm:text-xs text-gray-400 line-through">
                           {parseInt(promo.price).toLocaleString()} Fcfa
                         </span>
                       </div>

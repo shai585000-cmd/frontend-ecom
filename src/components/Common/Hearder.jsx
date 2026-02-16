@@ -66,9 +66,12 @@ const Hearder = () => {
   return (
     <>
       {/* Barre d'annonce */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center py-2 text-sm font-medium">
-        <div className="animate-marquee whitespace-nowrap">
-          🔥 Livraison GRATUITE pour toute commande supérieure à 50 000 FCFA 🔥 | 📱 Nouveaux iPhone 15 disponibles ! | ⚡ Garantie 12 mois sur tous nos produits
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center py-2 text-sm font-medium overflow-hidden">
+        <div className="whitespace-nowrap overflow-hidden">
+          <span className="animate-marquee">
+            🔥 Livraison GRATUITE pour toute commande supérieure à 50 000 FCFA 🔥 | 📱 Nouveaux iPhone 15 disponibles ! | ⚡ Garantie 12 mois sur tous nos produits &nbsp;&nbsp;&nbsp;&nbsp;
+            🔥 Livraison GRATUITE pour toute commande supérieure à 50 000 FCFA 🔥 | 📱 Nouveaux iPhone 15 disponibles ! | ⚡ Garantie 12 mois sur tous nos produits &nbsp;&nbsp;&nbsp;&nbsp;
+          </span>
         </div>
       </div>
 
