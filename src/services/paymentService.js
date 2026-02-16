@@ -1,8 +1,8 @@
-import apInstance from './api';
+import apInstance, { publicApi } from './api';
 
-// Créer un paiement pour une commande
+// Créer un paiement pour une commande (fonctionne avec ou sans authentification)
 export const createPayment = async (paymentData) => {
-    const response = await apInstance.post('/payments/', paymentData);
+    const response = await publicApi.post('/payments/', paymentData);
     return response.data;
 };
 
