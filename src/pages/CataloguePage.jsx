@@ -32,8 +32,13 @@ const CataloguePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Si promo=true, récupérer uniquement les produits en promotion
+        const productsEndpoint = promoFilter 
+          ? '/produits/products/promotion/' 
+          : '/produits/products/';
+        
         const [productsRes, categoriesRes] = await Promise.all([
-          publicApi.get('/produits/products/'),
+          publicApi.get(productsEndpoint),
           publicApi.get('/home/categories/')
         ]);
         setAllProducts(productsRes.data);
@@ -45,7 +50,7 @@ const CataloguePage = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [promoFilter]);
 
   // Synchroniser selectedCategory avec l'URL
   useEffect(() => {
