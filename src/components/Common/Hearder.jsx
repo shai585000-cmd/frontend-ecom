@@ -5,6 +5,7 @@ import useAuthStore from "../../hooks/authStore";
 import { logoutUser } from "../../services/authService";
 import useCartStore from "../../hooks/useCartStore";
 import useWishlistStore from "../../store/wishlistStore";
+import { publicApi } from "../../services/api";
 
 const Hearder = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,6 +13,7 @@ const Hearder = () => {
   const [productsMenuOpen, setProductsMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [announcements, setAnnouncements] = useState([]);
   const profileMenuRef = useRef(null);
   const productsMenuRef = useRef(null);
   
@@ -20,6 +22,25 @@ const Hearder = () => {
   const navigate = useNavigate();
   const cartItems = useCartStore((state) => state.getCartLength());
   const wishlistCount = useWishlistStore((state) => state.getWishlistCount());
+
+  // Récupérer les annonces depuis l'API
+  useEffect(() => {
+    const fetchAnnouncements = async () => {
+      try {
+        const response = await publicApi.get("/home/announcements/");
+        setAnnouncements(response.data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des annonces:", error);
+        // Fallback avec des annonces par défaut
+        setAnnouncements([
+          { id: 1, text: "Livraison GRATUITE pour toute commande supérieure à 50 000 FCFA", emoji: "🔥" },
+          { id: 2, text: "Nouveaux iPhone 15 disponibles !", emoji: "📱" },
+          { id: 3, text: "Garantie 12 mois sur tous nos produits", emoji: "⚡" },
+        ]);
+      }
+    };
+    fetchAnnouncements();
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -69,8 +90,23 @@ const Hearder = () => {
       <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center py-2 text-sm font-medium overflow-hidden">
         <div className="whitespace-nowrap overflow-hidden">
           <span className="animate-marquee">
-            🔥 Livraison GRATUITE pour toute commande supérieure à 50 000 FCFA 🔥 | 📱 Nouveaux iPhone 15 disponibles ! | ⚡ Garantie 12 mois sur tous nos produits &nbsp;&nbsp;&nbsp;&nbsp;
-            🔥 Livraison GRATUITE pour toute commande supérieure à 50 000 FCFA 🔥 | 📱 Nouveaux iPhone 15 disponibles ! | ⚡ Garantie 12 mois sur tous nos produits &nbsp;&nbsp;&nbsp;&nbsp;
+            {announcements.length > 0 ? (
+              <>
+                {announcements.map((ann, index) => (
+                  <span key={ann.id || index}>
+                    {ann.emoji} {ann.text} {index < announcements.length - 1 ? " | " : ""}
+                  </span>
+                ))}
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                {announcements.map((ann, index) => (
+                  <span key={`dup-${ann.id || index}`}>
+                    {ann.emoji} {ann.text} {index < announcements.length - 1 ? " | " : ""}
+                  </span>
+                ))}
+              </>
+            ) : (
+              <>🔥 Bienvenue sur TECH STORE 🔥</>
+            )}
           </span>
         </div>
       </div>
