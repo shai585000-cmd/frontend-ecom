@@ -125,7 +125,7 @@ const CataloguePage = () => {
 
   // Import de la fonction utilitaire pour les images
   const getImageUrlHelper = (image) => {
-    if (!image) return '/placeholder.jpg';
+    if (!image) return '/placeholder.svg';
     if (image.startsWith('http://') || image.startsWith('https://')) return image;
     // Gerer les URLs externes stockees dans ImageField Django
     if (image.includes('https%3A') || image.includes('https:/') || image.includes('http%3A') || image.includes('http:/')) {

@@ -14,7 +14,7 @@ const RecentlyViewedCarousel = ({ currentProductId }) => {
     : recentlyViewed.slice(0, 4);
 
   const getImageUrl = (image) => {
-    if (!image) return '/placeholder.jpg';
+    if (!image) return '/placeholder.svg';
     if (image.startsWith('http://') || image.startsWith('https://')) return image;
     if (image.includes('https%3A') || image.includes('http%3A')) {
       let url = image;

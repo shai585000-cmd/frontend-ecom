@@ -12,7 +12,7 @@ const RecommendedProducts = ({ productId, limit = 4 }) => {
   const addToCart = useCartStore((state) => state.addToCart);
 
   const getImageUrl = (image) => {
-    if (!image) return '/placeholder.jpg';
+    if (!image) return '/placeholder.svg';
     if (image.startsWith('http://') || image.startsWith('https://')) return image;
     if (image.includes('https%3A') || image.includes('http%3A')) {
       let url = image;

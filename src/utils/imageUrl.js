@@ -5,7 +5,7 @@
  * - URL externe stockee dans ImageField Django (/media/https%3A/... ou /media/https:/...)
  */
 export const getImageUrl = (image) => {
-  if (!image) return '/placeholder.jpg';
+  if (!image) return '/placeholder.svg';
   
   // Si c'est deja une URL complete
   if (image.startsWith('http://') || image.startsWith('https://')) {

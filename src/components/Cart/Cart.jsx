@@ -13,7 +13,7 @@ const Cart = () => {
 
   // Fonction pour gerer les URLs d'images
   const getImageUrl = (image) => {
-    if (!image) return '/placeholder.jpg';
+    if (!image) return '/placeholder.svg';
     if (image.startsWith('http://') || image.startsWith('https://')) return image;
     if (image.includes('https%3A') || image.includes('https:/') || image.includes('http%3A') || image.includes('http:/')) {
       let url = image;

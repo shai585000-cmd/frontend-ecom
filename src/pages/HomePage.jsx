@@ -24,7 +24,7 @@ const HomePage = () => {
 
   // Fonction pour gerer les URLs d'images
   const getImageUrl = (image) => {
-    if (!image) return '/placeholder.jpg';
+    if (!image) return '/placeholder.svg';
     if (image.startsWith('http://') || image.startsWith('https://')) return image;
     if (image.includes('https%3A') || image.includes('https:/') || image.includes('http%3A') || image.includes('http:/')) {
       let url = image;
@@ -161,7 +161,7 @@ const HomePage = () => {
                           alt={promo.name}
                           className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"
                           onError={(e) => {
-                            e.target.src = "/placeholder.png";
+                            e.target.src = "/placeholder.svg";
                           }}
                         />
                         {promo.promotion && (
@@ -247,7 +247,7 @@ const HomePage = () => {
                           alt={product.name}
                           className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"
                           onError={(e) => {
-                            e.target.src = "/placeholder.png";
+                            e.target.src = "/placeholder.svg";
                           }}
                         />
                         {product.promotion && (
