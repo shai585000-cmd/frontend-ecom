@@ -85,18 +85,18 @@ const RecommendedProducts = ({ productId, limit = 4 }) => {
 
             <div className="p-3">
               <Link to={`/products/${product.id}`}>
-                <h3 className="font-medium text-gray-800 text-sm line-clamp-2 hover:text-indigo-600 transition-colors">
+                <h3 className="font-medium text-gray-800 text-sm line-clamp-2 hover:text-red-600 transition-colors">
                   {product.name || product.title}
                 </h3>
               </Link>
 
-              <p className="text-indigo-600 font-bold mt-1">
+              <p className="text-red-600 font-bold mt-1">
                 {parseFloat(product.price).toLocaleString()} <span className="text-xs">Fcfa</span>
               </p>
 
               <button
                 onClick={() => addToCart(product)}
-                className="w-full mt-2 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center gap-1"
+                className="w-full mt-2 py-2 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-1"
               >
                 <ShoppingCart size={14} />
                 Ajouter
