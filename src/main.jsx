@@ -22,11 +22,11 @@ createRoot(document.getElementById('root')).render(
         },
         success: {
           style: {
-            background: '#10B981',
+            background: '#DC2626',
           },
           iconTheme: {
             primary: '#fff',
-            secondary: '#10B981',
+            secondary: '#DC2626',
           },
         },
         error: {

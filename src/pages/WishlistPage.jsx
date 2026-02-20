@@ -62,7 +62,7 @@ const WishlistPage = () => {
       <>
         <Header />
         <div className="min-h-screen flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500"></div>
         </div>
         <Footer />
       </>
@@ -97,7 +97,7 @@ const WishlistPage = () => {
               </p>
               <Link
                 to="/produit"
-                className="inline-block px-6 py-3 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg transition-colors"
+                className="inline-block px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-colors"
               >
                 Decouvrir nos produits
               </Link>
@@ -126,7 +126,7 @@ const WishlistPage = () => {
                   {/* Contenu */}
                   <div className="p-4">
                     <Link to={`/products/${product.id}`}>
-                      <h3 className="font-semibold text-gray-800 mb-2 hover:text-green-500 transition-colors line-clamp-2">
+                      <h3 className="font-semibold text-gray-800 mb-2 hover:text-red-600 transition-colors line-clamp-2">
                         {product.name}
                       </h3>
                     </Link>
@@ -135,7 +135,7 @@ const WishlistPage = () => {
                     <div className="mb-4">
                       {product.promotion ? (
                         <div className="flex items-center gap-2">
-                          <span className="text-2xl font-bold text-green-500">
+                          <span className="text-2xl font-bold text-red-600">
                             {product.promotion_price?.toLocaleString()} FCFA
                           </span>
                           <span className="text-sm text-gray-400 line-through">
@@ -153,7 +153,7 @@ const WishlistPage = () => {
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleAddToCart(product)}
-                        className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg transition-colors"
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-colors"
                       >
                         <ShoppingCart size={18} />
                         Ajouter au panier
