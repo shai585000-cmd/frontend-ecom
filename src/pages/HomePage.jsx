@@ -60,8 +60,8 @@ const HomePage = () => {
   // Solutions/Categories cards data
   const solutionCards = [
     { title: "Smartphones Premium", desc: "Les derniers modèles iPhone & Samsung", icon: <Smartphone className="w-8 h-8 text-white" />, link: "/produit?category=1", bg: "from-gray-800 to-gray-900" },
-    { title: "Accessoires Tech", desc: "Coques, chargeurs, écouteurs...", icon: <Headphones className="w-8 h-8 text-white" />, link: "/produit?category=3", bg: "from-purple-500 to-purple-600" },
-    { title: "Ordinateurs", desc: "Laptops et PC performants", icon: <Monitor className="w-8 h-8 text-white" />, link: "/produit?category=2", bg: "from-green-500 to-green-600" },
+    { title: "Accessoires Tech", desc: "Coques, chargeurs, écouteurs...", icon: <Headphones className="w-8 h-8 text-white" />, link: "/produit?category=3", bg: "from-gray-700 to-gray-800" },
+    { title: "Ordinateurs", desc: "Laptops et PC performants", icon: <Monitor className="w-8 h-8 text-white" />, link: "/produit?category=2", bg: "from-gray-600 to-gray-700" },
     { title: "Promotions", desc: "Jusqu'à -50% sur une sélection", icon: <Flame className="w-8 h-8 text-white" />, link: "/produit?promo=true", bg: "from-red-500 to-red-600" },
   ];
 

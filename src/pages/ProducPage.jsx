@@ -116,18 +116,18 @@ const ProducPage = () => {
             {/* Marque et Catégorie */}
             <div className="flex flex-wrap gap-4">
               {product.brand && (
-                <div className="flex items-center gap-2 px-4 py-2 bg-indigo-50 rounded-lg">
-                  <Package size={18} className="text-indigo-600" />
+                <div className="flex items-center gap-2 px-4 py-2 bg-red-50 rounded-lg">
+                  <Package size={18} className="text-red-600" />
                   <span className="text-sm font-medium text-gray-700">
-                    Marque: <span className="text-indigo-600 font-semibold">{product.brand.name || product.brand}</span>
+                    Marque: <span className="text-red-600 font-semibold">{product.brand.name || product.brand}</span>
                   </span>
                 </div>
               )}
               {product.categorie && (
-                <div className="flex items-center gap-2 px-4 py-2 bg-purple-50 rounded-lg">
-                  <Package size={18} className="text-purple-600" />
+                <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg">
+                  <Package size={18} className="text-gray-700" />
                   <span className="text-sm font-medium text-gray-700">
-                    Catégorie: <span className="text-purple-600 font-semibold">{product.categorie.name || product.categorie}</span>
+                    Catégorie: <span className="text-gray-800 font-semibold">{product.categorie.name || product.categorie}</span>
                   </span>
                 </div>
               )}
@@ -212,11 +212,11 @@ const ProducPage = () => {
             )}
 
             {/* Prix et Promotion */}
-            <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-6 border border-indigo-200">
+            <div className="bg-gradient-to-r from-red-50 to-gray-50 rounded-xl p-6 border border-red-200">
               {product.promotion && product.promotion_price ? (
                 <div className="space-y-2">
                   <div className="flex items-center gap-3">
-                    <span className="text-2xl md:text-4xl font-bold text-indigo-600">
+                    <span className="text-2xl md:text-4xl font-bold text-red-600">
                       {parseFloat(product.promotion_price).toLocaleString()} Fcfa
                     </span>
                     <span className="px-3 py-1 bg-red-500 text-white text-sm font-bold rounded-full">
@@ -231,7 +231,7 @@ const ProducPage = () => {
                   </div>
                 </div>
               ) : (
-                <div className="text-3xl md:text-4xl font-bold text-indigo-600">
+                <div className="text-3xl md:text-4xl font-bold text-red-600">
                   {parseFloat(product.price).toLocaleString()} Fcfa
                 </div>
               )}
@@ -243,14 +243,14 @@ const ProducPage = () => {
               whileTap={{ scale: 0.98 }}
               onClick={() => handleAddToCart(product)}
               disabled={product.stock === 0}
-              className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 disabled:bg-gray-400 disabled:cursor-not-allowed"
+              className="w-full py-4 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               <ShoppingCart size={24} />
               {product.stock === 0 ? "Produit indisponible" : "Ajouter au panier"}
             </motion.button>
 
             {/* Informations supplémentaires */}
-            <div className="space-y-3 bg-blue-50 rounded-xl p-4 border border-blue-200">
+            <div className="space-y-3 bg-gray-50 rounded-xl p-4 border border-gray-200">
               <div className="flex items-start gap-3">
                 <Phone size={20} className="text-red-600 mt-1 flex-shrink-0" />
                 <div className="text-sm text-gray-700">
