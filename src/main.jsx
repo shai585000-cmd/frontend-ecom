@@ -4,6 +4,10 @@ import { Toaster } from 'react-hot-toast'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import './index.css'
 import App from './App.jsx'
+import { startKeepAlive } from './services/keepAliveService'
+
+// Démarrer le service keep-alive pour maintenir le backend Render éveillé
+startKeepAlive()
 
 const GOOGLE_CLIENT_ID = '427788449898-u3i5tqe9dnpvice4kjr3rp06vbfou4sv.apps.googleusercontent.com'
 
