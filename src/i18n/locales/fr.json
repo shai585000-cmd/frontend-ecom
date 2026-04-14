@@ -45,6 +45,12 @@
     "supportDesc": "À votre écoute"
   },
   "home": {
+    "newsletter": {
+      "title": "Abonnez-vous à notre newsletter",
+      "description": "Recevez nos offres exclusives et les dernières nouveautés directement dans votre boîte mail.",
+      "emailPlaceholder": "Votre adresse email",
+      "subscribe": "S'abonner"
+    },
     "hero": {
       "badge": "Nouveauté",
       "title": "La meilleure tech",

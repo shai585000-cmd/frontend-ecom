@@ -45,6 +45,12 @@
     "supportDesc": "Always here for you"
   },
   "home": {
+    "newsletter": {
+      "title": "Subscribe to our newsletter",
+      "description": "Get exclusive offers and the latest news directly in your inbox.",
+      "emailPlaceholder": "Your email address",
+      "subscribe": "Subscribe"
+    },
     "hero": {
       "badge": "New",
       "title": "The best tech",

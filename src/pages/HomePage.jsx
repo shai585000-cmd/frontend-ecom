@@ -6,6 +6,7 @@ import useCartStore from "../hooks/useCartStore";
 import { Link } from "react-router-dom";
 import WishlistButton from "../components/Common/WishlistButton";
 import { ShoppingCart, ChevronRight, Truck, Shield, Headphones, CreditCard, Smartphone, Monitor, Flame, Gift } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const ICON_MAP = {
   truck: <Truck className="text-red-600 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />,
@@ -44,6 +45,7 @@ const DEFAULT_SOLUTIONS = [
 ];
 
 const HomePage = () => {
+  const { t } = useTranslation();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -379,22 +381,22 @@ const HomePage = () => {
         <section className="py-16 bg-gradient-to-r from-gray-900 to-red-600 text-white">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-2xl md:text-3xl font-bold mb-4">
-              Abonnez-vous à notre newsletter
+              {t('home.newsletter.title')}
             </h2>
             <p className="text-white/80 mb-8 max-w-xl mx-auto">
-              Recevez nos offres exclusives et les dernières nouveautés directement dans votre boîte mail.
+              {t('home.newsletter.description')}
             </p>
             <form className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
               <input
                 type="email"
-                placeholder="Votre adresse email"
+                placeholder={t('home.newsletter.emailPlaceholder')}
                 className="flex-grow px-6 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-white"
               />
               <button
                 type="submit"
                 className="px-8 py-3 bg-gray-900 text-white rounded-lg font-semibold hover:bg-gray-800 transition-colors"
               >
-                S&apos;abonner
+                {t('home.newsletter.subscribe')}
               </button>
             </form>
           </div>
