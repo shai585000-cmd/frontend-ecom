@@ -1,5 +1,6 @@
 import axios from 'axios';
 import useAuthStore from '../hooks/authStore';
+import logger from '../utils/logger';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -83,7 +84,7 @@ apInstance.interceptors.response.use(
                 } catch (refreshError) {
                     // Si le refresh échoue et ce n'est pas une route publique, déconnecter
                     if (!isPublicRoute) {
-                        console.error('Refresh token expiré, déconnexion...');
+                        logger.error('Refresh token expiré, déconnexion...');
                         useAuthStore.getState().clearAuth();
                         localStorage.removeItem('auth-storage');
                         window.location.href = '/login';

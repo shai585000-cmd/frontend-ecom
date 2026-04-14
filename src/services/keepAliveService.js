@@ -1,4 +1,5 @@
 import axios from 'axios';
+import logger from '../utils/logger';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -14,16 +15,16 @@ const pingBackend = async () => {
         await axios.get(`${API_URL}/api/products/`, {
             timeout: 30000, // 30 secondes de timeout car le cold start peut prendre du temps
         });
-        console.log('[KeepAlive] Backend ping successful:', new Date().toLocaleTimeString());
+        logger.log('[KeepAlive] Backend ping successful:', new Date().toLocaleTimeString());
     } catch (error) {
         // On ne log pas les erreurs réseau car c'est normal si le backend est en train de démarrer
-        console.log('[KeepAlive] Backend ping attempt:', new Date().toLocaleTimeString());
+        logger.log('[KeepAlive] Backend ping attempt:', new Date().toLocaleTimeString());
     }
 };
 
 export const startKeepAlive = () => {
     if (intervalId) {
-        console.log('[KeepAlive] Already running');
+        logger.log('[KeepAlive] Already running');
         return;
     }
 
@@ -32,14 +33,14 @@ export const startKeepAlive = () => {
 
     // Puis ping toutes les 14 minutes
     intervalId = setInterval(pingBackend, PING_INTERVAL);
-    console.log('[KeepAlive] Service started - pinging every 14 minutes');
+    logger.log('[KeepAlive] Service started - pinging every 14 minutes');
 };
 
 export const stopKeepAlive = () => {
     if (intervalId) {
         clearInterval(intervalId);
         intervalId = null;
-        console.log('[KeepAlive] Service stopped');
+        logger.log('[KeepAlive] Service stopped');
     }
 };
 

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { GoogleLogin } from '@react-oauth/google';
 import { publicApi } from "../services/api";
+import logger from '../utils/logger';
 import useAuthStore from '../hooks/authStore';
 import Header from "../components/Common/Hearder";
 import Footer from "../components/Common/Footer";
@@ -103,7 +104,7 @@ const RegisterPage = () => {
     setError("");
 
     if (!validateForm()) {
-      console.log("Validation du formulaire échouée");
+      logger.log("Validation du formulaire échouée");
       return;
     }
 
@@ -125,16 +126,16 @@ const RegisterPage = () => {
     };
 
     try {
-      console.log("Données du formulaire envoyées:", userData);
+      logger.log("Données du formulaire envoyées:", userData);
 
       const response = await publicApi.post("/users/signup/", userData);
-      console.log("Réponse de l'API :", response.data);
+      logger.log("Réponse de l'API :", response.data);
 
       if (response.data) {
         navigate("/login");
       }
     } catch (err) {
-      console.error("Erreur détaillée:", err);
+      logger.error("Erreur détaillée:", err);
       // Afficher l'erreur spécifique du serveur si disponible
       const errorMessage =
         err.response?.data?.detail ||
@@ -159,7 +160,7 @@ const RegisterPage = () => {
         navigate('/');
       }
     } catch (err) {
-      console.error('Erreur Google Auth:', err);
+      logger.error('Erreur Google Auth:', err);
       setError('Erreur lors de la connexion avec Google');
     }
   };

@@ -13,6 +13,7 @@ import {
   Package, Calendar, ChevronRight
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import logger from '../utils/logger';
 
 const UserProfilePage = () => {
   const [activeTab, setActiveTab] = useState('profile');
@@ -77,7 +78,7 @@ const UserProfilePage = () => {
       setOrders(ordersData.slice(0, 5)); // Dernieres 5 commandes
       setReviews(reviewsData);
     } catch (error) {
-      console.error('Erreur:', error);
+      logger.error('Erreur:', error);
       toast.error('Erreur lors du chargement du profil');
     } finally {
       setLoading(false);

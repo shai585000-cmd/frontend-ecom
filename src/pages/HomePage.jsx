@@ -6,6 +6,7 @@ import useCartStore from "../hooks/useCartStore";
 import { Link } from "react-router-dom";
 import WishlistButton from "../components/Common/WishlistButton";
 import { ShoppingCart, ChevronRight, Truck, Shield, Headphones, CreditCard, Smartphone, Monitor, Flame, Gift } from "lucide-react";
+import logger from "../utils/logger";
 import { useTranslation } from "react-i18next";
 
 const ICON_MAP = {
@@ -95,7 +96,7 @@ const HomePage = () => {
         if (solutionsRes.data && solutionsRes.data.length > 0) setSolutionCards(solutionsRes.data);
         setError(null);
       } catch (err) {
-        console.error("Erreur lors de la récupération des produits:", err);
+        logger.error("Erreur lors de la récupération des produits:", err);
         setError("Impossible de charger les produits");
       } finally {
         setLoading(false);
@@ -224,10 +225,10 @@ const HomePage = () => {
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 flex items-center gap-2">
-                <Flame className="w-6 h-6 text-red-500" /> Vente Chaude
+                <Flame className="w-6 h-6 text-red-500" /> {t('home.hotSales')}
               </h2>
               <Link to="/produit" className="text-red-600 hover:text-red-700 font-medium flex items-center gap-1">
-                Voir tout <ChevronRight size={18} />
+                {t('home.viewAll')} <ChevronRight size={18} />
               </Link>
             </div>
 

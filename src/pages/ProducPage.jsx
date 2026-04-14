@@ -11,6 +11,7 @@ import RecentlyViewedCarousel from "../components/Produit/RecentlyViewedCarousel
 import RecommendedProducts from "../components/Produit/RecommendedProducts";
 import { motion } from "framer-motion";
 import { Star, Package, Phone, AlertCircle, Truck, ShoppingCart } from "lucide-react";
+import logger from "../utils/logger";
 
 const ProducPage = () => {
   const { id } = useParams();
@@ -48,7 +49,7 @@ const ProducPage = () => {
         // Ajouter le produit à la liste des produits vus récemment
         addRecentlyViewed(productResponse.data);
       } catch (error) {
-        console.error("Erreur lors de la récupération du produit:", error);
+        logger.error("Erreur lors de la récupération du produit:", error);
         navigate("/products");
       } finally {
         setLoading(false);

@@ -6,6 +6,7 @@ import { createOrder } from '../services/orderService';
 import { createPayment } from '../services/paymentService';
 import { getShippingZones, getShippingFeeByCity } from '../services/shippingService';
 import Header from '../components/Common/Hearder';
+import logger from '../utils/logger';
 
 // Numéro WhatsApp du propriétaire (format international sans +)
 const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || "2250170629746";
@@ -49,7 +50,7 @@ const CheckoutPage = () => {
           setShippingFee(parseFloat(defaultZone.shipping_fee));
         }
       } catch (err) {
-        console.error('Erreur chargement zones:', err);
+        logger.error('Erreur chargement zones:', err);
       }
     };
     loadZones();
@@ -165,7 +166,7 @@ Merci de confirmer ma commande!`;
       window.location.href = whatsappUrl;
       
     } catch (err) {
-      console.error('Erreur:', err);
+      logger.error('Erreur:', err);
       setError(err.response?.data?.error || "Erreur lors de la commande");
     } finally {
       setIsProcessing(false);

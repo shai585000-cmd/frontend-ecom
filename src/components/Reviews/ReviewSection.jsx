@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Star, User, CheckCircle, Send } from 'lucide-react';
 import { getProductReviews, getProductReviewStats, canReview, createReview } from '../../services/reviewService';
 import useAuthStore from '../../hooks/authStore';
+import logger from '../../utils/logger';
 
 const ReviewSection = ({ productId }) => {
   const [reviews, setReviews] = useState([]);
@@ -40,7 +41,7 @@ const ReviewSection = ({ productId }) => {
         setCanUserReview(canReviewData.can_review);
       }
     } catch (err) {
-      console.error('Erreur:', err);
+      logger.error('Erreur:', err);
     } finally {
       setLoading(false);
     }

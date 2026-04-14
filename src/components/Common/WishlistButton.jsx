@@ -5,6 +5,7 @@ import useAuthStore from '../../hooks/authStore';
 import useWishlistStore from '../../store/wishlistStore';
 import { addToWishlist, removeFromWishlist, checkInWishlist } from '../../services/wishlistService';
 import toast from 'react-hot-toast';
+import logger from '../../utils/logger';
 
 const WishlistButton = ({ product, size = 24, className = '' }) => {
   const [isInWishlist, setIsInWishlist] = useState(false);
@@ -20,7 +21,7 @@ const WishlistButton = ({ product, size = 24, className = '' }) => {
           const result = await checkInWishlist(product.id);
           setIsInWishlist(result.in_wishlist);
         } catch (error) {
-          console.error('Erreur verification wishlist:', error);
+          logger.error('Erreur verification wishlist:', error);
         }
       } else {
         setIsInWishlist(checkLocal(product.id));

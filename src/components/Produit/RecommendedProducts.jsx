@@ -5,6 +5,7 @@ import { ShoppingCart } from 'lucide-react';
 import { publicApi } from '../../services/api';
 import useCartStore from '../../hooks/useCartStore';
 import WishlistButton from '../Common/WishlistButton';
+import logger from '../../utils/logger';
 
 const RecommendedProducts = ({ productId, limit = 4 }) => {
   const [recommendations, setRecommendations] = useState([]);
@@ -34,7 +35,7 @@ const RecommendedProducts = ({ productId, limit = 4 }) => {
           setRecommendations(response.data.recommendations);
         }
       } catch (err) {
-        console.error('Erreur recommandations:', err);
+        logger.error('Erreur recommandations:', err);
       } finally {
         setLoading(false);
       }

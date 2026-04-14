@@ -6,6 +6,7 @@ import useCartStore from '../hooks/useCartStore';
 import Header from '../components/Common/Hearder';
 import Footer from '../components/Common/Footer';
 import WishlistButton from '../components/Common/WishlistButton';
+import logger from '../utils/logger';
 
 const PRODUCTS_PER_PAGE = 12;
 
@@ -45,7 +46,7 @@ const CataloguePage = () => {
         setAllProducts(productsRes.data);
         setCategories(categoriesRes.data);
       } catch (error) {
-        console.error('Erreur:', error);
+        logger.error('Erreur:', error);
       } finally {
         setLoading(false);
       }

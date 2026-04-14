@@ -6,6 +6,7 @@ import { getOrders, cancelOrder } from '../services/orderService';
 import useAuthStore from '../hooks/authStore';
 import Header from '../components/Common/Hearder';
 import toast from 'react-hot-toast';
+import logger from '../utils/logger';
 
 const OrdersPage = () => {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ const OrdersPage = () => {
         toast.success('Commandes actualisees');
       }
     } catch (err) {
-      console.error('Erreur lors du chargement des commandes:', err);
+      logger.error('Erreur lors du chargement des commandes:', err);
       setError('Impossible de charger vos commandes');
     } finally {
       setLoading(false);
@@ -129,7 +130,7 @@ const OrdersPage = () => {
       // Rafraîchir la liste
       fetchOrders();
     } catch (err) {
-      console.error('Erreur lors de l\'annulation:', err);
+      logger.error('Erreur lors de l\'annulation:', err);
       alert(err.response?.data?.error || 'Impossible d\'annuler la commande');
     } finally {
       setCancellingId(null);

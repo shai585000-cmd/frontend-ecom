@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { publicApi } from '../../services/api';
+import logger from '../../utils/logger';
 
 const Banniere = () => {
   const [banniere, setBanniere] = useState([]);
@@ -9,10 +10,10 @@ const Banniere = () => {
     const fetchBanniere = async () => {
       try {
         const response = await publicApi.get("/home/banner");
-        console.log("Bannières reçues:", response.data);
+        logger.log("Bannières reçues:", response.data);
         setBanniere(response.data);
       } catch (error) {
-        console.error("Erreur lors de la récupération de la bannière :", error);
+        logger.error("Erreur lors de la récupération de la bannière :", error);
       }
     };
 
@@ -42,7 +43,7 @@ const Banniere = () => {
                   alt={banner.title || 'Bannière'}
                   className="w-full h-[400px] object-cover"
                   onError={(e) => {
-                    console.error("Erreur chargement image:", banner.image);
+                    logger.error("Erreur chargement image:", banner.image);
                     e.target.style.display = 'none';
                   }}
                 />

@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
 import useAuthStore from '../hooks/authStore';
 import { loginUser } from '../services/authService';
+import logger from '../utils/logger';
 import { publicApi } from '../services/api';
 import Header from '../components/Common/Hearder';
 import Footer from '../components/Common/Footer';
@@ -46,7 +47,7 @@ const LoginPage = () => {
         navigate('/');
       }
     } catch (err) {
-      console.error('Erreur Google Auth:', err);
+      logger.error('Erreur Google Auth:', err);
     }
   };
 
@@ -68,7 +69,7 @@ const LoginPage = () => {
           <div className="flex justify-center">
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
-              onError={() => console.log('Erreur connexion Google')}
+              onError={() => logger.log('Erreur connexion Google')}
               text="continue_with"
               shape="rectangular"
               size="large"

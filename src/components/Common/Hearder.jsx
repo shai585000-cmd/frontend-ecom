@@ -8,6 +8,7 @@ import useCartStore from "../../hooks/useCartStore";
 import useWishlistStore from "../../store/wishlistStore";
 import { publicApi } from "../../services/api";
 import LanguageSwitcher from "./LanguageSwitcher";
+import logger from '../../utils/logger';
 
 const Hearder = () => {
   const { t } = useTranslation();
@@ -33,7 +34,7 @@ const Hearder = () => {
         const response = await publicApi.get("/home/announcements/");
         setAnnouncements(response.data);
       } catch (error) {
-        console.error("Erreur lors de la récupération des annonces:", error);
+        logger.error("Erreur lors de la récupération des annonces:", error);
         // Fallback avec des annonces par défaut
         setAnnouncements([
           { id: 1, text: "Livraison GRATUITE pour toute commande supérieure à 50 000 FCFA", emoji: "🔥" },
@@ -50,7 +51,7 @@ const Hearder = () => {
       await logoutUser();
       navigate("/");
     } catch (error) {
-      console.error("Erreur lors de la déconnexion:", error);
+      logger.error("Erreur lors de la déconnexion:", error);
     }
   };
 

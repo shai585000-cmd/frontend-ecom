@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Package, Truck, MapPin, Phone, CreditCard } from 'lucide-react';
 import { getOrderById, cancelOrder } from '../services/orderService';
 import Header from '../components/Common/Hearder';
+import logger from '../utils/logger';
 
 const OrderDetailPage = () => {
   const { id } = useParams();
@@ -18,7 +19,7 @@ const OrderDetailPage = () => {
         const data = await getOrderById(id);
         setOrder(data);
       } catch (err) {
-        console.error('Erreur:', err);
+        logger.error('Erreur:', err);
         setError('Commande introuvable');
       } finally {
         setLoading(false);
@@ -36,7 +37,7 @@ const OrderDetailPage = () => {
       const data = await getOrderById(id);
       setOrder(data);
     } catch (err) {
-      console.error('Erreur annulation:', err);
+      logger.error('Erreur annulation:', err);
       setError('Impossible d\'annuler la commande');
     } finally {
       setCancelling(false);

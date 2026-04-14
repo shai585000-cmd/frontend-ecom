@@ -8,6 +8,7 @@ import useWishlistStore from '../store/wishlistStore';
 import useCartStore from '../hooks/useCartStore';
 import { getWishlist, removeFromWishlist } from '../services/wishlistService';
 import toast from 'react-hot-toast';
+import logger from '../utils/logger';
 
 const WishlistPage = () => {
   const [products, setProducts] = useState([]);
@@ -28,7 +29,7 @@ const WishlistPage = () => {
           setProducts(localWishlist);
         }
       } catch (error) {
-        console.error('Erreur chargement wishlist:', error);
+        logger.error('Erreur chargement wishlist:', error);
         toast.error('Erreur lors du chargement des favoris');
       } finally {
         setLoading(false);
@@ -48,7 +49,7 @@ const WishlistPage = () => {
       setProducts(products.filter(p => p.id !== productId));
       toast.success('Produit retire des favoris');
     } catch (error) {
-      console.error('Erreur suppression:', error);
+      logger.error('Erreur suppression:', error);
       toast.error('Erreur lors de la suppression');
     }
   };

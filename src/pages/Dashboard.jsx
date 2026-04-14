@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { publicApi } from "../services/api";
+import logger from "../utils/logger";
 import { useParams } from "react-router-dom";
 import useAuthStore from "../hooks/authStore";
 import Header from "../components/Common/Hearder";
@@ -11,18 +12,18 @@ const Dashboard = () => {
   const [error, setError] = useState(null);
   const { id } = useParams();
   const { user } = useAuthStore();
-  console.log(user.nom_cli);
+  logger.log(user.nom_cli);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await publicApi.get(`users/dashboard/${id}`);
 
-        console.log(res.data);
+        logger.log(res.data);
         setData(res.data);
       } catch (error) {
         setError(error.message);
-        console.error("Erreur lors de la récupération des données:", error);
+        logger.error("Erreur lors de la récupération des données:", error);
       }
     };
 

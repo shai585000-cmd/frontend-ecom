@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import logger from '../utils/logger';
 import { persist, createJSONStorage } from "zustand/middleware";
 
 const useAuthStore = create(
@@ -11,7 +12,7 @@ const useAuthStore = create(
       error: null,
 
       setAuth: (user, tokens) => {
-        console.log("setAuth appelé avec:", { user, tokens }); // Debug
+        logger.log("setAuth appelé avec:", { user, tokens });
         set({
           user,
           tokens,
@@ -24,7 +25,7 @@ const useAuthStore = create(
       setError: (error) => set({ error }),
 
       clearAuth: () => {
-        console.log("clearAuth appelé"); // Debug
+        logger.log("clearAuth appelé");
         set(
           {
             user: null,
