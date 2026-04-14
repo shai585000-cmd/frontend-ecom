@@ -11,12 +11,12 @@ let intervalId = null;
 
 const pingBackend = async () => {
     try {
-        // Utilise un endpoint léger - on peut utiliser /api/products/ ou créer un endpoint /health
-        await axios.get(`${API_URL}/api/products/`, {
+        // Utilise un endpoint léger - /produits/products/
+        await axios.get(`${API_URL}/produits/products/`, {
             timeout: 30000, // 30 secondes de timeout car le cold start peut prendre du temps
         });
         logger.log('[KeepAlive] Backend ping successful:', new Date().toLocaleTimeString());
-    } catch (error) {
+    } catch {
         // On ne log pas les erreurs réseau car c'est normal si le backend est en train de démarrer
         logger.log('[KeepAlive] Backend ping attempt:', new Date().toLocaleTimeString());
     }
