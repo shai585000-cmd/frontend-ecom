@@ -5,6 +5,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google'
 import './index.css'
 import App from './App.jsx'
 import { startKeepAlive } from './services/keepAliveService'
+import './i18n/index.js'
 
 // Démarrer le service keep-alive pour maintenir le backend Render éveillé
 startKeepAlive()

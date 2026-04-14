@@ -1,13 +1,16 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Search, ShoppingCart, Heart, User, LogOut, Package, Settings, ChevronDown, Menu, X, Gift, Smartphone, Monitor, Headphones, Flame } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import useAuthStore from "../../hooks/authStore";
 import { logoutUser } from "../../services/authService";
 import useCartStore from "../../hooks/useCartStore";
 import useWishlistStore from "../../store/wishlistStore";
 import { publicApi } from "../../services/api";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 const Hearder = () => {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [productsMenuOpen, setProductsMenuOpen] = useState(false);
@@ -61,12 +64,12 @@ const Hearder = () => {
   };
 
   const productCategories = [
-    { name: "Tous les produits", path: "/produit", icon: null },
-    { name: "Nouveautés", path: "/produit?category=new", icon: <Gift size={16} className="text-red-500" /> },
-    { name: "Smartphones", path: "/produit?category=1", icon: <Smartphone size={16} className="text-red-500" /> },
-    { name: "Ordinateurs", path: "/produit?category=2", icon: <Monitor size={16} className="text-red-500" /> },
-    { name: "Accessoires", path: "/produit?category=3", icon: <Headphones size={16} className="text-red-500" /> },
-    { name: "Promotions", path: "/produit?promo=true", icon: <Flame size={16} className="text-red-500" /> },
+    { name: t('nav.allProducts'), path: "/produit", icon: null },
+    { name: t('nav.new'), path: "/produit?category=new", icon: <Gift size={16} className="text-red-500" /> },
+    { name: t('nav.smartphones'), path: "/produit?category=1", icon: <Smartphone size={16} className="text-red-500" /> },
+    { name: t('nav.computers'), path: "/produit?category=2", icon: <Monitor size={16} className="text-red-500" /> },
+    { name: t('nav.accessories'), path: "/produit?category=3", icon: <Headphones size={16} className="text-red-500" /> },
+    { name: t('nav.promotions'), path: "/produit?promo=true", icon: <Flame size={16} className="text-red-500" /> },
   ];
 
   const showDashboard = user?.commerçant;
@@ -127,7 +130,7 @@ const Hearder = () => {
             {/* Navigation desktop */}
             <nav className="hidden lg:flex items-center space-x-8">
               <Link to="/" className="text-gray-700 hover:text-red-600 font-medium transition-colors">
-                Accueil
+                {t('nav.home')}
               </Link>
               
               {/* Menu Produits avec dropdown */}
@@ -136,7 +139,7 @@ const Hearder = () => {
                   onClick={() => setProductsMenuOpen(!productsMenuOpen)}
                   className="flex items-center gap-1 text-gray-700 hover:text-red-600 font-medium transition-colors"
                 >
-                  Produits
+                  {t('nav.products')}
                   <ChevronDown size={16} className={`transition-transform ${productsMenuOpen ? 'rotate-180' : ''}`} />
                 </button>
                 
@@ -157,10 +160,10 @@ const Hearder = () => {
               </div>
 
               <Link to="/a-propos" className="text-gray-700 hover:text-red-600 font-medium transition-colors">
-                À propos
+                {t('nav.about')}
               </Link>
               <Link to="/contact" className="text-gray-700 hover:text-red-600 font-medium transition-colors">
-                Contact
+                {t('nav.contact')}
               </Link>
             </nav>
 
@@ -202,7 +205,7 @@ const Hearder = () => {
                     className="flex items-center gap-2 p-2 text-gray-600 hover:text-red-600 transition-colors"
                   >
                     <User size={22} />
-                    <span className="hidden md:inline text-sm font-medium">{user?.nom_cli || 'Mon compte'}</span>
+                    <span className="hidden md:inline text-sm font-medium">{user?.nom_cli || t('header.myAccount')}</span>
                     <ChevronDown size={16} className={`hidden md:block transition-transform ${profileMenuOpen ? 'rotate-180' : ''}`} />
                   </button>
 
@@ -220,7 +223,7 @@ const Hearder = () => {
                           className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
                         >
                           <User size={18} />
-                          Mon profil
+                          {t('header.myProfile')}
                         </Link>
 
                         <Link
@@ -229,7 +232,7 @@ const Hearder = () => {
                           className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
                         >
                           <Package size={18} />
-                          Mes commandes
+                          {t('header.myOrders')}
                         </Link>
 
                         <Link
@@ -238,7 +241,7 @@ const Hearder = () => {
                           className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
                         >
                           <Heart size={18} />
-                          Mes favoris
+                          {t('header.myFavorites')}
                           {wishlistCount > 0 && (
                             <span className="ml-auto bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded-full">
                               {wishlistCount}
@@ -253,7 +256,7 @@ const Hearder = () => {
                             className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
                           >
                             <Settings size={18} />
-                            Dashboard
+                            {t('header.dashboard')}
                           </Link>
                         )}
                       </div>
@@ -267,7 +270,7 @@ const Hearder = () => {
                           className="flex items-center gap-3 w-full px-4 py-2.5 text-red-600 hover:bg-red-50 transition-colors"
                         >
                           <LogOut size={18} />
-                          Déconnexion
+                          {t('header.logout')}
                         </button>
                       </div>
                     </div>
@@ -279,9 +282,12 @@ const Hearder = () => {
                   className="hidden md:flex items-center gap-2 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors font-medium"
                 >
                   <User size={18} />
-                  Connexion
+                  {t('nav.login')}
                 </Link>
               )}
+
+              {/* Sélecteur de langue */}
+              <LanguageSwitcher />
 
               {/* Menu mobile */}
               <button
@@ -303,7 +309,7 @@ const Hearder = () => {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Rechercher un produit..."
+                  placeholder={t('header.search')}
                   className="w-full py-3 px-4 pr-12 rounded-lg border border-gray-200 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-blue-200"
                   autoFocus
                 />
@@ -329,7 +335,7 @@ const Hearder = () => {
                     onClick={() => setIsOpen(false)}
                     className="block py-3 px-4 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors"
                   >
-                    Accueil
+                    {t('nav.home')}
                   </Link>
                 </li>
                 {productCategories.map((cat) => (
@@ -349,7 +355,7 @@ const Hearder = () => {
                     onClick={() => setIsOpen(false)}
                     className="block py-3 px-4 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors"
                   >
-                    À propos
+                    {t('nav.about')}
                   </Link>
                 </li>
                 {!isAuthenticated && (
@@ -359,7 +365,7 @@ const Hearder = () => {
                       onClick={() => setIsOpen(false)}
                       className="block py-3 px-4 bg-red-600 text-white text-center rounded-lg hover:bg-red-700 transition-colors font-medium"
                     >
-                      Connexion
+                      {t('nav.login')}
                     </Link>
                   </li>
                 )}

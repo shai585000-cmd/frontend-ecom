@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { FaFacebook, FaLinkedin, FaWhatsapp } from "react-icons/fa";
 import { FaInstagram, FaXTwitter } from "react-icons/fa6";
 import { Mail, Phone, MapPin, CreditCard, Truck, ShieldCheck, Headphones } from 'lucide-react';
 
 const Footer = () => {
+  const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -17,8 +19,8 @@ const Footer = () => {
                 <Truck className="w-6 h-6 text-red-500" />
               </div>
               <div>
-                <p className="font-medium text-white">Livraison rapide</p>
-                <p className="text-sm text-gray-400">Partout en Afrique</p>
+                <p className="font-medium text-white">{t('footer.fastDelivery')}</p>
+                <p className="text-sm text-gray-400">{t('footer.deliveryDesc')}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -26,8 +28,8 @@ const Footer = () => {
                 <ShieldCheck className="w-6 h-6 text-red-500" />
               </div>
               <div>
-                <p className="font-medium text-white">Paiement securise</p>
-                <p className="text-sm text-gray-400">100% securise</p>
+                <p className="font-medium text-white">{t('footer.securePayment')}</p>
+                <p className="text-sm text-gray-400">{t('footer.secureDesc')}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -35,7 +37,7 @@ const Footer = () => {
                 <CreditCard className="w-6 h-6 text-red-500" />
               </div>
               <div>
-                <p className="font-medium text-white">Mobile Money</p>
+                <p className="font-medium text-white">{t('footer.mobileMoney', 'Mobile Money')}</p>
                 <p className="text-sm text-gray-400">MTN, Orange, Wave</p>
               </div>
             </div>
@@ -44,8 +46,8 @@ const Footer = () => {
                 <Headphones className="w-6 h-6 text-red-500" />
               </div>
               <div>
-                <p className="font-medium text-white">Support 24/7</p>
-                <p className="text-sm text-gray-400">A votre ecoute</p>
+                <p className="font-medium text-white">{t('footer.support')}</p>
+                <p className="text-sm text-gray-400">{t('footer.supportDesc')}</p>
               </div>
             </div>
           </div>
@@ -63,8 +65,7 @@ const Footer = () => {
               </span>
             </Link>
             <p className="text-gray-400 mb-6">
-              Votre boutique tech de confiance pour smartphones et accessoires. 
-              Achetez en toute sécurité avec livraison rapide.
+              {t('footer.description')}
             </p>
             {/* Reseaux sociaux */}
             <div className="flex gap-3">
@@ -113,51 +114,51 @@ const Footer = () => {
 
           {/* Liens rapides */}
           <div>
-            <h3 className="text-white font-semibold mb-4">Liens rapides</h3>
+            <h3 className="text-white font-semibold mb-4">{t('footer.quickLinks')}</h3>
             <ul className="space-y-3">
               <li>
-                <Link to="/" className="hover:text-red-500 transition-colors">Accueil</Link>
+                <Link to="/" className="hover:text-red-500 transition-colors">{t('nav.home')}</Link>
               </li>
               <li>
-                <Link to="/produit" className="hover:text-red-500 transition-colors">Catalogue</Link>
+                <Link to="/produit" className="hover:text-red-500 transition-colors">{t('nav.products')}</Link>
               </li>
               <li>
-                <Link to="/a-propos" className="hover:text-red-500 transition-colors">A propos</Link>
+                <Link to="/a-propos" className="hover:text-red-500 transition-colors">{t('nav.about')}</Link>
               </li>
               <li>
-                <Link to="/blog" className="hover:text-red-500 transition-colors">Blog</Link>
+                <Link to="/blog" className="hover:text-red-500 transition-colors">{t('footer.blog')}</Link>
               </li>
               <li>
-                <Link to="/actualites" className="hover:text-red-500 transition-colors">Actualites</Link>
+                <Link to="/actualites" className="hover:text-red-500 transition-colors">{t('footer.news')}</Link>
               </li>
             </ul>
           </div>
 
           {/* Mon compte */}
           <div>
-            <h3 className="text-white font-semibold mb-4">Mon compte</h3>
+            <h3 className="text-white font-semibold mb-4">{t('footer.myAccount')}</h3>
             <ul className="space-y-3">
               <li>
-                <Link to="/login" className="hover:text-red-500 transition-colors">Connexion</Link>
+                <Link to="/login" className="hover:text-red-500 transition-colors">{t('footer.login')}</Link>
               </li>
               <li>
-                <Link to="/register" className="hover:text-red-500 transition-colors">Inscription</Link>
+                <Link to="/register" className="hover:text-red-500 transition-colors">{t('footer.register')}</Link>
               </li>
               <li>
-                <Link to="/orders" className="hover:text-red-500 transition-colors">Mes commandes</Link>
+                <Link to="/orders" className="hover:text-red-500 transition-colors">{t('footer.orders')}</Link>
               </li>
               <li>
-                <Link to="/cart" className="hover:text-red-500 transition-colors">Mon panier</Link>
+                <Link to="/cart" className="hover:text-red-500 transition-colors">{t('footer.cart')}</Link>
               </li>
               <li>
-                <Link to="/profile" className="hover:text-red-500 transition-colors">Mon profil</Link>
+                <Link to="/profile" className="hover:text-red-500 transition-colors">{t('footer.profile')}</Link>
               </li>
             </ul>
           </div>
 
           {/* Contact */}
           <div>
-            <h3 className="text-white font-semibold mb-4">Contact</h3>
+            <h3 className="text-white font-semibold mb-4">{t('footer.contact')}</h3>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
@@ -185,14 +186,14 @@ const Footer = () => {
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-gray-400 text-sm text-center md:text-left">
-              {currentYear} INFOTEK. Tous droits réservés.
+              {currentYear} INFOTEK. {t('footer.rights')}
             </p>
             <div className="flex gap-6 text-sm">
               <a href="#" className="text-gray-400 hover:text-red-500 transition-colors">
-                Conditions générales
+                {t('footer.terms')}
               </a>
               <a href="#" className="text-gray-400 hover:text-red-500 transition-colors">
-                Politique de confidentialité
+                {t('footer.privacy')}
               </a>
             </div>
           </div>

@@ -7,12 +7,51 @@ import { Link } from "react-router-dom";
 import WishlistButton from "../components/Common/WishlistButton";
 import { ShoppingCart, ChevronRight, Truck, Shield, Headphones, CreditCard, Smartphone, Monitor, Flame, Gift } from "lucide-react";
 
+const ICON_MAP = {
+  truck: <Truck className="text-red-600 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />,
+  shield: <Shield className="text-red-600 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />,
+  headphones: <Headphones className="text-red-600 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />,
+  'credit-card': <CreditCard className="text-red-600 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />,
+  gift: <Gift className="text-red-600 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />,
+  smartphone: <Smartphone className="w-8 h-8 text-white" />,
+  monitor: <Monitor className="w-8 h-8 text-white" />,
+  flame: <Flame className="w-8 h-8 text-white" />,
+};
+
+const DEFAULT_HERO = {
+  badge_text: "Nouveautés 2024",
+  title: "Découvrez les meilleurs smartphones du marché",
+  title_highlight: "smartphones",
+  description: "iPhone 15, Samsung Galaxy S24, et bien plus encore. Livraison gratuite et garantie 12 mois.",
+  button1_text: "Explorer les produits",
+  button1_link: "/produit",
+  button2_text: "Voir les promos",
+  button2_link: "/produit?promo=true",
+};
+
+const DEFAULT_FEATURES = [
+  { id: 1, icon: 'truck', title: 'Livraison Gratuite', description: 'Dès 50 000 FCFA' },
+  { id: 2, icon: 'shield', title: 'Garantie 12 mois', description: 'Sur tous les produits' },
+  { id: 3, icon: 'headphones', title: 'Support 24/7', description: 'Assistance dédiée' },
+  { id: 4, icon: 'credit-card', title: 'Paiement Sécurisé', description: 'Mobile Money & CB' },
+];
+
+const DEFAULT_SOLUTIONS = [
+  { id: 1, title: "Smartphones Premium", description: "Les derniers modèles iPhone & Samsung", icon: "smartphone", link: "/produit?category=1", bg_gradient: "from-gray-800 to-gray-900" },
+  { id: 2, title: "Accessoires Tech", description: "Coques, chargeurs, écouteurs...", icon: "headphones", link: "/produit?category=3", bg_gradient: "from-gray-700 to-gray-800" },
+  { id: 3, title: "Ordinateurs", description: "Laptops et PC performants", icon: "monitor", link: "/produit?category=2", bg_gradient: "from-gray-600 to-gray-700" },
+  { id: 4, title: "Promotions", description: "Jusqu'à -50% sur une sélection", icon: "flame", link: "/produit?promo=true", bg_gradient: "from-red-500 to-red-600" },
+];
+
 const HomePage = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [categories, setCategories] = useState([]);
   const [promotions, setPromotions] = useState([]);
+  const [hero, setHero] = useState(DEFAULT_HERO);
+  const [features, setFeatures] = useState(DEFAULT_FEATURES);
+  const [solutionCards, setSolutionCards] = useState(DEFAULT_SOLUTIONS);
 
   const addToCart = useCartStore((state) => state.addToCart);
 
@@ -38,14 +77,20 @@ const HomePage = () => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        const [productsRes, categoriesRes, promotionsRes] = await Promise.all([
+        const [productsRes, categoriesRes, promotionsRes, heroRes, featuresRes, solutionsRes] = await Promise.all([
           publicApi.get("/produits/products/"),
           publicApi.get("/home/categories/"),
-          publicApi.get("/produits/products/promotion/")
+          publicApi.get("/produits/products/promotion/"),
+          publicApi.get("/home/hero/").catch(() => ({ data: {} })),
+          publicApi.get("/home/features/").catch(() => ({ data: [] })),
+          publicApi.get("/home/solutions/").catch(() => ({ data: [] })),
         ]);
         setProducts(productsRes.data);
         setCategories(categoriesRes.data);
         setPromotions(promotionsRes.data);
+        if (heroRes.data && heroRes.data.title) setHero(heroRes.data);
+        if (featuresRes.data && featuresRes.data.length > 0) setFeatures(featuresRes.data);
+        if (solutionsRes.data && solutionsRes.data.length > 0) setSolutionCards(solutionsRes.data);
         setError(null);
       } catch (err) {
         console.error("Erreur lors de la récupération des produits:", err);
@@ -57,13 +102,6 @@ const HomePage = () => {
     fetchProducts();
   }, []);
 
-  // Solutions/Categories cards data
-  const solutionCards = [
-    { title: "Smartphones Premium", desc: "Les derniers modèles iPhone & Samsung", icon: <Smartphone className="w-8 h-8 text-white" />, link: "/produit?category=1", bg: "from-gray-800 to-gray-900" },
-    { title: "Accessoires Tech", desc: "Coques, chargeurs, écouteurs...", icon: <Headphones className="w-8 h-8 text-white" />, link: "/produit?category=3", bg: "from-gray-700 to-gray-800" },
-    { title: "Ordinateurs", desc: "Laptops et PC performants", icon: <Monitor className="w-8 h-8 text-white" />, link: "/produit?category=2", bg: "from-gray-600 to-gray-700" },
-    { title: "Promotions", desc: "Jusqu'à -50% sur une sélection", icon: <Flame className="w-8 h-8 text-white" />, link: "/produit?promo=true", bg: "from-red-500 to-red-600" },
-  ];
 
   if (loading) {
     return (
@@ -111,28 +149,32 @@ const HomePage = () => {
           <div className="container mx-auto px-4 py-16 md:py-24 relative z-10">
             <div className="max-w-3xl">
               <span className="inline-block bg-red-600 text-white text-sm font-semibold px-4 py-1 rounded-full mb-4">
-                Nouveautés 2024
+                {hero.badge_text}
               </span>
               <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">
-                Découvrez les meilleurs
-                <span className="text-red-500"> smartphones</span> du marché
+                {hero.title_highlight
+                  ? hero.title.replace(hero.title_highlight, '')
+                  : hero.title}
+                {hero.title_highlight && (
+                  <span className="text-red-500"> {hero.title_highlight}</span>
+                )}
               </h1>
               <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-6 sm:mb-8">
-                iPhone 15, Samsung Galaxy S24, et bien plus encore. Livraison gratuite et garantie 12 mois.
+                {hero.description}
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link
-                  to="/produit"
+                  to={hero.button1_link}
                   className="inline-flex items-center gap-2 bg-red-600 text-white px-4 sm:px-6 md:px-8 py-3 md:py-4 rounded-lg font-semibold hover:bg-red-700 transition-colors text-sm sm:text-base"
                 >
-                  Explorer les produits
+                  {hero.button1_text}
                   <ChevronRight size={20} />
                 </Link>
                 <Link
-                  to="/produit?promo=true"
+                  to={hero.button2_link}
                   className="inline-flex items-center gap-2 bg-white/10 text-white px-4 sm:px-6 md:px-8 py-3 md:py-4 rounded-lg font-semibold hover:bg-white/20 transition-colors border border-white/20 text-sm sm:text-base"
                 >
-                  Voir les promos
+                  {hero.button2_text}
                 </Link>
               </div>
             </div>
@@ -143,42 +185,17 @@ const HomePage = () => {
         <section className="bg-white border-b">
           <div className="container mx-auto px-4 py-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-              <div className="flex items-center gap-2 sm:gap-3">
-                <div className="p-2 sm:p-3 bg-red-100 rounded-full flex-shrink-0">
-                  <Truck className="text-red-600 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+              {features.map((feature) => (
+                <div key={feature.id} className="flex items-center gap-2 sm:gap-3">
+                  <div className="p-2 sm:p-3 bg-red-100 rounded-full flex-shrink-0">
+                    {ICON_MAP[feature.icon] || <Truck className="text-red-600 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />}
+                  </div>
+                  <div>
+                    <p className="font-semibold text-gray-800 text-xs sm:text-sm md:text-base">{feature.title}</p>
+                    <p className="text-xs sm:text-sm text-gray-500">{feature.description}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="font-semibold text-gray-800 text-xs sm:text-sm md:text-base">Livraison Gratuite</p>
-                  <p className="text-xs sm:text-sm text-gray-500">Dès 50 000 FCFA</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2 sm:gap-3">
-                <div className="p-2 sm:p-3 bg-red-100 rounded-full flex-shrink-0">
-                  <Shield className="text-red-600 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-800 text-xs sm:text-sm md:text-base">Garantie 12 mois</p>
-                  <p className="text-xs sm:text-sm text-gray-500">Sur tous les produits</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2 sm:gap-3">
-                <div className="p-2 sm:p-3 bg-red-100 rounded-full flex-shrink-0">
-                  <Headphones className="text-red-600 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-800 text-xs sm:text-sm md:text-base">Support 24/7</p>
-                  <p className="text-xs sm:text-sm text-gray-500">Assistance dédiée</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2 sm:gap-3">
-                <div className="p-2 sm:p-3 bg-red-100 rounded-full flex-shrink-0">
-                  <CreditCard className="text-red-600 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-800 text-xs sm:text-sm md:text-base">Paiement Sécurisé</p>
-                  <p className="text-xs sm:text-sm text-gray-500">Mobile Money & CB</p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </section>
@@ -283,15 +300,15 @@ const HomePage = () => {
             </h2>
             
             <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
-              {solutionCards.map((card, index) => (
+              {solutionCards.map((card) => (
                 <Link
-                  key={index}
+                  key={card.id}
                   to={card.link}
-                  className={`group relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br ${card.bg} p-4 sm:p-6 text-white hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1`}
+                  className={`group relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br ${card.bg_gradient} p-4 sm:p-6 text-white hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1`}
                 >
-                  <div className="text-2xl sm:text-4xl mb-2 sm:mb-4">{card.icon}</div>
+                  <div className="text-2xl sm:text-4xl mb-2 sm:mb-4">{ICON_MAP[card.icon] || <Smartphone className="w-8 h-8 text-white" />}</div>
                   <h3 className="text-sm sm:text-xl font-bold mb-1 sm:mb-2">{card.title}</h3>
-                  <p className="text-white/80 text-xs sm:text-sm mb-2 sm:mb-4 line-clamp-2">{card.desc}</p>
+                  <p className="text-white/80 text-xs sm:text-sm mb-2 sm:mb-4 line-clamp-2">{card.description}</p>
                   <span className="inline-flex items-center gap-1 text-xs sm:text-sm font-semibold">
                     ACHETER <ChevronRight size={16} />
                   </span>
