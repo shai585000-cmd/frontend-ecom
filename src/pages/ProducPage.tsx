@@ -9,7 +9,6 @@ import Footer from "../components/Common/Footer";
 import ReviewSection from "../components/Reviews/ReviewSection";
 import RecentlyViewedCarousel from "../components/Produit/RecentlyViewedCarousel";
 import RecommendedProducts from "../components/Produit/RecommendedProducts";
-import { motion } from "framer-motion";
 import { Star, Package, Phone, AlertCircle, Truck, ShoppingCart } from "lucide-react";
 import logger from "../utils/logger";
 
@@ -60,33 +59,45 @@ const ProducPage = () => {
   }, [id, navigate, addRecentlyViewed]);
 
   if (loading) {
-    return <div>Chargement...</div>;
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="container mx-auto px-4 py-8 max-w-7xl">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-pulse">
+            <div className="bg-white rounded-2xl p-4 shadow-sm">
+              <div className="w-full h-[400px] bg-gray-200 rounded-xl" />
+            </div>
+            <div className="space-y-4">
+              <div className="h-8 bg-gray-200 rounded w-3/4" />
+              <div className="h-4 bg-gray-200 rounded w-full" />
+              <div className="h-4 bg-gray-200 rounded w-2/3" />
+              <div className="h-16 bg-gray-200 rounded" />
+              <div className="h-12 bg-gray-200 rounded" />
+              <div className="h-14 bg-gray-200 rounded" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (!product) {
-    return <div>Produit non trouvé</div>;
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="container mx-auto px-4 py-16 text-center text-gray-500">Produit non trouvé</div>
+        <Footer />
+      </div>
+    );
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="container mx-auto px-4 py-8 max-w-7xl"
-      >
-        <motion.div
-          className="grid grid-cols-1 lg:grid-cols-2 gap-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-        >
+      <div className="container mx-auto px-4 py-8 max-w-7xl">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Colonne gauche - Image */}
-          <motion.div
-            className="space-y-4"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-          >
+          <div className="space-y-4">
             <div className="bg-white rounded-2xl p-4 shadow-lg">
               <img
                 src={getImageUrl(product.image)}
@@ -94,14 +105,10 @@ const ProducPage = () => {
                 className="w-full h-[400px] md:h-[500px] object-contain rounded-xl"
               />
             </div>
-          </motion.div>
+          </div>
 
           {/* Colonne droite - Informations */}
-          <motion.div
-            className="space-y-6"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-          >
+          <div className="space-y-6">
             {/* Titre */}
             <h1 className="text-2xl md:text-4xl font-bold text-gray-900">
               {product.name || product.title}
@@ -239,16 +246,14 @@ const ProducPage = () => {
             </div>
 
             {/* Bouton Acheter */}
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+            <button
               onClick={() => handleAddToCart(product)}
               disabled={product.stock === 0}
-              className="w-full py-4 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 disabled:bg-gray-400 disabled:cursor-not-allowed"
+              className="w-full py-4 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold text-lg shadow-md flex items-center justify-center gap-3 disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               <ShoppingCart size={24} />
               {product.stock === 0 ? "Produit indisponible" : "Ajouter au panier"}
-            </motion.button>
+            </button>
 
             {/* Informations supplémentaires */}
             <div className="space-y-3 bg-gray-50 rounded-xl p-4 border border-gray-200">
@@ -275,39 +280,24 @@ const ProducPage = () => {
                 </button>
               </div>
             </div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
 
         {/* Section Recommandations IA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="mt-12"
-        >
+        <div className="mt-12">
           <RecommendedProducts productId={parseInt(id)} limit={8} />
-        </motion.div>
+        </div>
 
         {/* Section Avis */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          className="mt-12"
-        >
+        <div className="mt-12">
           <ReviewSection productId={parseInt(id)} />
-        </motion.div>
+        </div>
 
         {/* Section Produits vus récemment */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
-          className="mt-12"
-        >
+        <div className="mt-12">
           <RecentlyViewedCarousel currentProductId={parseInt(id)} />
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
       <Footer />
     </div>
   );
