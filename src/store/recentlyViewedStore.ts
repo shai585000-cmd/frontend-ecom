@@ -1,15 +1,31 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import type { Product } from '../types';
+
+interface RecentlyViewedItem extends Pick<Product, 'id' | 'description' | 'price' | 'image' | 'stock'> {
+  title: string;
+  category?: Product['category'];
+  viewedAt: string;
+}
+
+interface RecentlyViewedState {
+  recentlyViewed: RecentlyViewedItem[];
+  addRecentlyViewed: (product: Product) => void;
+  removeRecentlyViewed: (productId: number) => void;
+  clearRecentlyViewed: () => void;
+  getRecentlyViewedCount: () => number;
+  getLastViewed: (count?: number) => RecentlyViewedItem[];
+}
 
 const MAX_RECENTLY_VIEWED = 10; // Nombre maximum de produits à garder
 
-const useRecentlyViewedStore = create(
+const useRecentlyViewedStore = create<RecentlyViewedState>()(
   persist(
     (set, get) => ({
       recentlyViewed: [],
       
       // Ajouter un produit à la liste des produits vus récemment
-      addRecentlyViewed: (product) => {
+      addRecentlyViewed: (product: Product) => {
         set((state) => {
           // Vérifier si le produit existe déjà
           const existingIndex = state.recentlyViewed.findIndex(
@@ -30,7 +46,7 @@ const useRecentlyViewedStore = create(
           // Ajouter le produit au début de la liste
           newRecentlyViewed.unshift({
             id: product.id,
-            title: product.title,
+            title: product.title ?? product.name ?? '',
             description: product.description,
             price: product.price,
             image: product.image,
@@ -49,7 +65,7 @@ const useRecentlyViewedStore = create(
       },
       
       // Retirer un produit de la liste
-      removeRecentlyViewed: (productId) => {
+      removeRecentlyViewed: (productId: number) => {
         set((state) => ({
           recentlyViewed: state.recentlyViewed.filter((p) => p.id !== productId),
         }));
@@ -62,13 +78,13 @@ const useRecentlyViewedStore = create(
       getRecentlyViewedCount: () => get().recentlyViewed.length,
       
       // Obtenir les N derniers produits vus
-      getLastViewed: (count = 5) => {
+      getLastViewed: (count: number = 5) => {
         return get().recentlyViewed.slice(0, count);
       },
     }),
     {
       name: 'recently-viewed-storage',
-      getStorage: () => localStorage,
+      storage: createJSONStorage(() => localStorage),
     }
   )
 );

@@ -1,18 +1,18 @@
+/// <reference types="vite/client" />
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Toaster } from 'react-hot-toast'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import './index.css'
-import App from './App.jsx'
+import App from './App'
 import { startKeepAlive } from './services/keepAliveService'
-import './i18n/index.js'
+import './i18n/index'
 
-// Démarrer le service keep-alive pour maintenir le backend Render éveillé
 startKeepAlive()
 
-const GOOGLE_CLIENT_ID = '427788449898-u3i5tqe9dnpvice4kjr3rp06vbfou4sv.apps.googleusercontent.com'
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID as string
 
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
     <Toaster 

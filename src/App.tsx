@@ -18,40 +18,40 @@ import CataloguePage from "./pages/CataloguePage";
 import WhatsAppButton from "./components/Common/WhatsAppButton";
 import NotFoundPage from "./pages/NotFoundPage";
 import WishlistPage from "./pages/WishlistPage";
+import ProtectedRoute from "./components/Common/ProtectedRoute";
 
 const App = () => {
   return (
     <Router>
       <div className="app">
-        {/* Le Header est affiché sur toutes les pages */}
-
         <main>
           <Routes>
+            {/* Routes publiques */}
             <Route path="/" element={<HomePage />} />
             <Route path="/products/:id" element={<ProductPage />} />
             <Route path="/cart" element={<CartPage />} />
-            <Route path="/checkout" element={<CheckoutPage />} />
-            <Route path="/profile" element={<UserProfilePage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/a-propos" element={<AboutPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/a-propos" element={<AboutPage />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/actualites" element={<ActualitesPage />} />
-            <Route path="/dashboard/:id" element={<Dashboard />} />
-            <Route path="/orders" element={<OrdersPage />} />
-            <Route path="/orders/:id" element={<OrderDetailPage />} />
             <Route path="/produit" element={<CataloguePage />} />
-            <Route path="/wishlist" element={<WishlistPage />} />
             <Route path="/auth/callback" element={<GoogleCallbackPage />} />
-            
+
+            {/* Routes protégées (authentification requise) */}
+            <Route path="/checkout" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute><UserProfilePage /></ProtectedRoute>} />
+            <Route path="/dashboard/:id" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/orders" element={<ProtectedRoute><OrdersPage /></ProtectedRoute>} />
+            <Route path="/orders/:id" element={<ProtectedRoute><OrderDetailPage /></ProtectedRoute>} />
+            <Route path="/wishlist" element={<ProtectedRoute><WishlistPage /></ProtectedRoute>} />
+
             {/* Route 404 - Doit être en dernier */}
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
-        {/* Le Footer est affiché sur toutes les pages */}
-        
-        {/* Bouton WhatsApp flottant - Remplacer par votre numéro */}
-        <WhatsAppButton phoneNumber="2250170629746" />
+
+        <WhatsAppButton phoneNumber={import.meta.env.VITE_WHATSAPP_NUMBER || "2250170629746"} />
       </div>
     </Router>
   );

@@ -1,8 +1,22 @@
 import { create } from "zustand";
 import logger from '../utils/logger';
 import { persist, createJSONStorage } from "zustand/middleware";
+import type { User, AuthTokens } from '../types';
 
-const useAuthStore = create(
+interface AuthState {
+  user: User | null;
+  tokens: AuthTokens | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  error: string | null;
+  setAuth: (user: User, tokens: AuthTokens) => void;
+  setLoading: (isLoading: boolean) => void;
+  setError: (error: string | null) => void;
+  clearAuth: () => void;
+  clearError: () => void;
+}
+
+const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       user: null,
@@ -11,7 +25,7 @@ const useAuthStore = create(
       isLoading: false,
       error: null,
 
-      setAuth: (user, tokens) => {
+      setAuth: (user: User, tokens: AuthTokens) => {
         logger.log("setAuth appelé avec:", { user, tokens });
         set({
           user,
@@ -21,20 +35,17 @@ const useAuthStore = create(
         });
       },
 
-      setLoading: (isLoading) => set({ isLoading }),
-      setError: (error) => set({ error }),
+      setLoading: (isLoading: boolean) => set({ isLoading }),
+      setError: (error: string | null) => set({ error }),
 
       clearAuth: () => {
         logger.log("clearAuth appelé");
-        set(
-          {
-            user: null,
-            tokens: null,
-            isAuthenticated: false,
-            error: null,
-          },
-          true
-        ); // Force update
+        set({
+          user: null,
+          tokens: null,
+          isAuthenticated: false,
+          error: null,
+        });
       },
 
       clearError: () => set({ error: null }),
@@ -51,4 +62,5 @@ const useAuthStore = create(
   )
 );
 
+export type { AuthState };
 export default useAuthStore;

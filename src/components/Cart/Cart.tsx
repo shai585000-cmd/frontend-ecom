@@ -12,7 +12,7 @@ const Cart = () => {
   const getTotalPrice = useCartStore((state) => state.getTotalPrice);
 
   // Fonction pour gerer les URLs d'images
-  const getImageUrl = (image) => {
+  const getImageUrl = (image: string | undefined): string => {
     if (!image) return '/placeholder.svg';
     if (image.startsWith('http://') || image.startsWith('https://')) return image;
     if (image.includes('https%3A') || image.includes('https:/') || image.includes('http%3A') || image.includes('http:/')) {
@@ -61,8 +61,9 @@ const Cart = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-50 to-indigo-50 p-4"
+        className="flex flex-col min-h-screen bg-gray-50"
       >
+        <Header />
         <motion.div
           initial={{ scale: 0.8 }}
           animate={{ scale: 1 }}
@@ -153,12 +154,12 @@ const Cart = () => {
               >
                 <motion.div
                   whileHover={{ scale: 1.05 }}
-                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden flex-shrink-0"
+                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden flex-shrink-0 bg-white border border-gray-100"
                 >
                   <img
                     src={getImageUrl(product.image)}
                     alt={product.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain p-1"
                   />
                 </motion.div>
 
