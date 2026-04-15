@@ -38,7 +38,6 @@ import { useTranslation } from 'react-i18next';
 import { getOrders } from '../services/orderService';
 import { getMyReviews } from '../services/reviewService';
 import useAuthStore from '../hooks/authStore';
-import { motion } from 'framer-motion';
 import { 
   User, Mail, Phone, MapPin, Building, Lock, 
   ShoppingBag, Star, Edit2, Save, X, Eye, EyeOff,
@@ -231,9 +230,7 @@ const UserProfilePage = () => {
       
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* En-tete du profil */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+        <div
           className="bg-gradient-to-r from-red-600 to-red-800 rounded-2xl p-4 sm:p-8 mb-6 sm:mb-8 text-white"
         >
           <div className="flex items-center gap-4 sm:gap-6">
@@ -249,7 +246,7 @@ const UserProfilePage = () => {
               </p>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Navigation par onglets */}
         <div className="grid grid-cols-4 gap-1 sm:flex sm:gap-2 mb-6">
@@ -276,12 +273,7 @@ const UserProfilePage = () => {
         </div>
 
         {/* Contenu des onglets */}
-        <motion.div
-          key={activeTab}
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.3 }}
-        >
+        <div>
           {/* Onglet Profil */}
           {activeTab === 'profile' && (
             <div className="bg-white rounded-2xl shadow-sm p-6">
@@ -671,7 +663,7 @@ const UserProfilePage = () => {
               )}
             </div>
           )}
-        </motion.div>
+        </div>
       </div>
 
       <Footer />

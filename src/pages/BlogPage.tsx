@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import Header from "../components/Common/Hearder";
 import Footer from "../components/Common/Footer";
 
@@ -30,36 +29,11 @@ const BlogPage = () => {
     },
   ];
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  const cardVariants = {
-    hidden: { y: 50, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut",
-      },
-    },
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
       <Header />
       {/* Hero Section modernisé */}
-      <motion.div
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
+      <div
         className="bg-gradient-to-r from-red-600 via-indigo-600 to-blue-700 py-20"
       >
         <div className="container mx-auto px-4">
@@ -70,27 +44,18 @@ const BlogPage = () => {
             Découvrez nos derniers articles et actualités
           </p>
         </div>
-      </motion.div>
+      </div>
 
-      {/* Articles Grid avec animations */}
+      {/* Articles Grid */}
       <div className="container mx-auto px-4 py-16">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {blogPosts.map((post, index) => (
-            <motion.article
+            <article
               key={index}
-              variants={cardVariants}
-              whileHover={{ scale: 1.03 }}
-              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 backdrop-blur-md bg-white/90"
+              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-md"
             >
               <div className="relative overflow-hidden">
-                <motion.img
-                  whileHover={{ scale: 1.1 }}
-                  transition={{ duration: 0.3 }}
+                <img
                   src={post.image}
                   alt={post.titre}
                   className="w-full h-56 object-cover"
@@ -109,18 +74,16 @@ const BlogPage = () => {
                 </p>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-500 text-sm">{post.date}</span>
-                  <motion.button
-                    whileHover={{ x: 5 }}
-                    className="text-indigo-600 hover:text-indigo-800 font-medium flex items-center gap-2"
+                  <button
+                    className="text-red-600 hover:text-red-800 font-medium flex items-center gap-2"
                   >
-                    Lire plus
-                    <span className="transform transition-transform">→</span>
-                  </motion.button>
+                    Lire plus →
+                  </button>
                 </div>
               </div>
-            </motion.article>
+            </article>
           ))}
-        </motion.div>
+        </div>
       </div>
       <Footer />
     </div>

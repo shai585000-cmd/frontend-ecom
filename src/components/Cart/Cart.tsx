@@ -1,7 +1,6 @@
 import useCartStore from "../../hooks/useCartStore";
 import { Link } from "react-router-dom";
 import { FaShoppingCart, FaTrash, FaMinus, FaPlus } from "react-icons/fa";
-import { motion, AnimatePresence } from "framer-motion";
 import Header from "../Common/Hearder";
 
 const Cart = () => {
@@ -26,93 +25,42 @@ const Cart = () => {
     return `${import.meta.env.VITE_API_URL}${image}`;
   };
 
-  // Animations variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 24,
-      },
-    },
-    exit: {
-      x: -300,
-      opacity: 0,
-      transition: { duration: 0.5 },
-    },
-  };
 
   if (!cart || cart.length === 0) {
     return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="flex flex-col min-h-screen bg-gray-50"
-      >
+      <div className="flex flex-col min-h-screen bg-gray-50">
         <Header />
-        <motion.div
-          initial={{ scale: 0.8 }}
-          animate={{ scale: 1 }}
-          transition={{
-            type: "spring",
-            stiffness: 260,
-            damping: 20,
-          }}
-          className="text-center"
-        >
-          <motion.div
-            animate={{
-              rotate: [0, -10, 10, -10, 0],
-              transition: { duration: 1, delay: 0.5 },
-            }}
-          >
+        <div className="text-center">
+          <div>
             <FaShoppingCart className="w-24 h-24 text-gray-300 mx-auto mb-4" />
-          </motion.div>
+          </div>
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-700 mb-4">
             Votre panier est vide
           </h1>
           <p className="text-gray-500 mb-8">
             Découvrez nos produits et commencez votre shopping
           </p>
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          <div>
             <Link
               to="/"
               className="inline-block px-8 py-3 bg-gradient-to-r from-red-500 to-red-700 text-white rounded-full hover:from-red-600 hover:to-indigo-700 transition-all duration-300 shadow-lg"
             >
               Continuer mes achats
             </Link>
-          </motion.div>
-        </motion.div>
-      </motion.div>
+          </div>
+        </div>
+      </div>
     );
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="min-h-screen bg-gradient-to-r from-blue-50 to-indigo-50 p-4 md:p-8"
+    <div
+      className="min-h-screen bg-gray-50 p-4 md:p-8"
     >
       <Header />
       <div className="max-w-4xl mx-auto">
         {/* Bouton retour */}
-        <motion.div 
-          initial={{ x: -20, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
+        <div 
           className="mb-4"
         >
           <Link
@@ -124,127 +72,92 @@ const Cart = () => {
             </svg>
             Retour a l&apos;accueil
           </Link>
-        </motion.div>
+        </div>
 
-        <motion.h1
-          initial={{ y: -50 }}
-          animate={{ y: 0 }}
-          transition={{ type: "spring", stiffness: 300, damping: 24 }}
+        <h1
           className="text-3xl font-bold text-gray-800 mb-8 text-center"
         >
           Mon Panier{" "}
           <span className="text-red-600">({cart.length} articles)</span>
-        </motion.h1>
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="bg-white rounded-2xl shadow-xl p-6 mb-8"
-        >
-          <AnimatePresence>
-            {cart.map((product) => (
-              <motion.div
-                key={product.id}
-                variants={itemVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                layout
-                className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-3 sm:p-4 mb-4 border-b last:border-b-0 hover:bg-gray-50 rounded-xl transition-all duration-300"
-              >
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden flex-shrink-0 bg-white border border-gray-100"
-                >
-                  <img
-                    src={getImageUrl(product.image)}
-                    alt={product.name}
-                    className="w-full h-full object-contain p-1"
-                  />
-                </motion.div>
+        </h1>
+        <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-6">
+          {cart.map((product) => (
+            <div
+              key={product.id}
+              className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-3 sm:p-4 mb-4 border-b last:border-b-0 hover:bg-gray-50 rounded-xl"
+            >
+              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden flex-shrink-0 bg-white border border-gray-100">
+                <img
+                  src={getImageUrl(product.image)}
+                  alt={product.name}
+                  className="w-full h-full object-contain p-1"
+                />
+              </div>
 
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-base sm:text-lg font-semibold text-gray-800 truncate">
-                    {product.name}
-                  </h3>
-                  <p className="text-gray-500 text-sm line-clamp-1 hidden sm:block">{product.description}</p>
-                  <div className="mt-1 sm:mt-2">
-                    <span className="text-lg sm:text-xl font-bold text-red-600">
-                      {product.price.toLocaleString()} Fcfa
-                    </span>
-                  </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-800 truncate">
+                  {product.name}
+                </h3>
+                <p className="text-gray-500 text-sm line-clamp-1 hidden sm:block">{product.description}</p>
+                <div className="mt-1 sm:mt-2">
+                  <span className="text-lg sm:text-xl font-bold text-red-600">
+                    {product.price.toLocaleString()} Fcfa
+                  </span>
                 </div>
+              </div>
 
-                <div className="flex items-center justify-between w-full sm:w-auto sm:flex-col gap-2 sm:gap-4">
-                  <div className="flex items-center gap-2 sm:gap-3 bg-gray-100 rounded-full px-2 py-1">
-                    <motion.button
-                      whileTap={{ scale: 0.9 }}
-                      onClick={() => decrementQuantity(product.id)}
-                      className="p-1.5 sm:p-2 rounded-full hover:bg-gray-200"
-                    >
-                      <FaMinus className="text-gray-500 text-xs sm:text-sm" />
-                    </motion.button>
-                    <span className="font-semibold w-6 text-center">{product.quantity}</span>
-                    <motion.button
-                      whileTap={{ scale: 0.9 }}
-                      onClick={() => incrementQuantity(product.id)}
-                      className="p-1.5 sm:p-2 rounded-full hover:bg-gray-200"
-                    >
-                      <FaPlus className="text-gray-500 text-xs sm:text-sm" />
-                    </motion.button>
-                  </div>
-                  <motion.button
-                    whileTap={{ scale: 0.9 }}
-                    onClick={() => removeFromCart(product.id)}
-                    className="text-red-500 p-2 hover:bg-red-50 rounded-full transition-colors"
+              <div className="flex items-center justify-between w-full sm:w-auto sm:flex-col gap-2 sm:gap-4">
+                <div className="flex items-center gap-2 sm:gap-3 bg-gray-100 rounded-full px-2 py-1">
+                  <button
+                    onClick={() => decrementQuantity(product.id)}
+                    className="p-1.5 sm:p-2 rounded-full hover:bg-gray-200"
                   >
-                    <FaTrash size={14} />
-                  </motion.button>
+                    <FaMinus className="text-gray-500 text-xs sm:text-sm" />
+                  </button>
+                  <span className="font-semibold w-6 text-center">{product.quantity}</span>
+                  <button
+                    onClick={() => incrementQuantity(product.id)}
+                    className="p-1.5 sm:p-2 rounded-full hover:bg-gray-200"
+                  >
+                    <FaPlus className="text-gray-500 text-xs sm:text-sm" />
+                  </button>
                 </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
+                <button
+                  onClick={() => removeFromCart(product.id)}
+                  className="text-red-500 p-2 hover:bg-red-50 rounded-full"
+                >
+                  <FaTrash size={14} />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
 
-        <motion.div
-          initial={{ y: 50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="bg-white rounded-2xl shadow-xl p-6"
-        >
+        <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6">
           <div className="flex justify-between items-center mb-6">
             <span className="text-xl font-semibold">Total</span>
-            <motion.span
-              key={getTotalPrice()}
-              initial={{ scale: 1.5, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              className="text-2xl font-bold text-red-600"
-            >
+            <span className="text-2xl font-bold text-red-600">
               {getTotalPrice()} Fcfa
-            </motion.span>
+            </span>
           </div>
 
           <div className="flex flex-col gap-4">
-            <motion.div whileHover={{ scale: 1.02 }}>
               <Link
                 to="/checkout"
-                className="block w-full py-4 bg-gradient-to-r from-red-500 to-red-700 text-white rounded-xl text-center font-semibold hover:from-red-600 hover:to-indigo-700 transition-all duration-300 shadow-md hover:shadow-lg"
+                className="block w-full py-4 bg-red-600 text-white rounded-xl text-center font-semibold hover:bg-red-700 shadow-md"
               >
                 Procéder au paiement
               </Link>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.02 }}>
               <Link
                 to="/"
-                className="block w-full py-4 border-2 border-gray-200 text-gray-600 rounded-xl text-center font-semibold hover:bg-gray-50 transition-all duration-300"
+                className="block w-full py-4 border-2 border-gray-200 text-gray-600 rounded-xl text-center font-semibold hover:bg-gray-50"
               >
                 Continuer mes achats
               </Link>
-            </motion.div>
           </div>
-        </motion.div>
+        </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
