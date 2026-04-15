@@ -239,11 +239,11 @@ const HomePage = () => {
                   className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
                 >
                   <Link to={`/products/${product.id}`}>
-                    <div className="relative aspect-square overflow-hidden bg-gray-100">
+                    <div className="relative bg-white" style={{aspectRatio:'1/1'}}>
                       <img
                         src={getImageUrl(product.image)}
                         alt={product.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="absolute inset-0 w-full h-full object-contain p-4"
                         onError={(e) => { e.target.src = "/placeholder.svg"; }}
                       />
                       {product.promotion && (
@@ -342,11 +342,11 @@ const HomePage = () => {
                     className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border-2 border-red-100"
                   >
                     <Link to={`/products/${promo.id}`}>
-                      <div className="relative aspect-square overflow-hidden bg-gray-100">
+                      <div className="relative bg-white" style={{aspectRatio:'1/1'}}>
                         <img
                           src={getImageUrl(promo.image)}
                           alt={promo.name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          className="absolute inset-0 w-full h-full object-contain p-4"
                           onError={(e) => { e.target.src = "/placeholder.svg"; }}
                         />
                         <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">

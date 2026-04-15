@@ -308,39 +308,39 @@ const CataloguePage = () => {
         ) : viewMode === 'grid' ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             {visibleProducts.map((product, index) => (
-              <div 
-                key={product.id} 
+              <div
+                key={product.id}
                 ref={index === visibleProducts.length - 1 ? lastProductRef : null}
-                className="bg-white rounded-xl shadow-sm overflow-hidden group hover:shadow-lg transition-shadow"
+                className="bg-white rounded-xl shadow-sm overflow-hidden group hover:shadow-md transition-shadow border border-gray-100"
               >
                 <Link to={`/products/${product.id}`}>
-                  <div className="aspect-square overflow-hidden relative">
+                  <div className="relative bg-white" style={{ aspectRatio: '1/1' }}>
                     <img
                       src={getImageUrl(product.image)}
                       alt={product.name || product.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="absolute inset-0 w-full h-full object-contain p-4"
                     />
-                    {/* Bouton Wishlist */}
                     <div className="absolute top-2 right-2">
                       <WishlistButton product={product} size={20} />
                     </div>
                   </div>
                 </Link>
-                <div className="p-4">
+                <div className="p-4 border-t border-gray-50">
                   <Link to={`/products/${product.id}`}>
-                    <h3 className="font-medium text-gray-800 mb-1 line-clamp-2 hover:text-red-600">
+                    <h3 className="font-medium text-gray-800 mb-2 line-clamp-2 text-sm hover:text-red-600">
                       {product.name || product.title}
                     </h3>
                   </Link>
-                  <p className="text-indigo-600 font-bold mb-3">
+                  <p className="text-red-600 font-bold mb-3">
                     {parseFloat(product.price).toLocaleString()} Fcfa
                   </p>
                   <button
                     onClick={() => handleAddToCart(product)}
-                    className="w-full py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition flex items-center justify-center gap-2"
+                    className="w-full py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition flex items-center justify-center gap-2 text-sm"
                   >
-                    <ShoppingCart size={18} />
-                    <span className="hidden sm:inline">Ajouter</span>
+                    <ShoppingCart size={16} />
+                    <span className="hidden sm:inline">Ajouter au panier</span>
+                    <span className="sm:hidden">Ajouter</span>
                   </button>
                 </div>
               </div>
@@ -349,26 +349,25 @@ const CataloguePage = () => {
         ) : (
           <div className="space-y-4">
             {visibleProducts.map((product, index) => (
-              <div 
-                key={product.id} 
+              <div
+                key={product.id}
                 ref={index === visibleProducts.length - 1 ? lastProductRef : null}
-                className="bg-white rounded-xl shadow-sm overflow-hidden flex"
+                className="bg-white rounded-xl shadow-sm overflow-hidden flex border border-gray-100 hover:shadow-md transition-shadow"
               >
-                <Link to={`/products/${product.id}`} className="w-32 h-32 md:w-48 md:h-48 flex-shrink-0 relative">
+                <Link to={`/products/${product.id}`} className="w-32 h-32 md:w-48 md:h-48 flex-shrink-0 relative bg-white">
                   <img
                     src={getImageUrl(product.image)}
                     alt={product.name || product.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain p-3"
                   />
-                  {/* Bouton Wishlist */}
                   <div className="absolute top-2 right-2">
                     <WishlistButton product={product} size={18} />
                   </div>
                 </Link>
-                <div className="flex-1 p-4 flex flex-col justify-between">
+                <div className="flex-1 p-4 flex flex-col justify-between border-l border-gray-50">
                   <div>
                     <Link to={`/products/${product.id}`}>
-                      <h3 className="font-medium text-gray-800 text-lg hover:text-red-600">
+                      <h3 className="font-medium text-gray-800 text-base hover:text-red-600">
                         {product.name || product.title}
                       </h3>
                     </Link>
@@ -377,14 +376,14 @@ const CataloguePage = () => {
                     </p>
                   </div>
                   <div className="flex items-center justify-between mt-4">
-                    <p className="text-indigo-600 font-bold text-lg">
+                    <p className="text-red-600 font-bold text-lg">
                       {parseFloat(product.price).toLocaleString()} Fcfa
                     </p>
                     <button
                       onClick={() => handleAddToCart(product)}
-                      className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition flex items-center gap-2"
+                      className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition flex items-center gap-2 text-sm"
                     >
-                      <ShoppingCart size={18} />
+                      <ShoppingCart size={16} />
                       Ajouter
                     </button>
                   </div>
@@ -400,8 +399,6 @@ const CataloguePage = () => {
             <Loader className="animate-spin text-red-600" size={32} />
           </div>
         )}
-
-
       </div>
 
       <Footer />

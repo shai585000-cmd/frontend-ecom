@@ -72,11 +72,11 @@ const RecommendedProducts = ({ productId, limit = 4 }) => {
             className="bg-gray-50 rounded-lg overflow-hidden group hover:shadow-md transition-shadow"
           >
             <Link to={`/products/${product.id}`}>
-              <div className="relative aspect-square overflow-hidden">
+              <div className="relative bg-white" style={{aspectRatio:'1/1'}}>
                 <img
                   src={getImageUrl(product.image)}
                   alt={product.name || product.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="absolute inset-0 w-full h-full object-contain p-3"
                 />
                 <div className="absolute top-2 right-2">
                   <WishlistButton product={product} size={16} />
