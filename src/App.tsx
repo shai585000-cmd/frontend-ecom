@@ -38,8 +38,10 @@ const App = () => {
             <Route path="/produit" element={<CataloguePage />} />
             <Route path="/auth/callback" element={<GoogleCallbackPage />} />
 
+            {/* Checkout accessible sans connexion (commande guest autorisée) */}
+            <Route path="/checkout" element={<CheckoutPage />} />
+
             {/* Routes protégées (authentification requise) */}
-            <Route path="/checkout" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><UserProfilePage /></ProtectedRoute>} />
             <Route path="/dashboard/:id" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/orders" element={<ProtectedRoute><OrdersPage /></ProtectedRoute>} />
