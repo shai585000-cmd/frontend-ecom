@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { publicApi } from "../services/api";
 import { getProductReviewStats } from "../services/reviewService";
@@ -12,17 +12,44 @@ import RecommendedProducts from "../components/Produit/RecommendedProducts";
 import { Star, Package, Phone, AlertCircle, Truck, ShoppingCart } from "lucide-react";
 import logger from "../utils/logger";
 
+interface Product {
+  id: number;
+  name?: string;
+  title?: string;
+  description?: string;
+  image?: string;
+  price: number;
+  promotion?: boolean;
+  promotion_price?: number;
+  stock: number;
+  brand?: { name?: string } | string;
+  categorie?: { name?: string } | string;
+  color?: string;
+  ram?: string;
+  storage?: string;
+  screen_size?: string;
+  operating_system?: string;
+  network?: string;
+}
+
+interface ReviewStats {
+  average_rating: number;
+  total_reviews: number;
+}
+
 const ProducPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [product, setProduct] = useState(null);
-  const [reviewStats, setReviewStats] = useState(null);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [reviewStats, setReviewStats] = useState<ReviewStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showBelow, setShowBelow] = useState(false);
+  const belowRef = useRef<HTMLDivElement>(null);
   const handleAddToCart = useCartStore((state) => state.addToCart);
   const addRecentlyViewed = useRecentlyViewedStore((state) => state.addRecentlyViewed);
 
   // Fonction pour gerer les URLs d'images
-  const getImageUrl = (image) => {
+  const getImageUrl = (image: string | undefined): string => {
     if (!image) return '/placeholder.svg';
     if (image.startsWith('http://') || image.startsWith('https://')) return image;
     if (image.includes('https%3A') || image.includes('https:/') || image.includes('http%3A') || image.includes('http:/')) {
@@ -57,6 +84,17 @@ const ProducPage = () => {
 
     fetchProduct();
   }, [id, navigate, addRecentlyViewed]);
+
+  // Charger les sections basses uniquement quand l'utilisateur scrolle vers elles
+  useEffect(() => {
+    if (!belowRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setShowBelow(true); observer.disconnect(); } },
+      { rootMargin: '200px' }
+    );
+    observer.observe(belowRef.current);
+    return () => observer.disconnect();
+  }, [loading]);
 
   if (loading) {
     return (
@@ -127,7 +165,7 @@ const ProducPage = () => {
                 <div className="flex items-center gap-2 px-4 py-2 bg-red-50 rounded-lg">
                   <Package size={18} className="text-red-600" />
                   <span className="text-sm font-medium text-gray-700">
-                    Marque: <span className="text-red-600 font-semibold">{product.brand.name || product.brand}</span>
+                    Marque: <span className="text-red-600 font-semibold">{typeof product.brand === 'object' ? product.brand?.name : product.brand}</span>
                   </span>
                 </div>
               )}
@@ -135,7 +173,7 @@ const ProducPage = () => {
                 <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg">
                   <Package size={18} className="text-gray-700" />
                   <span className="text-sm font-medium text-gray-700">
-                    Catégorie: <span className="text-gray-800 font-semibold">{product.categorie.name || product.categorie}</span>
+                    Catégorie: <span className="text-gray-800 font-semibold">{typeof product.categorie === 'object' ? product.categorie?.name : product.categorie}</span>
                   </span>
                 </div>
               )}
@@ -225,14 +263,14 @@ const ProducPage = () => {
                 <div className="space-y-2">
                   <div className="flex items-center gap-3">
                     <span className="text-2xl md:text-4xl font-bold text-red-600">
-                      {parseFloat(product.promotion_price).toLocaleString()} Fcfa
+                      {parseFloat(String(product.promotion_price)).toLocaleString()} Fcfa
                     </span>
                     <span className="px-3 py-1 bg-red-500 text-white text-sm font-bold rounded-full">
-                      -{Math.round(((product.price - product.promotion_price) / product.price) * 100)}%
+                      -{Math.round(((product.price - Number(product.promotion_price)) / product.price) * 100)}%
                     </span>
                   </div>
                   <div className="text-lg text-gray-500 line-through">
-                    {parseFloat(product.price).toLocaleString()} Fcfa
+                    {parseFloat(String(product.price)).toLocaleString()} Fcfa
                   </div>
                   <div className="text-sm text-green-600 font-semibold">
                     Promotion en cours !
@@ -240,14 +278,14 @@ const ProducPage = () => {
                 </div>
               ) : (
                 <div className="text-3xl md:text-4xl font-bold text-red-600">
-                  {parseFloat(product.price).toLocaleString()} Fcfa
+                  {parseFloat(String(product.price)).toLocaleString()} Fcfa
                 </div>
               )}
             </div>
 
             {/* Bouton Acheter */}
             <button
-              onClick={() => handleAddToCart(product)}
+              onClick={() => handleAddToCart(product as never)}
               disabled={product.stock === 0}
               className="w-full py-4 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold text-lg shadow-md flex items-center justify-center gap-3 disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
@@ -283,19 +321,21 @@ const ProducPage = () => {
           </div>
         </div>
 
-        {/* Section Recommandations IA */}
-        <div className="mt-12">
-          <RecommendedProducts productId={parseInt(id)} limit={8} />
-        </div>
-
-        {/* Section Avis */}
-        <div className="mt-12">
-          <ReviewSection productId={parseInt(id)} />
-        </div>
-
-        {/* Section Produits vus récemment */}
-        <div className="mt-12">
-          <RecentlyViewedCarousel currentProductId={parseInt(id)} />
+        {/* Sections chargées en lazy via IntersectionObserver */}
+        <div ref={belowRef}>
+          {showBelow && (
+            <>
+              <div className="mt-12">
+                <RecommendedProducts productId={parseInt(id ?? '0')} limit={8} />
+              </div>
+              <div className="mt-12">
+                <ReviewSection productId={parseInt(id ?? '0')} />
+              </div>
+              <div className="mt-12">
+                <RecentlyViewedCarousel currentProductId={parseInt(id ?? '0')} />
+              </div>
+            </>
+          )}
         </div>
       </div>
       <Footer />
