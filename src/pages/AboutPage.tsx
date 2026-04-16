@@ -3,10 +3,10 @@ import Footer from "../components/Common/Footer";
 
 const AboutPage = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       <Header />
       <div className="max-w-6xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
-        <h1 className="text-4xl md:text-5xl font-bold text-center text-blue-800 mb-16 relative">
+        <h1 className="text-4xl md:text-5xl font-bold text-center text-gray-800 mb-16 relative">
           Notre Excellence Technologique
           <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-red-500 mt-4"></div>
         </h1>
@@ -63,8 +63,8 @@ const AboutPage = () => {
               tendances technologiques pour vous offrir les produits les plus 
               innovants et performants du marché, avec des conseils personnalisés.
             </p>
-            <div className="bg-blue-100 rounded-lg p-6">
-              <h3 className="text-lg font-medium text-blue-800 mb-2">
+            <div className="bg-red-50 rounded-lg p-6">
+              <h3 className="text-lg font-medium text-red-700 mb-2">
                 Nos Services Premium
               </h3>
               <ul className="list-disc list-inside text-gray-600 space-y-2">
