@@ -50,10 +50,12 @@ const HomePage = () => {
 
   const products = useProductStore((s) => s.products);
   const promoProducts = useProductStore((s) => s.promoProducts);
+  const topSellingProducts = useProductStore((s) => s.topSellingProducts);
   const loadingList = useProductStore((s) => s.loadingList);
   const storeError = useProductStore((s) => s.error);
   const fetchProducts = useProductStore((s) => s.fetchProducts);
   const fetchPromoProducts = useProductStore((s) => s.fetchPromoProducts);
+  const fetchTopSellingProducts = useProductStore((s) => s.fetchTopSellingProducts);
 
   const categories = useHomeStore((s) => s.categories);
   const heroData = useHomeStore((s) => s.hero);
@@ -91,6 +93,7 @@ const HomePage = () => {
   useEffect(() => {
     fetchProducts();
     fetchPromoProducts();
+    fetchTopSellingProducts(30, 10);
     fetchAll();
   }, []);
 
@@ -235,7 +238,7 @@ const HomePage = () => {
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
-              {products.slice(0, 10).map((product) => (
+              {(topSellingProducts.length > 0 ? topSellingProducts : products.slice(0, 10)).map((product) => (
                 <div
                   key={product.id}
                   className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"

@@ -7,12 +7,18 @@ import type { Product } from '../types';
 
 // ─── State interface ──────────────────────────────────────────────────────────
 
+interface TopSellingProduct extends Product {
+  total_sold: number;
+}
+
 interface ProductStoreState {
   // Lists
   products: Product[];
   productsCache: CacheEntry<Product[]> | null;
   promoProducts: Product[];
   promoCache: CacheEntry<Product[]> | null;
+  topSellingProducts: TopSellingProduct[];
+  topSellingCache: CacheEntry<TopSellingProduct[]> | null;
 
   // Single-product lookup (id → cached entry)
   productById: Partial<Record<number, CacheEntry<Product>>>;
@@ -20,12 +26,14 @@ interface ProductStoreState {
   // Per-action loading flags
   loadingList: boolean;
   loadingPromo: boolean;
+  loadingTopSelling: boolean;
   loadingById: Partial<Record<number, boolean>>;
   error: string | null;
 
   // Actions
   fetchProducts: () => Promise<void>;
   fetchPromoProducts: () => Promise<void>;
+  fetchTopSellingProducts: (days?: number, limit?: number) => Promise<void>;
   fetchProductById: (id: number) => Promise<Product | null>;
   invalidateProduct: (id: number) => void;
   invalidateAll: () => void;
@@ -40,9 +48,12 @@ const useProductStore = create<ProductStoreState>()(
   productsCache: null,
   promoProducts: [],
   promoCache: null,
+  topSellingProducts: [],
+  topSellingCache: null,
   productById: {},
   loadingList: false,
   loadingPromo: false,
+  loadingTopSelling: false,
   loadingById: {},
   error: null,
 
@@ -96,6 +107,29 @@ const useProductStore = create<ProductStoreState>()(
     }
   },
 
+  fetchTopSellingProducts: async (days: number = 30, limit: number = 10) => {
+    const { topSellingCache, loadingTopSelling } = get();
+    if (loadingTopSelling || isFresh(topSellingCache)) return;
+
+    set({ loadingTopSelling: true, error: null });
+    try {
+      const res = await publicApi.get<{ products: TopSellingProduct[] }>(
+        `/produits/products/top-selling/?days=${days}&limit=${limit}`
+      );
+      const data = res.data.products;
+      set({
+        topSellingProducts: data,
+        topSellingCache: makeEntry(data, TTL.SHORT),
+        loadingTopSelling: false,
+      });
+    } catch (e: unknown) {
+      set({
+        error: e instanceof Error ? e.message : 'Erreur chargement ventes chaudes',
+        loadingTopSelling: false,
+      });
+    }
+  },
+
   fetchProductById: async (id: number) => {
     const { productById, loadingById, products } = get();
 
@@ -142,7 +176,7 @@ const useProductStore = create<ProductStoreState>()(
 
   // Full invalidation (e.g. after bulk admin action)
   invalidateAll: () => {
-    set({ productsCache: null, promoCache: null, productById: {} });
+    set({ productsCache: null, promoCache: null, topSellingCache: null, productById: {} });
   },
     }),
     {
@@ -152,8 +186,10 @@ const useProductStore = create<ProductStoreState>()(
       partialize: (state) => ({
         products: state.products,
         promoProducts: state.promoProducts,
+        topSellingProducts: state.topSellingProducts,
         productsCache: state.productsCache,
         promoCache: state.promoCache,
+        topSellingCache: state.topSellingCache,
         productById: state.productById,
       }),
     }
