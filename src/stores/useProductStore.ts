@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import { publicApi } from '../services/api';
 import { makeEntry, isFresh, TTL } from './lib/cache';
 import type { CacheEntry } from './lib/cache';
@@ -32,7 +33,9 @@ interface ProductStoreState {
 
 // ─── Store ────────────────────────────────────────────────────────────────────
 
-const useProductStore = create<ProductStoreState>((set, get) => ({
+const useProductStore = create<ProductStoreState>()(
+  persist(
+    (set, get) => ({
   products: [],
   productsCache: null,
   promoProducts: [],
@@ -141,6 +144,22 @@ const useProductStore = create<ProductStoreState>((set, get) => ({
   invalidateAll: () => {
     set({ productsCache: null, promoCache: null, productById: {} });
   },
-}));
+    }),
+    {
+      name: 'infotek-products',
+      version: 1,
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({
+        products: state.products,
+        promoProducts: state.promoProducts,
+        productsCache: state.productsCache,
+        promoCache: state.promoCache,
+        productById: state.productById,
+      }),
+      migrate: (persisted: unknown) => persisted,
+      onRehydrateStorage: () => () => { /* silent rehydration */ },
+    }
+  )
+);
 
 export default useProductStore;

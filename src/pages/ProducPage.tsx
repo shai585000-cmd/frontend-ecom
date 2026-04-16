@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { publicApi } from "../services/api";
-import { getProductReviewStats } from "../services/reviewService";
+import useProductStore from "../stores/useProductStore";
+import useReviewStore from "../stores/useReviewStore";
 import useCartStore from "../hooks/useCartStore";
 import useRecentlyViewedStore from "../store/recentlyViewedStore";
 import Header from "../components/Common/Hearder";
@@ -11,6 +11,7 @@ import RecentlyViewedCarousel from "../components/Produit/RecentlyViewedCarousel
 import RecommendedProducts from "../components/Produit/RecommendedProducts";
 import { Star, Package, Phone, AlertCircle, Truck, ShoppingCart } from "lucide-react";
 import logger from "../utils/logger";
+import type { ReviewStats } from "../types";
 
 interface Product {
   id: number;
@@ -32,11 +33,6 @@ interface Product {
   network?: string;
 }
 
-interface ReviewStats {
-  average_rating: number;
-  total_reviews: number;
-}
-
 const ProducPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -45,6 +41,8 @@ const ProducPage = () => {
   const [loading, setLoading] = useState(true);
   const [showBelow, setShowBelow] = useState(false);
   const belowRef = useRef<HTMLDivElement>(null);
+  const fetchProductByIdStore = useProductStore((s) => s.fetchProductById);
+  const fetchStats = useReviewStore((s) => s.fetchStats);
   const handleAddToCart = useCartStore((state) => state.addToCart);
   const addRecentlyViewed = useRecentlyViewedStore((state) => state.addRecentlyViewed);
 
@@ -64,16 +62,16 @@ const ProducPage = () => {
   };
 
   useEffect(() => {
-    const fetchProduct = async () => {
+    const load = async () => {
       try {
-        const [productResponse, statsResponse] = await Promise.all([
-          publicApi.get(`/produits/products/${id}/`),
-          getProductReviewStats(id).catch(() => ({ average_rating: 0, total_reviews: 0 }))
+        const [p, stats] = await Promise.all([
+          fetchProductByIdStore(Number(id)),
+          fetchStats(Number(id)),
         ]);
-        setProduct(productResponse.data);
-        setReviewStats(statsResponse);
-        // Ajouter le produit à la liste des produits vus récemment
-        addRecentlyViewed(productResponse.data);
+        if (!p) { navigate("/products"); return; }
+        setProduct(p as Product);
+        setReviewStats(stats);
+        addRecentlyViewed(p as never);
       } catch (error) {
         logger.error("Erreur lors de la récupération du produit:", error);
         navigate("/products");
@@ -81,9 +79,8 @@ const ProducPage = () => {
         setLoading(false);
       }
     };
-
-    fetchProduct();
-  }, [id, navigate, addRecentlyViewed]);
+    load();
+  }, [id, navigate, addRecentlyViewed, fetchProductByIdStore, fetchStats]);
 
   // Charger les sections basses uniquement quand l'utilisateur scrolle vers elles
   useEffect(() => {

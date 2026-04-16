@@ -1,62 +1,31 @@
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Heart } from 'lucide-react';
 import PropTypes from 'prop-types';
-import useAuthStore from '../../hooks/authStore';
-import useWishlistStore from '../../store/wishlistStore';
-import { addToWishlist, removeFromWishlist, checkInWishlist } from '../../services/wishlistService';
+import useWishlistStore from '../../stores/useWishlistStore';
 import toast from 'react-hot-toast';
-import logger from '../../utils/logger';
+import type { Product } from '../../types';
 
-const WishlistButton = ({ product, size = 24, className = '' }) => {
-  const [isInWishlist, setIsInWishlist] = useState(false);
+const WishlistButton = ({ product, size = 24, className = '' }: { product: Product; size?: number; className?: string }) => {
   const [loading, setLoading] = useState(false);
-  
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const { addToLocalWishlist, removeFromLocalWishlist, isInWishlist: checkLocal } = useWishlistStore();
 
-  useEffect(() => {
-    const checkWishlist = async () => {
-      if (isAuthenticated) {
-        try {
-          const result = await checkInWishlist(product.id);
-          setIsInWishlist(result.in_wishlist);
-        } catch (error) {
-          logger.error('Erreur verification wishlist:', error);
-        }
-      } else {
-        setIsInWishlist(checkLocal(product.id));
-      }
-    };
-    checkWishlist();
-  }, [product.id, isAuthenticated, checkLocal]);
+  const inWishlist = useWishlistStore((s) => s.isInWishlist(product.id));
+  const addToWishlist = useWishlistStore((s) => s.addToWishlist);
+  const removeFromWishlist = useWishlistStore((s) => s.removeFromWishlist);
 
-  const handleToggle = async (e) => {
+  const handleToggle = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
     setLoading(true);
-    
     try {
-      if (isAuthenticated) {
-        if (isInWishlist) {
-          await removeFromWishlist(product.id);
-          toast.success('Retire des favoris');
-        } else {
-          await addToWishlist(product.id);
-          toast.success('Ajoute aux favoris');
-        }
+      if (inWishlist) {
+        await removeFromWishlist(product.id);
+        toast.success('Retiré des favoris');
       } else {
-        if (isInWishlist) {
-          removeFromLocalWishlist(product.id);
-          toast.success('Retire des favoris');
-        } else {
-          addToLocalWishlist(product);
-          toast.success('Ajoute aux favoris');
-        }
+        await addToWishlist(product);
+        toast.success('Ajouté aux favoris');
       }
-      setIsInWishlist(!isInWishlist);
     } catch {
-      toast.error('Erreur lors de la mise a jour');
+      toast.error('Erreur lors de la mise à jour');
     } finally {
       setLoading(false);
     }
@@ -67,16 +36,13 @@ const WishlistButton = ({ product, size = 24, className = '' }) => {
       onClick={handleToggle}
       disabled={loading}
       className={`p-2 rounded-full transition-all ${
-        isInWishlist 
-          ? 'bg-red-50 text-red-500' 
+        inWishlist
+          ? 'bg-red-50 text-red-500'
           : 'bg-gray-100 text-gray-400 hover:text-red-500'
       } ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:scale-110'} ${className}`}
-      aria-label={isInWishlist ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+      aria-label={inWishlist ? 'Retirer des favoris' : 'Ajouter aux favoris'}
     >
-      <Heart 
-        size={size} 
-        className={isInWishlist ? 'fill-current' : ''} 
-      />
+      <Heart size={size} className={inWishlist ? 'fill-current' : ''} />
     </button>
   );
 };

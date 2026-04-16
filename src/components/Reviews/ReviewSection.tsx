@@ -1,18 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Star, User, CheckCircle, Send } from 'lucide-react';
-import { getProductReviews, getProductReviewStats, canReview, createReview } from '../../services/reviewService';
+import { canReview } from '../../services/reviewService';
 import useAuthStore from '../../hooks/authStore';
+import useReviewStore from '../../stores/useReviewStore';
 import logger from '../../utils/logger';
 
-const ReviewSection = ({ productId }) => {
-  const [reviews, setReviews] = useState([]);
-  const [stats, setStats] = useState(null);
-  const [loading, setLoading] = useState(true);
+const ReviewSection = ({ productId }: { productId: number }) => {
   const [canUserReview, setCanUserReview] = useState(false);
-  const [reviewMessage, setReviewMessage] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   
   const [formData, setFormData] = useState({
@@ -23,29 +20,27 @@ const ReviewSection = ({ productId }) => {
 
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
+  const reviews = useReviewStore((s) => s.reviewsByProduct[productId]?.data ?? []);
+  const stats = useReviewStore((s) => s.statsByProduct[productId]?.data ?? null);
+  const loading = useReviewStore((s) => Boolean(s.loadingReviews[productId]));
+  const fetchReviews = useReviewStore((s) => s.fetchReviews);
+  const fetchStoreStats = useReviewStore((s) => s.fetchStats);
+  const storeCreateReview = useReviewStore((s) => s.createReview);
+
   useEffect(() => {
-    fetchData();
-  }, [productId]);
-
-  const fetchData = async () => {
-    try {
-      const [reviewsData, statsData] = await Promise.all([
-        getProductReviews(productId),
-        getProductReviewStats(productId)
-      ]);
-      setReviews(reviewsData);
-      setStats(statsData);
-
-      if (isAuthenticated) {
-        const canReviewData = await canReview(productId);
-        setCanUserReview(canReviewData.can_review);
+    const load = async () => {
+      try {
+        await Promise.all([fetchReviews(productId), fetchStoreStats(productId)]);
+        if (isAuthenticated) {
+          const canReviewData = await canReview(productId);
+          setCanUserReview(canReviewData.can_review);
+        }
+      } catch (err) {
+        logger.error('Erreur:', err);
       }
-    } catch (err) {
-      logger.error('Erreur:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+    load();
+  }, [productId, isAuthenticated]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -58,18 +53,17 @@ const ReviewSection = ({ productId }) => {
     setError(null);
 
     try {
-      await createReview({
-        product: productId,
+      await storeCreateReview(productId, {
         rating: formData.rating,
         title: formData.title,
-        comment: formData.comment
+        comment: formData.comment,
       });
       setSuccess(true);
       setShowForm(false);
       setFormData({ rating: 5, title: '', comment: '' });
-      fetchData();
-    } catch (err) {
-      setError(err.response?.data?.error || 'Erreur lors de la soumission');
+    } catch (err: unknown) {
+      const e = err as { response?: { data?: { error?: string } } };
+      setError(e.response?.data?.error || 'Erreur lors de la soumission');
     } finally {
       setSubmitting(false);
     }

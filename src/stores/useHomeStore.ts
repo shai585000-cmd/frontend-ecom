@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import { publicApi } from '../services/api';
 import { makeEntry, isFresh, TTL } from './lib/cache';
 import type { CacheEntry } from './lib/cache';
@@ -63,7 +64,9 @@ const FALLBACK_ANNOUNCEMENTS: Announcement[] = [
 
 // ─── Store ────────────────────────────────────────────────────────────────────
 
-const useHomeStore = create<HomeStoreState>((set, get) => ({
+const useHomeStore = create<HomeStoreState>()(
+  persist(
+    (set, get) => ({
   categories: [],
   categoriesCache: null,
   hero: null,
@@ -202,6 +205,29 @@ const useHomeStore = create<HomeStoreState>((set, get) => ({
       announcementsCache: null,
     });
   },
-}));
+    }),
+    {
+      name: 'infotek-home',
+      version: 1,
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({
+        categories: state.categories,
+        categoriesCache: state.categoriesCache,
+        hero: state.hero,
+        heroCache: state.heroCache,
+        features: state.features,
+        featuresCache: state.featuresCache,
+        solutions: state.solutions,
+        solutionsCache: state.solutionsCache,
+        banner: state.banner,
+        bannerCache: state.bannerCache,
+        announcements: state.announcements,
+        announcementsCache: state.announcementsCache,
+      }),
+      migrate: (persisted: unknown) => persisted,
+      onRehydrateStorage: () => () => { /* silent rehydration */ },
+    }
+  )
+);
 
 export default useHomeStore;

@@ -5,9 +5,8 @@ import { useTranslation } from "react-i18next";
 import useAuthStore from "../../hooks/authStore";
 import { logoutUser } from "../../services/authService";
 import useCartStore from "../../hooks/useCartStore";
-import useWishlistStore from "../../store/wishlistStore";
-import { publicApi } from "../../services/api";
-import { getWishlist } from "../../services/wishlistService";
+import useWishlistStore from "../../stores/useWishlistStore";
+import useHomeStore from "../../stores/useHomeStore";
 import LanguageSwitcher from "./LanguageSwitcher";
 import logger from '../../utils/logger';
 
@@ -19,7 +18,6 @@ const Hearder = () => {
   const [productsMenuOpen, setProductsMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [announcements, setAnnouncements] = useState([]);
   const profileMenuRef = useRef(null);
   const productsMenuRef = useRef(null);
 
@@ -27,47 +25,19 @@ const Hearder = () => {
   const user = useAuthStore((state) => state.user);
   const navigate = useNavigate();
   const cartItems = useCartStore((state) => state.getCartLength());
-  const wishlistCount = useWishlistStore((state) => state.getWishlistCount());
-  const setWishlist = useWishlistStore((state) => state.setWishlist);
+  const wishlistCount = useWishlistStore((s) => s.getWishlistCount());
+  const fetchWishlist = useWishlistStore((s) => s.fetchWishlist);
+  const announcements = useHomeStore((s) => s.announcements);
+  const fetchAnnouncements = useHomeStore((s) => s.fetchAnnouncements);
 
   const isActive = (path) => {
     if (path === '/') return location.pathname === '/';
     return location.pathname.startsWith(path);
   };
 
-  // Récupérer les annonces depuis l'API
-  useEffect(() => {
-    const fetchAnnouncements = async () => {
-      try {
-        const response = await publicApi.get("/home/announcements/");
-        setAnnouncements(response.data);
-      } catch (error) {
-        logger.error("Erreur lors de la récupération des annonces:", error);
-        // Fallback avec des annonces par défaut
-        setAnnouncements([
-          { id: 1, text: "Livraison GRATUITE pour toute commande supérieure à 50 000 FCFA", emoji: "🔥" },
-          { id: 2, text: "Nouveaux iPhone 15 disponibles !", emoji: "📱" },
-          { id: 3, text: "Garantie 12 mois sur tous nos produits", emoji: "⚡" },
-        ]);
-      }
-    };
-    fetchAnnouncements();
-  }, []);
+  useEffect(() => { fetchAnnouncements(); }, []);
 
-  // Synchroniser la wishlist serveur avec le store local quand authentifié
-  useEffect(() => {
-    const syncWishlist = async () => {
-      if (isAuthenticated) {
-        try {
-          const serverWishlist = await getWishlist();
-          setWishlist(serverWishlist);
-        } catch (error) {
-          logger.error("Erreur synchro wishlist:", error);
-        }
-      }
-    };
-    syncWishlist();
-  }, [isAuthenticated, setWishlist]);
+  useEffect(() => { if (isAuthenticated) { fetchWishlist(); } }, [isAuthenticated]);
 
   const handleLogout = async () => {
     try {

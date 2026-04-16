@@ -34,12 +34,12 @@ interface ReviewStoreState {
   fetchMyReviews: () => Promise<void>;
   createReview: (
     productId: number,
-    data: { rating: number; comment: string }
+    data: { rating: number; comment: string; title?: string }
   ) => Promise<void>;
   updateReview: (
     reviewId: number,
     productId: number,
-    data: Partial<{ rating: number; comment: string }>
+    data: Partial<{ rating: number; comment: string; title?: string }>
   ) => Promise<void>;
   deleteReview: (reviewId: number, productId: number) => Promise<void>;
   invalidateProduct: (productId: number) => void;

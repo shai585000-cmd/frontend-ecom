@@ -1,61 +1,32 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, ShoppingCart, Trash2 } from 'lucide-react';
 import Header from '../components/Common/Hearder';
 import Footer from '../components/Common/Footer';
-import useAuthStore from '../store/authStore';
-import useWishlistStore from '../store/wishlistStore';
+import useWishlistStore from '../stores/useWishlistStore';
 import useCartStore from '../hooks/useCartStore';
-import { getWishlist, removeFromWishlist } from '../services/wishlistService';
 import toast from 'react-hot-toast';
-import logger from '../utils/logger';
 
 const WishlistPage = () => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const { wishlist: localWishlist, removeFromLocalWishlist } = useWishlistStore();
+  const wishlist = useWishlistStore((s) => s.wishlist);
+  const loading = useWishlistStore((s) => s.loading);
+  const fetchWishlist = useWishlistStore((s) => s.fetchWishlist);
+  const removeFromWishlist = useWishlistStore((s) => s.removeFromWishlist);
   const { addToCart } = useCartStore();
 
-  useEffect(() => {
-    const fetchWishlist = async () => {
-      setLoading(true);
-      try {
-        if (isAuthenticated) {
-          const data = await getWishlist();
-          setProducts(data);
-        } else {
-          setProducts(localWishlist);
-        }
-      } catch (error) {
-        logger.error('Erreur chargement wishlist:', error);
-        toast.error('Erreur lors du chargement des favoris');
-      } finally {
-        setLoading(false);
-      }
-    };
+  useEffect(() => { fetchWishlist(); }, []);
 
-    fetchWishlist();
-  }, [isAuthenticated, localWishlist]);
-
-  const handleRemove = async (productId) => {
+  const handleRemove = async (productId: number) => {
     try {
-      if (isAuthenticated) {
-        await removeFromWishlist(productId);
-      } else {
-        removeFromLocalWishlist(productId);
-      }
-      setProducts(products.filter(p => p.id !== productId));
-      toast.success('Produit retire des favoris');
-    } catch (error) {
-      logger.error('Erreur suppression:', error);
+      await removeFromWishlist(productId);
+      toast.success('Produit retiré des favoris');
+    } catch {
       toast.error('Erreur lors de la suppression');
     }
   };
 
-  const handleAddToCart = (product) => {
-    addToCart(product);
+  const handleAddToCart = (product: unknown) => {
+    addToCart(product as never);
   };
 
   if (loading) {
@@ -94,12 +65,12 @@ const WishlistPage = () => {
               Mes Favoris
             </h1>
             <p className="text-gray-600 mt-2">
-              {products.length} produit{products.length > 1 ? 's' : ''} dans votre liste de souhaits
+              {wishlist.length} produit{wishlist.length > 1 ? 's' : ''} dans votre liste de souhaits
             </p>
           </div>
 
           {/* Liste des produits */}
-          {products.length === 0 ? (
+          {wishlist.length === 0 ? (
             <div className="bg-white rounded-xl shadow-sm p-12 text-center">
               <Heart className="mx-auto text-gray-300 mb-4" size={64} />
               <h2 className="text-2xl font-semibold text-gray-800 mb-2">
@@ -117,7 +88,7 @@ const WishlistPage = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {products.map((product) => (
+              {wishlist.map((product) => (
                 <div
                   key={product.id}
                   className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow"

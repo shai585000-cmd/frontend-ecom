@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Footer from "../components/Common/Footer";
 import Hearder from "../components/Common/Hearder";
-import { publicApi } from "../services/api";
+import useProductStore from "../stores/useProductStore";
+import useHomeStore from "../stores/useHomeStore";
 import useCartStore from "../hooks/useCartStore";
 import { Link } from "react-router-dom";
 import WishlistButton from "../components/Common/WishlistButton";
 import { ShoppingCart, ChevronRight, Truck, Shield, Headphones, CreditCard, Smartphone, Monitor, Flame, Gift } from "lucide-react";
-import logger from "../utils/logger";
 import { useTranslation } from "react-i18next";
 
 const ICON_MAP = {
@@ -47,19 +47,31 @@ const DEFAULT_SOLUTIONS = [
 
 const HomePage = () => {
   const { t } = useTranslation();
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [categories, setCategories] = useState([]);
-  const [promotions, setPromotions] = useState([]);
-  const [hero, setHero] = useState(DEFAULT_HERO);
-  const [features, setFeatures] = useState(DEFAULT_FEATURES);
-  const [solutionCards, setSolutionCards] = useState(DEFAULT_SOLUTIONS);
+
+  const products = useProductStore((s) => s.products);
+  const promoProducts = useProductStore((s) => s.promoProducts);
+  const loadingList = useProductStore((s) => s.loadingList);
+  const storeError = useProductStore((s) => s.error);
+  const fetchProducts = useProductStore((s) => s.fetchProducts);
+  const fetchPromoProducts = useProductStore((s) => s.fetchPromoProducts);
+
+  const categories = useHomeStore((s) => s.categories);
+  const heroData = useHomeStore((s) => s.hero);
+  const featuresData = useHomeStore((s) => s.features);
+  const solutionsData = useHomeStore((s) => s.solutions);
+  const fetchAll = useHomeStore((s) => s.fetchAll);
+
+  const hero = heroData ?? DEFAULT_HERO;
+  const features = featuresData.length > 0 ? featuresData : DEFAULT_FEATURES;
+  const solutionCards = solutionsData.length > 0 ? solutionsData : DEFAULT_SOLUTIONS;
+  const promotions = promoProducts;
+  const loading = loadingList && products.length === 0;
+  const error = storeError;
 
   const addToCart = useCartStore((state) => state.addToCart);
 
-  const handleAddToCart = (product) => {
-    addToCart(product);
+  const handleAddToCart = (product: { id: number; name?: string; price: number; image?: string; quantity?: number }) => {
+    addToCart(product as never);
   };
 
   const getImageUrl = (image) => {
@@ -77,32 +89,9 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        const [productsRes, categoriesRes, promotionsRes, heroRes, featuresRes, solutionsRes] = await Promise.all([
-          publicApi.get("/produits/products/"),
-          publicApi.get("/home/categories/"),
-          publicApi.get("/produits/products/promotion/"),
-          publicApi.get("/home/hero/").catch(() => ({ data: {} })),
-          publicApi.get("/home/features/").catch(() => ({ data: [] })),
-          publicApi.get("/home/solutions/").catch(() => ({ data: [] })),
-        ]);
-        setProducts(productsRes.data);
-        setCategories(categoriesRes.data);
-        setPromotions(promotionsRes.data);
-        if (heroRes.data && heroRes.data.title) setHero(heroRes.data);
-        if (featuresRes.data && featuresRes.data.length > 0) setFeatures(featuresRes.data);
-        if (solutionsRes.data && solutionsRes.data.length > 0) setSolutionCards(solutionsRes.data);
-        setError(null);
-      } catch (err) {
-        logger.error("Erreur lors de la récupération des produits:", err);
-        setError("Impossible de charger les produits");
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchProducts();
+    fetchPromoProducts();
+    fetchAll();
   }, []);
 
 

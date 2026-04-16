@@ -102,14 +102,18 @@ export interface ShippingZone {
 export interface Review {
   id: number;
   user: User | string;
+  user_name?: string;
   rating: number;
+  title?: string;
   comment: string;
   created_at: string;
+  is_verified_purchase?: boolean;
 }
 
 export interface ReviewStats {
   average_rating: number;
   total_reviews: number;
+  rating_distribution?: Record<number, number>;
 }
 
 // ─── Bannières / Home ─────────────────────────────────────────────────────────
