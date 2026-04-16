@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { publicApi } from '../services/api';
+import publicApi from '../services/api';
 import { makeEntry, isFresh, TTL } from './lib/cache';
 import type { CacheEntry } from './lib/cache';
 import type { Category, HeroSection, Feature, SolutionCard, Banner } from '../types';
@@ -224,8 +224,6 @@ const useHomeStore = create<HomeStoreState>()(
         announcements: state.announcements,
         announcementsCache: state.announcementsCache,
       }),
-      migrate: (persisted: unknown) => persisted,
-      onRehydrateStorage: () => () => { /* silent rehydration */ },
     }
   )
 );

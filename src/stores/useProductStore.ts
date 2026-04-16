@@ -156,8 +156,6 @@ const useProductStore = create<ProductStoreState>()(
         promoCache: state.promoCache,
         productById: state.productById,
       }),
-      migrate: (persisted: unknown) => persisted,
-      onRehydrateStorage: () => () => { /* silent rehydration */ },
     }
   )
 );
