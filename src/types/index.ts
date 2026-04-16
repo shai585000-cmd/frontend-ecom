@@ -107,6 +107,11 @@ export interface Review {
   created_at: string;
 }
 
+export interface ReviewStats {
+  average_rating: number;
+  total_reviews: number;
+}
+
 // ─── Bannières / Home ─────────────────────────────────────────────────────────
 
 export interface Banner {
