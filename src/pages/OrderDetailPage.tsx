@@ -1,16 +1,45 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Package, Truck, MapPin, Phone, CreditCard } from 'lucide-react';
+import { ArrowLeft, Package, Truck, MapPin, Phone, CreditCard, Star } from 'lucide-react';
 import { getOrderById, cancelOrder } from '../services/orderService';
 import Header from '../components/Common/Hearder';
 import logger from '../utils/logger';
 
+interface OrderItem {
+  product: number | null;
+  product_name: string;
+  quantity: number;
+  unit_price: string;
+  total_price: string;
+}
+
+interface Payment {
+  payment_method_display: string;
+  status_display: string;
+  phone_number?: string;
+}
+
+interface OrderDetail {
+  id: number;
+  order_number: string;
+  status: string;
+  status_display: string;
+  total_amount: string;
+  shipping_address: string;
+  shipping_city: string;
+  shipping_phone: string;
+  notes?: string;
+  created_at: string;
+  items: OrderItem[];
+  payments?: Payment[];
+}
+
 const OrderDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [order, setOrder] = useState(null);
+  const [order, setOrder] = useState<OrderDetail | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [cancelling, setCancelling] = useState(false);
 
   useEffect(() => {
@@ -44,8 +73,8 @@ const OrderDetailPage = () => {
     }
   };
 
-  const getStatusColor = (status) => {
-    const colors = {
+  const getStatusColor = (status: string) => {
+    const colors: Record<string, string> = {
       pending: 'bg-yellow-100 text-yellow-800',
       confirmed: 'bg-blue-100 text-blue-800',
       processing: 'bg-purple-100 text-purple-800',
@@ -167,14 +196,23 @@ const OrderDetailPage = () => {
           </div>
           <div className="divide-y">
             {order.items && order.items.map((item, index) => (
-              <div key={index} className="py-4 flex justify-between items-center">
-                <div>
+              <div key={index} className="py-4 flex justify-between items-center gap-4">
+                <div className="flex-1">
                   <p className="font-medium">{item.product_name}</p>
                   <p className="text-sm text-gray-500">Quantite: {item.quantity}</p>
                 </div>
-                <div className="text-right">
+                <div className="text-right flex flex-col items-end gap-2">
                   <p className="font-medium">{parseFloat(item.total_price).toLocaleString()} Fcfa</p>
                   <p className="text-sm text-gray-500">{parseFloat(item.unit_price).toLocaleString()} Fcfa/unite</p>
+                  {order.status === 'delivered' && item.product && (
+                    <Link
+                      to={`/products/${item.product}#reviews`}
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-yellow-50 text-yellow-700 border border-yellow-300 rounded-lg text-xs font-semibold hover:bg-yellow-100 transition-colors"
+                    >
+                      <Star size={13} className="fill-yellow-400 text-yellow-400" />
+                      Laisser un avis
+                    </Link>
+                  )}
                 </div>
               </div>
             ))}
