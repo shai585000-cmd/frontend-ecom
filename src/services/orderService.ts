@@ -1,9 +1,12 @@
 import apInstance, { publicApi } from './api';
+import useAuthStore from '../hooks/authStore';
 
 
 // Créer une commande à partir du panier (fonctionne avec ou sans authentification)
 export const createOrder = async (orderData) => {
-    const response = await publicApi.post('/orders/', orderData);
+    const isAuthenticated = useAuthStore.getState().isAuthenticated;
+    const api = isAuthenticated ? apInstance : publicApi;
+    const response = await api.post('/orders/', orderData);
     return response.data;
 };
 
