@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Heart } from 'lucide-react';
 import PropTypes from 'prop-types';
 import useWishlistStore from '../../stores/useWishlistStore';
-import toast from 'react-hot-toast';
 import type { Product } from '../../types';
 
 const WishlistButton = ({ product, size = 24, className = '' }: { product: Product; size?: number; className?: string }) => {
@@ -19,13 +18,11 @@ const WishlistButton = ({ product, size = 24, className = '' }: { product: Produ
     try {
       if (inWishlist) {
         await removeFromWishlist(product.id);
-        toast.success('Retiré des favoris');
       } else {
         await addToWishlist(product);
-        toast.success('Ajouté aux favoris');
       }
     } catch {
-      toast.error('Erreur lors de la mise à jour');
+      // Silent error handling
     } finally {
       setLoading(false);
     }
