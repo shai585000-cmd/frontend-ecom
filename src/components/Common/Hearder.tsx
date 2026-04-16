@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Search, ShoppingCart, Heart, User, LogOut, Package, Settings, ChevronDown, Menu, X, Smartphone, Monitor, Headphones, Flame } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import useAuthStore from "../../hooks/authStore";
@@ -13,6 +13,7 @@ import logger from '../../utils/logger';
 
 const Hearder = () => {
   const { t } = useTranslation();
+  const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [productsMenuOpen, setProductsMenuOpen] = useState(false);
@@ -21,13 +22,18 @@ const Hearder = () => {
   const [announcements, setAnnouncements] = useState([]);
   const profileMenuRef = useRef(null);
   const productsMenuRef = useRef(null);
-  
+
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const user = useAuthStore((state) => state.user);
   const navigate = useNavigate();
   const cartItems = useCartStore((state) => state.getCartLength());
   const wishlistCount = useWishlistStore((state) => state.getWishlistCount());
   const setWishlist = useWishlistStore((state) => state.setWishlist);
+
+  const isActive = (path) => {
+    if (path === '/') return location.pathname === '/';
+    return location.pathname.startsWith(path);
+  };
 
   // Récupérer les annonces depuis l'API
   useEffect(() => {
@@ -146,15 +152,15 @@ const Hearder = () => {
 
             {/* Navigation desktop */}
             <nav className="hidden lg:flex items-center space-x-8">
-              <Link to="/" className="text-gray-700 hover:text-red-600 font-medium transition-colors">
+              <Link to="/" className={`${isActive('/') ? 'text-red-600' : 'text-gray-700 hover:text-red-600'} font-medium transition-colors`}>
                 {t('nav.home')}
               </Link>
-              
+
               {/* Menu Produits avec dropdown */}
               <div className="relative" ref={productsMenuRef}>
                 <button
                   onClick={() => setProductsMenuOpen(!productsMenuOpen)}
-                  className="flex items-center gap-1 text-gray-700 hover:text-red-600 font-medium transition-colors"
+                  className={`${isActive('/produit') ? 'text-red-600' : 'text-gray-700 hover:text-red-600'} flex items-center gap-1 font-medium transition-colors`}
                 >
                   {t('nav.products')}
                   <ChevronDown size={16} className={`transition-transform ${productsMenuOpen ? 'rotate-180' : ''}`} />
@@ -176,10 +182,10 @@ const Hearder = () => {
                 )}
               </div>
 
-              <Link to="/a-propos" className="text-gray-700 hover:text-red-600 font-medium transition-colors">
+              <Link to="/a-propos" className={`${isActive('/a-propos') ? 'text-red-600' : 'text-gray-700 hover:text-red-600'} font-medium transition-colors`}>
                 {t('nav.about')}
               </Link>
-              <Link to="/contact" className="text-gray-700 hover:text-red-600 font-medium transition-colors">
+              <Link to="/contact" className={`${isActive('/contact') ? 'text-red-600' : 'text-gray-700 hover:text-red-600'} font-medium transition-colors`}>
                 {t('nav.contact')}
               </Link>
             </nav>
@@ -350,7 +356,7 @@ const Hearder = () => {
                   <Link
                     to="/"
                     onClick={() => setIsOpen(false)}
-                    className="block py-3 px-4 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors"
+                    className={`${isActive('/') ? 'text-red-600 bg-red-50' : 'text-gray-700 hover:bg-red-50 hover:text-red-600'} block py-3 px-4 rounded-lg transition-colors`}
                   >
                     {t('nav.home')}
                   </Link>
@@ -360,7 +366,7 @@ const Hearder = () => {
                     <Link
                       to={cat.path}
                       onClick={() => setIsOpen(false)}
-                      className="flex items-center gap-2 py-3 px-4 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors"
+                      className={`${isActive(cat.path) ? 'text-red-600 bg-red-50' : 'text-gray-700 hover:bg-red-50 hover:text-red-600'} flex items-center gap-2 py-3 px-4 rounded-lg transition-colors`}
                     >
                       {cat.icon} {cat.name}
                     </Link>
@@ -370,7 +376,7 @@ const Hearder = () => {
                   <Link
                     to="/a-propos"
                     onClick={() => setIsOpen(false)}
-                    className="block py-3 px-4 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors"
+                    className={`${isActive('/a-propos') ? 'text-red-600 bg-red-50' : 'text-gray-700 hover:bg-red-50 hover:text-red-600'} block py-3 px-4 rounded-lg transition-colors`}
                   >
                     {t('nav.about')}
                   </Link>
