@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, ShoppingCart, Heart, User, LogOut, Package, Settings, ChevronDown, Menu, X, Gift, Smartphone, Monitor, Headphones, Flame } from "lucide-react";
+import { Search, ShoppingCart, Heart, User, LogOut, Package, Settings, ChevronDown, Menu, X, Smartphone, Monitor, Headphones, Flame } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import useAuthStore from "../../hooks/authStore";
 import { logoutUser } from "../../services/authService";
@@ -83,7 +83,6 @@ const Hearder = () => {
 
   const productCategories = [
     { name: t('nav.allProducts'), path: "/produit", icon: null },
-    { name: t('nav.new'), path: "/produit?category=new", icon: <Gift size={16} className="text-red-500" /> },
     { name: t('nav.smartphones'), path: "/produit?category=1", icon: <Smartphone size={16} className="text-red-500" /> },
     { name: t('nav.computers'), path: "/produit?category=2", icon: <Monitor size={16} className="text-red-500" /> },
     { name: t('nav.accessories'), path: "/produit?category=3", icon: <Headphones size={16} className="text-red-500" /> },
