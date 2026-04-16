@@ -20,9 +20,11 @@ const ReviewSection = ({ productId }: { productId: number }) => {
 
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
-  const reviews = useReviewStore((s) => s.reviewsByProduct[productId]?.data ?? []);
-  const stats = useReviewStore((s) => s.statsByProduct[productId]?.data ?? null);
-  const loading = useReviewStore((s) => Boolean(s.loadingReviews[productId]));
+  const reviewsData = useReviewStore((s) => s.reviewsByProduct[productId]?.data);
+  const statsData = useReviewStore((s) => s.statsByProduct[productId]?.data);
+  const loading = useReviewStore((s) => s.loadingReviews[productId] === true);
+  const reviews = reviewsData ?? [];
+  const stats = statsData ?? null;
   const fetchReviews = useReviewStore((s) => s.fetchReviews);
   const fetchStoreStats = useReviewStore((s) => s.fetchStats);
   const storeCreateReview = useReviewStore((s) => s.createReview);
