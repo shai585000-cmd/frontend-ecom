@@ -108,12 +108,25 @@ const HomePage = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col min-h-screen">
+      <div className="flex flex-col min-h-screen bg-gray-50">
         <Hearder />
-        <div className="flex-grow flex justify-center items-center bg-gray-50">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-4 border-red-600 border-t-transparent mx-auto mb-4"></div>
-            <p className="text-gray-600">Chargement...</p>
+        <div className="flex-grow">
+          <div className="container mx-auto px-4 py-8">
+            <div className="h-64 bg-gradient-to-r from-gray-200 to-gray-300 rounded-2xl mb-8 animate-pulse"></div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+              {[1,2,3,4].map(i => (
+                <div key={i} className="h-16 bg-gray-200 rounded-lg animate-pulse"></div>
+              ))}
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+              {[1,2,3,4,5,6,7,8,9,10].map(i => (
+                <div key={i} className="bg-white rounded-xl p-4 animate-pulse">
+                  <div className="aspect-square bg-gray-200 rounded-lg mb-4"></div>
+                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                  <div className="h-6 bg-gray-200 rounded w-1/2"></div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
