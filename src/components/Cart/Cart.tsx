@@ -43,7 +43,7 @@ const Cart = () => {
           <div>
             <Link
               to="/"
-              className="inline-block px-8 py-3 bg-gradient-to-r from-red-500 to-red-700 text-white rounded-full hover:from-red-600 hover:to-indigo-700 transition-all duration-300 shadow-lg"
+              className="inline-block px-8 py-3 bg-gradient-to-r from-red-500 to-black text-white rounded-full hover:from-red-600 hover:to-black transition-all duration-300 shadow-lg"
             >
               Continuer mes achats
             </Link>
