@@ -62,8 +62,20 @@ const WishlistPage = () => {
     return (
       <>
         <Header />
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500"></div>
+        <div className="min-h-screen bg-gray-50 py-8">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="h-12 w-64 bg-gray-200 rounded mb-8 animate-pulse"></div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1,2,3,4,5,6].map(i => (
+                <div key={i} className="bg-white rounded-xl p-4 animate-pulse">
+                  <div className="aspect-square bg-gray-200 rounded-lg mb-4"></div>
+                  <div className="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>
+                  <div className="h-5 bg-gray-200 rounded w-1/2 mb-4"></div>
+                  <div className="h-10 bg-gray-200 rounded"></div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
         <Footer />
       </>
