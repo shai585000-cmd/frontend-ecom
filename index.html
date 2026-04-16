@@ -8,42 +8,9 @@
     <meta name="theme-color" content="#E31B23" />
     <link rel="icon" type="image/jpeg" href="/icon.jpeg" />
     <link rel="apple-touch-icon" href="/icon.jpeg" />
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-        background: linear-gradient(135deg, #1A1A1A 0%, #2D2D2D 50%, #E31B23 100%);
-        min-height: 100vh;
-      }
-      #root {
-        min-height: 100vh;
-      }
-      /* Loading animation */
-      .loading-screen {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        background: linear-gradient(135deg, #1A1A1A 0%, #E31B23 100%);
-      }
-      .loading-screen::after {
-        content: "INFOTEK";
-        font-family: system-ui, -apple-system, sans-serif;
-        font-size: 2rem;
-        font-weight: bold;
-        color: white;
-        animation: pulse 1.5s ease-in-out infinite;
-      }
-      @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.5; }
-      }
-    </style>
   </head>
   <body>
-    <div id="root">
-      <div class="loading-screen"></div>
-    </div>
+    <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
