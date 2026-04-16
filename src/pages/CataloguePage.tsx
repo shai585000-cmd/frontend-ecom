@@ -173,13 +173,13 @@ const CataloguePage = () => {
       <Header />
       
       {/* Hero Section */}
-      <div className={`bg-gradient-to-r ${promoFilter ? 'from-red-600 to-orange-500' : 'from-gray-900 to-gray-800'} text-white py-12`}>
+      <div className={`bg-gradient-to-r ${promoFilter ? 'from-red-600 to-red-700' : 'from-gray-900 to-gray-800'} text-white py-12`}>
         <div className="max-w-7xl mx-auto px-4">
           <h1 className="text-3xl md:text-4xl font-bold mb-4">
             {promoFilter ? 'Offres Promotionnelles' : 'Notre Catalogue Tech'}
           </h1>
-          <p className={promoFilter ? 'text-orange-100' : 'text-gray-300'}>
-            {promoFilter 
+          <p className={promoFilter ? 'text-red-100' : 'text-gray-300'}>
+            {promoFilter
               ? 'Profitez de nos meilleures offres et réductions exceptionnelles !'
               : 'Découvrez notre sélection de smartphones et accessoires de dernière génération'
             }
