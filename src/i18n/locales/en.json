@@ -204,5 +204,46 @@
     "loginRequired": "Sign in required",
     "loginRequiredMsg": "Sign in to access your profile",
     "loginBtn": "Sign in"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Have a question? A problem with your order? Our team is here to help.",
+    "info": {
+      "title": "Contact Information",
+      "address": "Address",
+      "phone": "Phone",
+      "email": "Email",
+      "hours": "Business Hours",
+      "weekdays": "Monday - Friday",
+      "saturday": "Saturday"
+    },
+    "whatsapp": "Chat on WhatsApp",
+    "whatsappMessage": "Hello, I have a question about your store.",
+    "form": {
+      "title": "Send us a message",
+      "name": "Full name",
+      "namePlaceholder": "Your name",
+      "email": "Email",
+      "emailPlaceholder": "your@email.com",
+      "phone": "Phone",
+      "phonePlaceholder": "+225 XX XX XX XX XX",
+      "subject": "Subject",
+      "subjectPlaceholder": "Select a subject",
+      "subjects": {
+        "order": "Order inquiry",
+        "product": "Product information",
+        "delivery": "Delivery",
+        "return": "Return / Refund",
+        "other": "Other"
+      },
+      "message": "Message",
+      "messagePlaceholder": "Describe your request in detail...",
+      "submit": "Send message"
+    },
+    "success": "Message sent successfully! We'll respond within 24 hours.",
+    "errors": {
+      "required": "Please fill in all required fields",
+      "failed": "Error sending message. Please try again."
+    }
   }
 }

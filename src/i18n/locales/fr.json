@@ -204,5 +204,46 @@
     "loginRequired": "Connexion requise",
     "loginRequiredMsg": "Connectez-vous pour accéder à votre profil",
     "loginBtn": "Se connecter"
+  },
+  "contact": {
+    "title": "Contactez-nous",
+    "subtitle": "Une question ? Un problème avec votre commande ? Notre équipe est là pour vous aider.",
+    "info": {
+      "title": "Nos coordonnées",
+      "address": "Adresse",
+      "phone": "Téléphone",
+      "email": "Email",
+      "hours": "Horaires",
+      "weekdays": "Lundi - Vendredi",
+      "saturday": "Samedi"
+    },
+    "whatsapp": "Discuter sur WhatsApp",
+    "whatsappMessage": "Bonjour, j'ai une question concernant votre boutique.",
+    "form": {
+      "title": "Envoyez-nous un message",
+      "name": "Nom complet",
+      "namePlaceholder": "Votre nom",
+      "email": "Email",
+      "emailPlaceholder": "votre@email.com",
+      "phone": "Téléphone",
+      "phonePlaceholder": "+225 XX XX XX XX XX",
+      "subject": "Sujet",
+      "subjectPlaceholder": "Sélectionnez un sujet",
+      "subjects": {
+        "order": "Question sur une commande",
+        "product": "Information produit",
+        "delivery": "Livraison",
+        "return": "Retour / Remboursement",
+        "other": "Autre"
+      },
+      "message": "Message",
+      "messagePlaceholder": "Décrivez votre demande en détail...",
+      "submit": "Envoyer le message"
+    },
+    "success": "Message envoyé avec succès ! Nous vous répondrons sous 24h.",
+    "errors": {
+      "required": "Veuillez remplir tous les champs obligatoires",
+      "failed": "Erreur lors de l'envoi. Veuillez réessayer."
+    }
   }
 }

@@ -10,6 +10,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import AboutPage from "./pages/AboutPage";
 import BlogPage from "./pages/BlogPage";
+import ContactPage from "./pages/ContactPage";
 import ActualitesPage from "./pages/ActualitesPage";
 import Dashboard from "./pages/Dashboard";
 import OrdersPage from "./pages/OrdersPage";
@@ -34,6 +35,7 @@ const App = () => {
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/a-propos" element={<AboutPage />} />
             <Route path="/blog" element={<BlogPage />} />
+            <Route path="/contact" element={<ContactPage />} />
             <Route path="/actualites" element={<ActualitesPage />} />
             <Route path="/produit" element={<CataloguePage />} />
             <Route path="/auth/callback" element={<GoogleCallbackPage />} />
