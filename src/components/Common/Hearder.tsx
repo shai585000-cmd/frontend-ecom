@@ -7,6 +7,7 @@ import { logoutUser } from "../../services/authService";
 import useCartStore from "../../hooks/useCartStore";
 import useWishlistStore from "../../store/wishlistStore";
 import { publicApi } from "../../services/api";
+import { getWishlist } from "../../services/wishlistService";
 import LanguageSwitcher from "./LanguageSwitcher";
 import logger from '../../utils/logger';
 
@@ -26,6 +27,7 @@ const Hearder = () => {
   const navigate = useNavigate();
   const cartItems = useCartStore((state) => state.getCartLength());
   const wishlistCount = useWishlistStore((state) => state.getWishlistCount());
+  const setWishlist = useWishlistStore((state) => state.setWishlist);
 
   // Récupérer les annonces depuis l'API
   useEffect(() => {
@@ -45,6 +47,21 @@ const Hearder = () => {
     };
     fetchAnnouncements();
   }, []);
+
+  // Synchroniser la wishlist serveur avec le store local quand authentifié
+  useEffect(() => {
+    const syncWishlist = async () => {
+      if (isAuthenticated) {
+        try {
+          const serverWishlist = await getWishlist();
+          setWishlist(serverWishlist);
+        } catch (error) {
+          logger.error("Erreur synchro wishlist:", error);
+        }
+      }
+    };
+    syncWishlist();
+  }, [isAuthenticated, setWishlist]);
 
   const handleLogout = async () => {
     try {
