@@ -1,4 +1,4 @@
-import { useState, useEffect, type ChangeEvent, type FormEvent } from 'react';
+import React, { useState, useEffect, type ChangeEvent, type FormEvent } from 'react';
 
 type OrderStatus = 'pending' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
 
@@ -30,6 +30,7 @@ interface Review {
   created_at: string;
   is_verified_purchase?: boolean;
 }
+
 import { Link } from 'react-router-dom';
 import Header from '../components/Common/Hearder';
 import Footer from '../components/Common/Footer';
@@ -38,10 +39,11 @@ import { useTranslation } from 'react-i18next';
 import { getOrders } from '../services/orderService';
 import { getMyReviews } from '../services/reviewService';
 import useAuthStore from '../hooks/authStore';
-import { 
-  User, Mail, Phone, MapPin, Building, Lock, 
+import {
+  User, Mail, Phone, MapPin, Building,
   ShoppingBag, Star, Edit2, Save, X, Eye, EyeOff,
-  Package, Calendar, ChevronRight
+  Package, Calendar, ChevronRight, Shield, ClipboardList,
+  MessageSquare, Home
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import logger from '../utils/logger';
@@ -55,8 +57,7 @@ const UserProfilePage = () => {
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
-  
-  // Form states
+
   const [formData, setFormData] = useState({
     nom_cli: '',
     email: '',
@@ -66,8 +67,7 @@ const UserProfilePage = () => {
     code_postal_cli: '',
     pays_cli: ''
   });
-  
-  // Password form states
+
   const [passwordForm, setPasswordForm] = useState({
     old_password: '',
     new_password: '',
@@ -96,7 +96,7 @@ const UserProfilePage = () => {
         getOrders().catch(() => []),
         getMyReviews().catch(() => [])
       ]);
-      
+
       setUser(userData);
       setFormData({
         nom_cli: userData.nom_cli || '',
@@ -107,7 +107,7 @@ const UserProfilePage = () => {
         code_postal_cli: userData.code_postal_cli || '',
         pays_cli: userData.pays_cli || ''
       });
-      setOrders(ordersData.slice(0, 5)); // Dernieres 5 commandes
+      setOrders(ordersData.slice(0, 5));
       setReviews(reviewsData);
     } catch (error) {
       logger.error('Erreur:', error);
@@ -144,12 +144,12 @@ const UserProfilePage = () => {
 
   const handleChangePassword = async (e: FormEvent) => {
     e.preventDefault();
-    
+
     if (passwordForm.new_password !== passwordForm.confirm_password) {
       toast.error(t('profile.passwordMismatch'));
       return;
     }
-    
+
     if (passwordForm.new_password.length < 6) {
       toast.error(t('profile.passwordMin'));
       return;
@@ -170,14 +170,14 @@ const UserProfilePage = () => {
 
   const getStatusColor = (status: OrderStatus): string => {
     const colors: Record<OrderStatus, string> = {
-      pending: 'bg-yellow-100 text-yellow-800',
-      confirmed: 'bg-blue-100 text-blue-800',
-      processing: 'bg-purple-100 text-purple-800',
-      shipped: 'bg-indigo-100 text-indigo-800',
-      delivered: 'bg-green-100 text-green-800',
-      cancelled: 'bg-red-100 text-red-800',
+      pending: 'bg-amber-50 text-amber-700 border border-amber-200',
+      confirmed: 'bg-blue-50 text-blue-700 border border-blue-200',
+      processing: 'bg-purple-50 text-purple-700 border border-purple-200',
+      shipped: 'bg-indigo-50 text-indigo-700 border border-indigo-200',
+      delivered: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
+      cancelled: 'bg-red-50 text-red-700 border border-red-200',
     };
-    return colors[status] || 'bg-gray-100 text-gray-800';
+    return colors[status] || 'bg-gray-50 text-gray-700 border border-gray-200';
   };
 
   const getStatusLabel = (status: OrderStatus): string => {
@@ -192,6 +192,15 @@ const UserProfilePage = () => {
     return labels[status] || status;
   };
 
+  /* ── Nav items ── */
+  const navItems = [
+    { id: 'profile', label: t('profile.tabs.profile'), icon: User },
+    { id: 'security', label: t('profile.tabs.security'), icon: Shield },
+    { id: 'orders', label: t('profile.tabs.orders'), icon: ClipboardList },
+    { id: 'reviews', label: t('profile.tabs.reviews'), icon: MessageSquare },
+  ];
+
+  /* ── Not authenticated ── */
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -212,457 +221,428 @@ const UserProfilePage = () => {
     );
   }
 
+  /* ── Loading ── */
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
         <Header />
         <div className="flex justify-center items-center h-96">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500" />
         </div>
         <Footer />
       </div>
     );
   }
 
+  /* ── Main layout ── */
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-100">
       <Header />
-      
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
-        {/* En-tete du profil */}
-        <div
-          className="bg-gradient-to-r from-red-600 to-red-800 rounded-2xl p-4 sm:p-8 mb-6 sm:mb-8 text-white"
-        >
-          <div className="flex items-center gap-4 sm:gap-6">
-            <div className="w-14 h-14 sm:w-20 sm:h-20 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
-              <User size={28} className="sm:hidden" />
-              <User size={40} className="hidden sm:block" />
-            </div>
-            <div className="min-w-0">
-              <h1 className="text-xl sm:text-3xl font-bold truncate">{user?.nom_cli || user?.username}</h1>
-              <p className="text-red-200 text-sm sm:text-base truncate">{user?.email}</p>
-              <p className="text-xs sm:text-sm text-red-200 mt-1">
-                {t('profile.memberSince')} {user?.created_at ? new Date(user.created_at).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' }) : ''}
-              </p>
-            </div>
-          </div>
-        </div>
 
-        {/* Navigation par onglets */}
-        <div className="grid grid-cols-4 gap-1 sm:flex sm:gap-2 mb-6">
-          {[
-            { id: 'profile', label: t('profile.tabs.profile'), labelFull: t('profile.tabs.profile'), icon: User },
-            { id: 'security', label: t('profile.tabs.security'), labelFull: t('profile.tabs.security'), icon: Lock },
-            { id: 'orders', label: t('profile.tabs.orders'), labelFull: t('profile.tabs.orders'), icon: ShoppingBag },
-            { id: 'reviews', label: t('profile.tabs.reviews'), labelFull: t('profile.tabs.reviews'), icon: Star },
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-2 rounded-lg font-medium transition-all text-xs sm:text-base ${
-                activeTab === tab.id
-                  ? 'bg-red-600 text-white'
-                  : 'bg-white text-gray-600 hover:bg-gray-100'
-              }`}
-            >
-              <tab.icon size={18} className="sm:w-[18px] sm:h-[18px]" />
-              <span className="sm:hidden">{tab.label}</span>
-              <span className="hidden sm:inline">{tab.labelFull}</span>
-            </button>
-          ))}
-        </div>
+      <div className="max-w-6xl mx-auto px-4 py-8">
 
-        {/* Contenu des onglets */}
-        <div>
-          {/* Onglet Profil */}
-          {activeTab === 'profile' && (
-            <div className="bg-white rounded-2xl shadow-sm p-6">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0 mb-6">
-                <h2 className="text-lg sm:text-xl font-bold text-gray-800">{t('profile.personalInfo')}</h2>
-                {!isEditing ? (
-                  <button
-                    onClick={() => setIsEditing(true)}
-                    className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors text-sm sm:text-base"
-                  >
-                    <Edit2 size={16} className="sm:w-[18px] sm:h-[18px]" />
-                    {t('profile.edit')}
-                  </button>
-                ) : (
-                  <div className="flex gap-2 w-full sm:w-auto">
-                    <button
-                      onClick={() => setIsEditing(false)}
-                      className="flex-1 sm:flex-none flex items-center justify-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors text-sm sm:text-base"
-                    >
-                      <X size={16} />
-                      <span className="hidden sm:inline">{t('profile.cancel')}</span>
-                    </button>
-                    <button
-                      onClick={handleSaveProfile}
-                      disabled={saving}
-                      className="flex-1 sm:flex-none flex items-center justify-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 text-sm sm:text-base"
-                    >
-                      <Save size={16} />
-                      {saving ? t('profile.saving') : t('profile.save')}
-                    </button>
-                  </div>
-                )}
+        {/* Breadcrumb */}
+        <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6">
+          <Home size={14} />
+          <Link to="/" className="hover:text-red-600 transition-colors">Accueil</Link>
+          <ChevronRight size={14} />
+          <span className="text-gray-800 font-medium">Mon compte</span>
+        </nav>
+
+        <div className="flex flex-col lg:flex-row gap-6">
+
+          {/* ════════════ SIDEBAR ════════════ */}
+          <aside className="lg:w-64 flex-shrink-0">
+
+            {/* Avatar card */}
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden mb-4">
+              <div className="bg-red-600 h-16" />
+              <div className="px-5 pb-5 -mt-8">
+                <div className="w-16 h-16 rounded-full bg-white border-4 border-white shadow-md flex items-center justify-center mb-3">
+                  <User size={28} className="text-red-600" />
+                </div>
+                <p className="font-semibold text-gray-900 text-base leading-tight truncate">
+                  {user?.nom_cli || user?.username || 'Utilisateur'}
+                </p>
+                <p className="text-sm text-gray-500 truncate mt-0.5">{user?.email}</p>
+                <p className="text-xs text-gray-400 mt-1">
+                  Membre depuis{' '}
+                  {user?.created_at
+                    ? new Date(user.created_at).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })
+                    : '—'}
+                </p>
               </div>
+            </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Nom complet */}
-                <div>
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                    <User size={16} />
-                    {t('profile.fullName')}
-                  </label>
-                  {isEditing ? (
+            {/* Navigation */}
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-4 pt-4 pb-2">
+                Mon compte
+              </p>
+              <nav className="pb-2">
+                {navItems.map((item) => {
+                  const Icon = item.icon;
+                  const active = activeTab === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => setActiveTab(item.id)}
+                      className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all text-left border-l-4 ${
+                        active
+                          ? 'border-red-600 bg-red-50 text-red-700'
+                          : 'border-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                      }`}
+                    >
+                      <Icon size={17} className={active ? 'text-red-600' : 'text-gray-400'} />
+                      {item.label}
+                    </button>
+                  );
+                })}
+              </nav>
+
+              <div className="border-t border-gray-100 mt-1 pb-2 pt-2">
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-4 pb-2 pt-1">
+                  Boutique
+                </p>
+                <Link
+                  to="/orders"
+                  className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all border-l-4 border-transparent"
+                >
+                  <ShoppingBag size={17} className="text-gray-400" />
+                  Toutes mes commandes
+                </Link>
+                <Link
+                  to="/produit"
+                  className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all border-l-4 border-transparent"
+                >
+                  <Package size={17} className="text-gray-400" />
+                  Nos produits
+                </Link>
+              </div>
+            </div>
+          </aside>
+
+          {/* ════════════ MAIN CONTENT ════════════ */}
+          <main className="flex-1 min-w-0">
+
+            {/* ── Profil ── */}
+            {activeTab === 'profile' && (
+              <div className="bg-white rounded-xl border border-gray-200">
+                <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+                  <h2 className="font-semibold text-gray-900">Informations personnelles</h2>
+                  {!isEditing ? (
+                    <button
+                      onClick={() => setIsEditing(true)}
+                      className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors"
+                    >
+                      <Edit2 size={15} />
+                      Modifier
+                    </button>
+                  ) : (
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setIsEditing(false)}
+                        className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                      >
+                        <X size={15} />
+                        Annuler
+                      </button>
+                      <button
+                        onClick={handleSaveProfile}
+                        disabled={saving}
+                        className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
+                      >
+                        <Save size={15} />
+                        {saving ? 'Sauvegarde…' : 'Sauvegarder'}
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Nom complet */}
+                  <FieldBlock
+                    label="Nom complet"
+                    icon={<User size={15} className="text-gray-400" />}
+                    isEditing={isEditing}
+                    display={user?.nom_cli}
+                  >
                     <input
                       type="text"
                       name="nom_cli"
                       value={formData.nom_cli}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      className={inputCls}
                     />
-                  ) : (
-                    <p className="px-4 py-3 bg-gray-50 rounded-lg text-gray-800">
-                      {user?.nom_cli || '-'}
-                    </p>
-                  )}
-                </div>
+                  </FieldBlock>
 
-                {/* Email */}
-                <div>
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                    <Mail size={16} />
-                    {t('profile.email')}
-                  </label>
-                  {isEditing ? (
+                  {/* Email */}
+                  <FieldBlock
+                    label="Adresse e-mail"
+                    icon={<Mail size={15} className="text-gray-400" />}
+                    isEditing={isEditing}
+                    display={user?.email}
+                  >
                     <input
                       type="email"
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      className={inputCls}
                     />
-                  ) : (
-                    <p className="px-4 py-3 bg-gray-50 rounded-lg text-gray-800">
-                      {user?.email || '-'}
-                    </p>
-                  )}
-                </div>
+                  </FieldBlock>
 
-                {/* Telephone */}
-                <div>
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                    <Phone size={16} />
-                    {t('profile.phone')}
-                  </label>
-                  {isEditing ? (
+                  {/* Téléphone */}
+                  <FieldBlock
+                    label="Téléphone"
+                    icon={<Phone size={15} className="text-gray-400" />}
+                    isEditing={isEditing}
+                    display={user?.numero_cli}
+                  >
                     <input
                       type="tel"
                       name="numero_cli"
                       value={formData.numero_cli}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      className={inputCls}
                     />
-                  ) : (
-                    <p className="px-4 py-3 bg-gray-50 rounded-lg text-gray-800">
-                      {user?.numero_cli || '-'}
-                    </p>
-                  )}
-                </div>
+                  </FieldBlock>
 
-                {/* Ville */}
-                <div>
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                    <Building size={16} />
-                    {t('profile.city')}
-                  </label>
-                  {isEditing ? (
+                  {/* Ville */}
+                  <FieldBlock
+                    label="Ville"
+                    icon={<Building size={15} className="text-gray-400" />}
+                    isEditing={isEditing}
+                    display={user?.ville_cli}
+                  >
                     <input
                       type="text"
                       name="ville_cli"
                       value={formData.ville_cli}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      className={inputCls}
                     />
-                  ) : (
-                    <p className="px-4 py-3 bg-gray-50 rounded-lg text-gray-800">
-                      {user?.ville_cli || '-'}
-                    </p>
-                  )}
-                </div>
+                  </FieldBlock>
 
-                {/* Adresse */}
-                <div className="md:col-span-2">
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                    <MapPin size={16} />
-                    {t('profile.address')}
-                  </label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      name="adresse_cli"
-                      value={formData.adresse_cli}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                    />
-                  ) : (
-                    <p className="px-4 py-3 bg-gray-50 rounded-lg text-gray-800">
-                      {user?.adresse_cli || '-'}
-                    </p>
-                  )}
-                </div>
+                  {/* Adresse — full width */}
+                  <div className="md:col-span-2">
+                    <FieldBlock
+                      label="Adresse"
+                      icon={<MapPin size={15} className="text-gray-400" />}
+                      isEditing={isEditing}
+                      display={user?.adresse_cli}
+                    >
+                      <input
+                        type="text"
+                        name="adresse_cli"
+                        value={formData.adresse_cli}
+                        onChange={handleInputChange}
+                        className={inputCls}
+                      />
+                    </FieldBlock>
+                  </div>
 
-                {/* Code postal */}
-                <div>
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                    <MapPin size={16} />
-                    {t('profile.postalCode')}
-                  </label>
-                  {isEditing ? (
+                  {/* Code postal */}
+                  <FieldBlock
+                    label="Code postal"
+                    icon={<MapPin size={15} className="text-gray-400" />}
+                    isEditing={isEditing}
+                    display={user?.code_postal_cli}
+                  >
                     <input
                       type="text"
                       name="code_postal_cli"
                       value={formData.code_postal_cli}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      className={inputCls}
                     />
-                  ) : (
-                    <p className="px-4 py-3 bg-gray-50 rounded-lg text-gray-800">
-                      {user?.code_postal_cli || '-'}
-                    </p>
-                  )}
-                </div>
+                  </FieldBlock>
 
-                {/* Pays */}
-                <div>
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                    <MapPin size={16} />
-                    {t('profile.country')}
-                  </label>
-                  {isEditing ? (
+                  {/* Pays */}
+                  <FieldBlock
+                    label="Pays"
+                    icon={<MapPin size={15} className="text-gray-400" />}
+                    isEditing={isEditing}
+                    display={user?.pays_cli}
+                  >
                     <input
                       type="text"
                       name="pays_cli"
                       value={formData.pays_cli}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      className={inputCls}
                     />
-                  ) : (
-                    <p className="px-4 py-3 bg-gray-50 rounded-lg text-gray-800">
-                      {user?.pays_cli || '-'}
-                    </p>
-                  )}
+                  </FieldBlock>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {/* Onglet Securite */}
-          {activeTab === 'security' && (
-            <div className="bg-white rounded-2xl shadow-sm p-6">
-              <h2 className="text-xl font-bold text-gray-800 mb-6">{t('profile.security')}</h2>
-              
-              <form onSubmit={handleChangePassword} className="max-w-md space-y-4">
-                {/* Mot de passe actuel */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {t('profile.currentPassword')}
-                  </label>
-                  <div className="relative">
-                    <input
-                      type={showPasswords.old ? 'text' : 'password'}
+            {/* ── Sécurité ── */}
+            {activeTab === 'security' && (
+              <div className="bg-white rounded-xl border border-gray-200">
+                <div className="px-6 py-4 border-b border-gray-100">
+                  <h2 className="font-semibold text-gray-900">Sécurité du compte</h2>
+                  <p className="text-sm text-gray-500 mt-0.5">Modifiez votre mot de passe</p>
+                </div>
+
+                <div className="p-6">
+                  <form onSubmit={handleChangePassword} className="max-w-md space-y-5">
+                    <PasswordField
+                      label="Mot de passe actuel"
                       name="old_password"
                       value={passwordForm.old_password}
+                      show={showPasswords.old}
                       onChange={handlePasswordChange}
-                      required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 pr-12"
+                      onToggle={() => setShowPasswords(p => ({ ...p, old: !p.old }))}
                     />
-                    <button
-                      type="button"
-                      onClick={() => setShowPasswords(p => ({ ...p, old: !p.old }))}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
-                    >
-                      {showPasswords.old ? <EyeOff size={20} /> : <Eye size={20} />}
-                    </button>
-                  </div>
-                </div>
-
-                {/* Nouveau mot de passe */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {t('profile.newPassword')}
-                  </label>
-                  <div className="relative">
-                    <input
-                      type={showPasswords.new ? 'text' : 'password'}
+                    <PasswordField
+                      label="Nouveau mot de passe"
                       name="new_password"
                       value={passwordForm.new_password}
+                      show={showPasswords.new}
                       onChange={handlePasswordChange}
-                      required
-                      minLength={6}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 pr-12"
+                      onToggle={() => setShowPasswords(p => ({ ...p, new: !p.new }))}
+                      hint="Minimum 6 caractères"
                     />
-                    <button
-                      type="button"
-                      onClick={() => setShowPasswords(p => ({ ...p, new: !p.new }))}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
-                    >
-                      {showPasswords.new ? <EyeOff size={20} /> : <Eye size={20} />}
-                    </button>
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">{t('profile.passwordMin')}</p>
-                </div>
-
-                {/* Confirmer le mot de passe */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {t('profile.confirmPassword')}
-                  </label>
-                  <div className="relative">
-                    <input
-                      type={showPasswords.confirm ? 'text' : 'password'}
+                    <PasswordField
+                      label="Confirmer le nouveau mot de passe"
                       name="confirm_password"
                       value={passwordForm.confirm_password}
+                      show={showPasswords.confirm}
                       onChange={handlePasswordChange}
-                      required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 pr-12"
+                      onToggle={() => setShowPasswords(p => ({ ...p, confirm: !p.confirm }))}
                     />
+
                     <button
-                      type="button"
-                      onClick={() => setShowPasswords(p => ({ ...p, confirm: !p.confirm }))}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                      type="submit"
+                      disabled={changingPassword}
+                      className="w-full py-3 bg-red-600 text-white rounded-lg font-semibold text-sm hover:bg-red-700 transition-colors disabled:opacity-50"
                     >
-                      {showPasswords.confirm ? <EyeOff size={20} /> : <Eye size={20} />}
+                      {changingPassword ? 'Modification…' : 'Modifier le mot de passe'}
                     </button>
-                  </div>
+                  </form>
                 </div>
-
-                <button
-                  type="submit"
-                  disabled={changingPassword}
-                  className="w-full py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-colors disabled:opacity-50"
-                >
-                  {changingPassword ? t('profile.changing') : t('profile.changePasswordBtn')}
-                </button>
-              </form>
-            </div>
-          )}
-
-          {/* Onglet Commandes */}
-          {activeTab === 'orders' && (
-            <div className="bg-white rounded-2xl shadow-sm p-6">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-bold text-gray-800">{t('profile.recentOrders')}</h2>
-                <Link
-                  to="/orders"
-                  className="text-red-600 hover:text-red-700 font-medium flex items-center gap-1"
-                >
-                  {t('profile.viewAll')}
-                  <ChevronRight size={18} />
-                </Link>
               </div>
+            )}
 
-              {orders.length === 0 ? (
-                <div className="text-center py-12">
-                  <Package size={48} className="mx-auto text-gray-400 mb-4" />
-                  <p className="text-gray-600">{t('profile.noOrders')}</p>
+            {/* ── Commandes ── */}
+            {activeTab === 'orders' && (
+              <div className="bg-white rounded-xl border border-gray-200">
+                <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+                  <h2 className="font-semibold text-gray-900">Commandes récentes</h2>
                   <Link
-                    to="/produit"
-                    className="inline-block mt-4 px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                    to="/orders"
+                    className="flex items-center gap-1 text-sm font-medium text-red-600 hover:text-red-700 transition-colors"
                   >
-                    {t('profile.discoverProducts')}
+                    Voir tout
+                    <ChevronRight size={16} />
                   </Link>
                 </div>
-              ) : (
-                <div className="space-y-4">
-                  {orders.map((order) => (
+
+                {orders.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-16 text-center px-4">
+                    <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+                      <Package size={28} className="text-gray-400" />
+                    </div>
+                    <p className="font-medium text-gray-700">{t('profile.noOrders')}</p>
+                    <p className="text-sm text-gray-500 mt-1 mb-5">Vous n&apos;avez encore passé aucune commande.</p>
                     <Link
-                      key={order.id}
-                      to={`/orders/${order.id}`}
-                      className="block p-4 border border-gray-200 rounded-xl hover:border-red-300 hover:bg-red-50/30 transition-all"
+                      to="/produit"
+                      className="px-5 py-2.5 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700 transition-colors"
                     >
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <p className="font-semibold text-gray-800">
-                            Commande #{order.id}
-                          </p>
-                          <p className="text-sm text-gray-500 flex items-center gap-1 mt-1">
-                            <Calendar size={14} />
-                            {new Date(order.created_at).toLocaleDateString('fr-FR')}
-                          </p>
-                        </div>
-                        <div className="text-right">
-                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
-                            {getStatusLabel(order.status)}
-                          </span>
-                          <p className="mt-2 font-bold text-gray-800">
-                            {parseFloat(String(order.total_amount)).toLocaleString()} Fcfa
-                          </p>
-                        </div>
-                      </div>
+                      Découvrir nos produits
                     </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Onglet Avis */}
-          {activeTab === 'reviews' && (
-            <div className="bg-white rounded-2xl shadow-sm p-6">
-              <h2 className="text-xl font-bold text-gray-800 mb-6">{t('profile.myReviews')}</h2>
-
-              {reviews.length === 0 ? (
-                <div className="text-center py-12">
-                  <Star size={48} className="mx-auto text-gray-400 mb-4" />
-                  <p className="text-gray-600">{t('profile.noReviews')}</p>
-                  <p className="text-sm text-gray-500 mt-2">
-                    {t('profile.noReviewsDesc')}
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {reviews.map((review) => (
-                    <div
-                      key={review.id}
-                      className="p-4 border border-gray-200 rounded-xl"
-                    >
-                      <div className="flex justify-between items-start mb-2">
-                        <div>
-                          <p className="font-semibold text-gray-800">
-                            {review.product?.name || 'Produit'}
-                          </p>
-                          <div className="flex items-center gap-1 mt-1">
-                            {[...Array(5)].map((_, i) => (
-                              <Star
-                                key={i}
-                                size={16}
-                                className={i < review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}
-                              />
-                            ))}
+                  </div>
+                ) : (
+                  <div className="divide-y divide-gray-100">
+                    {orders.map((order) => (
+                      <Link
+                        key={order.id}
+                        to={`/orders/${order.id}`}
+                        className="flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition-colors group"
+                      >
+                        <div className="flex items-center gap-4">
+                          <div className="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0">
+                            <ShoppingBag size={18} className="text-red-500" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-semibold text-gray-800">Commande #{order.id}</p>
+                            <p className="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
+                              <Calendar size={12} />
+                              {new Date(order.created_at).toLocaleDateString('fr-FR')}
+                            </p>
                           </div>
                         </div>
-                        <p className="text-sm text-gray-500">
-                          {new Date(review.created_at).toLocaleDateString('fr-FR')}
-                        </p>
-                      </div>
-                      {review.title && (
-                        <p className="font-medium text-gray-700">{review.title}</p>
-                      )}
-                      <p className="text-gray-600 mt-1">{review.comment}</p>
-                      {review.is_verified_purchase && (
-                        <span className="inline-block mt-2 px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full">
-                          {t('profile.verifiedPurchase')}
-                        </span>
-                      )}
-                    </div>
-                  ))}
+                        <div className="flex items-center gap-4">
+                          <span className={`hidden sm:inline-block px-2.5 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
+                            {getStatusLabel(order.status)}
+                          </span>
+                          <p className="font-bold text-gray-900 text-sm">
+                            {parseFloat(String(order.total_amount)).toLocaleString()} Fcfa
+                          </p>
+                          <ChevronRight size={16} className="text-gray-400 group-hover:text-red-500 transition-colors" />
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ── Avis ── */}
+            {activeTab === 'reviews' && (
+              <div className="bg-white rounded-xl border border-gray-200">
+                <div className="px-6 py-4 border-b border-gray-100">
+                  <h2 className="font-semibold text-gray-900">Mes avis</h2>
                 </div>
-              )}
-            </div>
-          )}
+
+                {reviews.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-16 text-center px-4">
+                    <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+                      <Star size={28} className="text-gray-400" />
+                    </div>
+                    <p className="font-medium text-gray-700">{t('profile.noReviews')}</p>
+                    <p className="text-sm text-gray-500 mt-1">{t('profile.noReviewsDesc')}</p>
+                  </div>
+                ) : (
+                  <div className="divide-y divide-gray-100">
+                    {reviews.map((review) => (
+                      <div key={review.id} className="px-6 py-5">
+                        <div className="flex items-start justify-between gap-4">
+                          <div>
+                            <p className="font-semibold text-gray-800 text-sm">
+                              {review.product?.name || 'Produit'}
+                            </p>
+                            <div className="flex items-center gap-0.5 mt-1">
+                              {[...Array(5)].map((_, i) => (
+                                <Star
+                                  key={i}
+                                  size={14}
+                                  className={i < review.rating ? 'fill-amber-400 text-amber-400' : 'text-gray-200'}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                          <p className="text-xs text-gray-400 flex-shrink-0">
+                            {new Date(review.created_at).toLocaleDateString('fr-FR')}
+                          </p>
+                        </div>
+                        {review.title && (
+                          <p className="font-medium text-gray-700 text-sm mt-2">{review.title}</p>
+                        )}
+                        <p className="text-sm text-gray-600 mt-1 leading-relaxed">{review.comment}</p>
+                        {review.is_verified_purchase && (
+                          <span className="inline-flex items-center gap-1 mt-2 px-2 py-0.5 bg-emerald-50 text-emerald-700 text-xs rounded-full border border-emerald-100">
+                            ✓ {t('profile.verifiedPurchase')}
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </main>
         </div>
       </div>
 
@@ -670,5 +650,84 @@ const UserProfilePage = () => {
     </div>
   );
 };
+
+/* ════════ Helpers ════════ */
+
+const inputCls =
+  'w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors';
+
+function FieldBlock({
+  label,
+  icon,
+  isEditing,
+  display,
+  children,
+}: {
+  label: string;
+  icon: React.ReactNode;
+  isEditing: boolean;
+  display?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+        {icon}
+        {label}
+      </label>
+      {isEditing ? (
+        <>{children}</>
+      ) : (
+        <p className="text-sm text-gray-800 px-3 py-2.5 bg-gray-50 rounded-lg border border-gray-100">
+          {display || <span className="text-gray-400">—</span>}
+        </p>
+      )}
+    </div>
+  );
+}
+
+function PasswordField({
+  label,
+  name,
+  value,
+  show,
+  onChange,
+  onToggle,
+  hint,
+}: {
+  label: string;
+  name: string;
+  value: string;
+  show: boolean;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onToggle: () => void;
+  hint?: string;
+}) {
+  return (
+    <div>
+      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+        {label}
+      </label>
+      <div className="relative">
+        <input
+          type={show ? 'text' : 'password'}
+          name={name}
+          value={value}
+          onChange={onChange}
+          required
+          className={`${inputCls} pr-11`}
+        />
+        <button
+          type="button"
+          onClick={onToggle}
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+        >
+          {show ? <EyeOff size={18} /> : <Eye size={18} />}
+        </button>
+      </div>
+      {hint && <p className="text-xs text-gray-400 mt-1">{hint}</p>}
+    </div>
+  );
+}
 
 export default UserProfilePage;
