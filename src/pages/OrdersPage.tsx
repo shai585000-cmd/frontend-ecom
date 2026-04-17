@@ -1,20 +1,44 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Package, ChevronRight, Clock, CheckCircle, Truck, XCircle, RefreshCw, PackageCheck, Loader2 } from 'lucide-react';
+import { Package, ChevronRight, Clock, CheckCircle, Truck, XCircle, RefreshCw, PackageCheck, Loader2, Star } from 'lucide-react';
 import { getOrders, cancelOrder } from '../services/orderService';
+import { getMyReviews } from '../services/reviewService';
 import useAuthStore from '../hooks/authStore';
 import Header from '../components/Common/Hearder';
 import toast from 'react-hot-toast';
 import logger from '../utils/logger';
 
+interface OrderItem {
+  id: number;
+  product: number | null;
+  product_name: string;
+  quantity: number;
+  unit_price: string;
+  total_price: string;
+}
+
+interface Order {
+  id: number;
+  order_number: string;
+  status: string;
+  status_display: string;
+  total_amount: string;
+  shipping_address: string;
+  shipping_city: string;
+  shipping_phone: string;
+  created_at: string;
+  items: OrderItem[];
+}
+
 const OrdersPage = () => {
   const navigate = useNavigate();
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [error, setError] = useState(null);
-  const [cancellingId, setCancellingId] = useState(null);
+  const [error, setError] = useState<string | null>(null);
+  const [cancellingId, setCancellingId] = useState<number | null>(null);
+  const [reviewedProductIds, setReviewedProductIds] = useState<Set<number>>(new Set());
 
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
@@ -33,8 +57,19 @@ const OrdersPage = () => {
       } else {
         setLoading(true);
       }
-      const data = await getOrders();
+      const [data, myReviews] = await Promise.all([
+        getOrders(),
+        getMyReviews().catch(() => [])
+      ]);
       setOrders(data);
+      const ids = new Set<number>(
+        myReviews
+          .map((r: { product?: { id?: number } | number }) =>
+            typeof r.product === 'object' ? r.product?.id : r.product
+          )
+          .filter(Boolean) as number[]
+      );
+      setReviewedProductIds(ids);
       if (isRefresh) {
         toast.success('Commandes actualisees');
       }
@@ -56,12 +91,12 @@ const OrdersPage = () => {
     { status: 'delivered', label: 'Livree', icon: PackageCheck },
   ];
 
-  const getStepIndex = (status) => {
+  const getStepIndex = (status: string) => {
     if (status === 'cancelled' || status === 'refunded') return -1;
     return orderSteps.findIndex(s => s.status === status);
   };
 
-  const OrderProgressBar = ({ status }) => {
+  const OrderProgressBar = ({ status }: { status: string }) => {
     const currentStep = getStepIndex(status);
     
     if (currentStep === -1) {
@@ -119,7 +154,7 @@ const OrdersPage = () => {
     status: PropTypes.string.isRequired,
   };
 
-  const handleCancelOrder = async (orderId) => {
+  const handleCancelOrder = async (orderId: number) => {
     if (!window.confirm('Êtes-vous sûr de vouloir annuler cette commande ?')) {
       return;
     }
@@ -130,14 +165,15 @@ const OrdersPage = () => {
       // Rafraîchir la liste
       fetchOrders();
     } catch (err) {
+      const e = err as { response?: { data?: { error?: string } } };
       logger.error('Erreur lors de l\'annulation:', err);
-      alert(err.response?.data?.error || 'Impossible d\'annuler la commande');
+      alert(e.response?.data?.error || 'Impossible d\'annuler la commande');
     } finally {
       setCancellingId(null);
     }
   };
 
-  const getStatusIcon = (status) => {
+  const getStatusIcon = (status: string) => {
     switch (status) {
       case 'pending':
         return <Clock className="w-5 h-5 text-yellow-500" />;
@@ -156,7 +192,7 @@ const OrdersPage = () => {
     }
   };
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status: string) => {
     switch (status) {
       case 'pending':
         return 'bg-yellow-100 text-yellow-800';
@@ -259,13 +295,30 @@ const OrdersPage = () => {
                   <h4 className="text-sm font-medium text-gray-500 mb-3">Articles</h4>
                   <div className="space-y-2">
                     {order.items && order.items.map((item) => (
-                      <div key={item.id} className="flex justify-between items-center text-sm">
-                        <span className="text-gray-700">
+                      <div key={item.id} className="flex justify-between items-center text-sm gap-3">
+                        <span className="text-gray-700 flex-1">
                           {item.quantity}x {item.product_name}
                         </span>
-                        <span className="font-medium text-gray-800">
-                          {parseFloat(item.total_price).toLocaleString()} Fcfa
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-gray-800">
+                            {parseFloat(item.total_price).toLocaleString()} Fcfa
+                          </span>
+                          {order.status === 'delivered' && item.product && !reviewedProductIds.has(item.product) && (
+                            <Link
+                              to={`/products/${item.product}#reviews`}
+                              className="flex items-center gap-1 px-2 py-1 bg-yellow-50 text-yellow-700 border border-yellow-300 rounded-lg text-xs font-semibold hover:bg-yellow-100 transition-colors whitespace-nowrap"
+                            >
+                              <Star size={11} className="fill-yellow-400 text-yellow-400" />
+                              Avis
+                            </Link>
+                          )}
+                          {order.status === 'delivered' && item.product && reviewedProductIds.has(item.product) && (
+                            <span className="flex items-center gap-1 px-2 py-1 bg-green-50 text-green-600 rounded-lg text-xs font-medium">
+                              <CheckCircle size={11} />
+                              Noté
+                            </span>
+                          )}
+                        </div>
                       </div>
                     ))}
                   </div>
