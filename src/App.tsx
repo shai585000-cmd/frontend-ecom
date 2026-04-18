@@ -1,31 +1,48 @@
+import { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
-import HomePage from "./pages/HomePage";
-import GoogleCallbackPage from "./pages/GoogleCallbackPage";
-import ProductPage from "./pages/ProducPage";
-import CartPage from "./pages/CartPage";
-import CheckoutPage from "./pages/CheckoutPage";
-import UserProfilePage from "./pages/UserProfilePage";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import AboutPage from "./pages/AboutPage";
-import BlogPage from "./pages/BlogPage";
-import ContactPage from "./pages/ContactPage";
-import ActualitesPage from "./pages/ActualitesPage";
-import Dashboard from "./pages/Dashboard";
-import OrdersPage from "./pages/OrdersPage";
-import OrderDetailPage from "./pages/OrderDetailPage";
-import CataloguePage from "./pages/CataloguePage";
 import WhatsAppButton from "./components/Common/WhatsAppButton";
-import NotFoundPage from "./pages/NotFoundPage";
-import WishlistPage from "./pages/WishlistPage";
-import ProtectedRoute from "./components/Common/ProtectedRoute";
+import { ProtectedRoute } from "./core/components";
+
+// Auth
+const LoginPage        = lazy(() => import("./features/auth/pages/LoginPage"));
+const RegisterPage     = lazy(() => import("./features/auth/pages/RegisterPage"));
+const GoogleCallbackPage = lazy(() => import("./features/auth/pages/GoogleCallbackPage"));
+
+// Home & Catalogue
+const HomePage         = lazy(() => import("./features/home/pages/HomePage"));
+const CataloguePage    = lazy(() => import("./features/catalogue/pages/CataloguePage"));
+const ProductPage      = lazy(() => import("./features/product/pages/ProductPage"));
+
+// Commerce
+const CartPage         = lazy(() => import("./features/cart/pages/CartPage"));
+const CheckoutPage     = lazy(() => import("./features/checkout/pages/CheckoutPage"));
+const WishlistPage     = lazy(() => import("./features/wishlist/pages/WishlistPage"));
+
+// Compte
+const UserProfilePage  = lazy(() => import("./features/profile/pages/UserProfilePage"));
+const OrdersPage       = lazy(() => import("./features/orders/pages/OrdersPage"));
+const OrderDetailPage  = lazy(() => import("./features/orders/pages/OrderDetailPage"));
+const Dashboard        = lazy(() => import("./features/dashboard/pages/Dashboard"));
+
+// Static
+const AboutPage        = lazy(() => import("./features/static/pages/AboutPage"));
+const BlogPage         = lazy(() => import("./features/static/pages/BlogPage"));
+const ContactPage      = lazy(() => import("./features/static/pages/ContactPage"));
+const ActualitesPage   = lazy(() => import("./pages/ActualitesPage"));
+const NotFoundPage     = lazy(() => import("./features/static/pages/NotFoundPage"));
+
+const PageLoader = () => (
+  <div className="flex justify-center items-center min-h-screen">
+    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-red-600"></div>
+  </div>
+);
 
 const App = () => {
   return (
     <Router>
       <div className="app">
         <main>
+          <Suspense fallback={<PageLoader />}>
           <Routes>
             {/* Routes publiques */}
             <Route path="/" element={<HomePage />} />
@@ -53,6 +70,7 @@ const App = () => {
             {/* Route 404 - Doit être en dernier */}
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
+          </Suspense>
         </main>
 
         <WhatsAppButton phoneNumber={import.meta.env.VITE_WHATSAPP_NUMBER || "2250170629746"} />
