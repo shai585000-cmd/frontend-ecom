@@ -19,6 +19,7 @@ interface Product {
   title?: string;
   description?: string;
   image?: string;
+  images?: { id: number; image: string }[];
   price: number;
   promotion?: boolean;
   promotion_price?: number;
@@ -40,6 +41,7 @@ const ProducPage = () => {
   const [reviewStats, setReviewStats] = useState<ReviewStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [showBelow, setShowBelow] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string>('');
   const belowRef = useRef<HTMLDivElement>(null);
   const fetchProductByIdStore = useProductStore((s) => s.fetchProductById);
   const fetchStats = useReviewStore((s) => s.fetchStats);
@@ -72,6 +74,10 @@ const ProducPage = () => {
         setProduct(p as Product);
         setReviewStats(stats);
         addRecentlyViewed(p as never);
+        // Set selected image from first available image
+        const productImages = (p as Product).images || [];
+        const firstImage = productImages.length > 0 ? productImages[0].image : (p as Product).image;
+        setSelectedImage(getImageUrl(firstImage));
       } catch (error) {
         logger.error("Erreur lors de la récupération du produit:", error);
         navigate("/products");
@@ -135,11 +141,33 @@ const ProducPage = () => {
           <div className="space-y-4">
             <div className="bg-white rounded-2xl p-4 shadow-lg">
               <img
-                src={getImageUrl(product.image)}
+                src={selectedImage}
                 alt={product.name || product.title}
                 className="w-full h-[400px] md:h-[500px] object-contain rounded-xl"
               />
             </div>
+            {/* Thumbnail Gallery */}
+            {product.images && product.images.length > 0 && (
+              <div className="flex gap-2 overflow-x-auto pb-2">
+                {product.images.map((img) => (
+                  <button
+                    key={img.id}
+                    onClick={() => setSelectedImage(getImageUrl(img.image))}
+                    className={`flex-shrink-0 w-20 h-20 rounded-lg border-2 overflow-hidden transition-all ${
+                      selectedImage === getImageUrl(img.image)
+                        ? 'border-red-600 ring-2 ring-red-200'
+                        : 'border-gray-200 hover:border-red-400'
+                    }`}
+                  >
+                    <img
+                      src={getImageUrl(img.image)}
+                      alt="Thumbnail"
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Colonne droite - Informations */}
