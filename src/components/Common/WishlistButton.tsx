@@ -1,30 +1,24 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Heart } from 'lucide-react';
 import PropTypes from 'prop-types';
-import useWishlistStore from '../../stores/useWishlistStore';
+import { useWishlist, useAddToWishlist, useRemoveFromWishlist } from '../../hooks/queries/useWishlistQueries';
 import type { Product } from '../../types';
 
 const WishlistButton = ({ product, size = 24, className = '' }: { product: Product; size?: number; className?: string }) => {
-  const [loading, setLoading] = useState(false);
+  const { data: wishlist = [] } = useWishlist();
+  const addMutation = useAddToWishlist();
+  const removeMutation = useRemoveFromWishlist();
 
-  const inWishlist = useWishlistStore((s) => s.isInWishlist(product.id));
-  const addToWishlist = useWishlistStore((s) => s.addToWishlist);
-  const removeFromWishlist = useWishlistStore((s) => s.removeFromWishlist);
+  const inWishlist = wishlist.some((p) => p.id === product.id);
+  const loading = addMutation.isPending || removeMutation.isPending;
 
-  const handleToggle = async (e: React.MouseEvent) => {
+  const handleToggle = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setLoading(true);
-    try {
-      if (inWishlist) {
-        await removeFromWishlist(product.id);
-      } else {
-        await addToWishlist(product);
-      }
-    } catch {
-      // Silent error handling
-    } finally {
-      setLoading(false);
+    if (inWishlist) {
+      removeMutation.mutate(product.id);
+    } else {
+      addMutation.mutate(product);
     }
   };
 

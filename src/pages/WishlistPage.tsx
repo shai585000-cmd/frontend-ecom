@@ -1,28 +1,17 @@
-import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, ShoppingCart, Trash2 } from 'lucide-react';
 import Header from '../components/Common/Hearder';
 import Footer from '../components/Common/Footer';
-import useWishlistStore from '../stores/useWishlistStore';
+import { useWishlist, useRemoveFromWishlist } from '../hooks/queries/useWishlistQueries';
 import useCartStore from '../hooks/useCartStore';
-import toast from 'react-hot-toast';
 
 const WishlistPage = () => {
-  const wishlist = useWishlistStore((s) => s.wishlist);
-  const loading = useWishlistStore((s) => s.loading);
-  const fetchWishlist = useWishlistStore((s) => s.fetchWishlist);
-  const removeFromWishlist = useWishlistStore((s) => s.removeFromWishlist);
+  const { data: wishlist = [], isLoading: loading } = useWishlist();
+  const removeFromWishlistMutation = useRemoveFromWishlist();
   const { addToCart } = useCartStore();
 
-  useEffect(() => { fetchWishlist(); }, []);
-
-  const handleRemove = async (productId: number) => {
-    try {
-      await removeFromWishlist(productId);
-      toast.success('Produit retiré des favoris');
-    } catch {
-      toast.error('Erreur lors de la suppression');
-    }
+  const handleRemove = (productId: number) => {
+    removeFromWishlistMutation.mutate(productId);
   };
 
   const handleAddToCart = (product: unknown) => {

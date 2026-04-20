@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Search, Filter, Grid, List, ChevronDown, ShoppingCart, Loader } from 'lucide-react';
-import { publicApi } from '../services/api';
+import { useProducts, usePromoProducts } from '../hooks/queries/useProductQueries';
+import { useCategories } from '../hooks/queries/useHomeQueries';
 import useCartStore from '../hooks/useCartStore';
 import Header from '../components/Common/Hearder';
 import Footer from '../components/Common/Footer';
 import WishlistButton from '../components/Common/WishlistButton';
-import logger from '../utils/logger';
 
 const PRODUCTS_PER_PAGE = 12;
 
@@ -16,9 +16,15 @@ const CataloguePage = () => {
   const promoFilter = searchParams.get('promo') === 'true';
   const searchFromUrl = searchParams.get('search') || '';
   
-  const [allProducts, setAllProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // React Query – auto-fetch, cache, refetch on focus/reconnect
+  const { data: allProductsData = [], isLoading: loadingAllProducts } = useProducts();
+  const { data: promoProductsData = [], isLoading: loadingPromo } = usePromoProducts();
+  const { data: categoriesData = [] } = useCategories();
+
+  const allProducts = promoFilter ? promoProductsData : allProductsData;
+  const categories = categoriesData;
+  const loading = promoFilter ? loadingPromo : loadingAllProducts;
+
   const [loadingMore, setLoadingMore] = useState(false);
   const [searchTerm, setSearchTerm] = useState(searchFromUrl);
   const [selectedCategory, setSelectedCategory] = useState(categoryFromUrl);
@@ -27,32 +33,9 @@ const CataloguePage = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [visibleCount, setVisibleCount] = useState(PRODUCTS_PER_PAGE);
   
-  const observerRef = useRef(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
   
   const addToCart = useCartStore((state) => state.addToCart);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Si promo=true, récupérer uniquement les produits en promotion
-        const productsEndpoint = promoFilter 
-          ? '/produits/products/promotion/' 
-          : '/produits/products/';
-        
-        const [productsRes, categoriesRes] = await Promise.all([
-          publicApi.get(productsEndpoint),
-          publicApi.get('/home/categories/')
-        ]);
-        setAllProducts(productsRes.data);
-        setCategories(categoriesRes.data);
-      } catch (error) {
-        logger.error('Erreur:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [promoFilter]);
 
   // Synchroniser selectedCategory avec l'URL
   useEffect(() => {

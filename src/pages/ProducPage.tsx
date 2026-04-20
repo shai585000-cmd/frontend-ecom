@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import useProductStore from "../stores/useProductStore";
-import useReviewStore from "../stores/useReviewStore";
+import { useProductById } from "../hooks/queries/useProductQueries";
+import { useReviewStats } from "../hooks/queries/useReviewQueries";
 import useCartStore from "../hooks/useCartStore";
 import useRecentlyViewedStore from "../store/recentlyViewedStore";
 import Header from "../components/Common/Hearder";
@@ -10,10 +10,8 @@ import ReviewSection from "../components/Reviews/ReviewSection";
 import RecentlyViewedCarousel from "../components/Produit/RecentlyViewedCarousel";
 import RecommendedProducts from "../components/Produit/RecommendedProducts";
 import { Star, Package, Phone, AlertCircle, Truck, ShoppingCart } from "lucide-react";
-import logger from "../utils/logger";
-import type { ReviewStats } from "../types";
 
-interface Product {
+interface ProductData {
   id: number;
   name?: string;
   title?: string;
@@ -37,14 +35,17 @@ interface Product {
 const ProducPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [product, setProduct] = useState<Product | null>(null);
-  const [reviewStats, setReviewStats] = useState<ReviewStats | null>(null);
-  const [loading, setLoading] = useState(true);
+  const productId = Number(id);
+
+  // React Query – auto-fetch, cache, refetch on focus
+  const { data: productRaw, isLoading: loadingProduct, isError } = useProductById(productId || undefined);
+  const { data: reviewStats } = useReviewStats(productId || undefined);
+
+  const product = productRaw as ProductData | undefined;
+
   const [showBelow, setShowBelow] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string>('');
   const belowRef = useRef<HTMLDivElement>(null);
-  const fetchProductByIdStore = useProductStore((s) => s.fetchProductById);
-  const fetchStats = useReviewStore((s) => s.fetchStats);
   const handleAddToCart = useCartStore((state) => state.addToCart);
   const addRecentlyViewed = useRecentlyViewedStore((state) => state.addRecentlyViewed);
 
@@ -63,30 +64,19 @@ const ProducPage = () => {
     return `${import.meta.env.VITE_API_URL}${image}`;
   };
 
+  // Set selected image when product loads
   useEffect(() => {
-    const load = async () => {
-      try {
-        const [p, stats] = await Promise.all([
-          fetchProductByIdStore(Number(id)),
-          fetchStats(Number(id)),
-        ]);
-        if (!p) { navigate("/products"); return; }
-        setProduct(p as Product);
-        setReviewStats(stats);
-        addRecentlyViewed(p as never);
-        // Set selected image from first available image
-        const productImages = (p as Product).images || [];
-        const firstImage = productImages.length > 0 ? productImages[0].image : (p as Product).image;
-        setSelectedImage(getImageUrl(firstImage));
-      } catch (error) {
-        logger.error("Erreur lors de la récupération du produit:", error);
-        navigate("/products");
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
-  }, [id, navigate, addRecentlyViewed, fetchProductByIdStore, fetchStats]);
+    if (!product) return;
+    const productImages = product.images || [];
+    const firstImage = productImages.length > 0 ? productImages[0].image : product.image;
+    setSelectedImage(getImageUrl(firstImage));
+    addRecentlyViewed(product as never);
+  }, [product]);
+
+  // Redirect if error
+  useEffect(() => {
+    if (isError) navigate("/products");
+  }, [isError, navigate]);
 
   // Charger les sections basses uniquement quand l'utilisateur scrolle vers elles
   useEffect(() => {
@@ -97,7 +87,9 @@ const ProducPage = () => {
     );
     observer.observe(belowRef.current);
     return () => observer.disconnect();
-  }, [loading]);
+  }, [loadingProduct]);
+
+  const loading = loadingProduct;
 
   if (loading) {
     return (

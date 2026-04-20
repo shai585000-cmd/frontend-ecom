@@ -5,8 +5,8 @@ import { useTranslation } from "react-i18next";
 import useAuthStore from "../../hooks/authStore";
 import { logoutUser } from "../../services/authService";
 import useCartStore from "../../hooks/useCartStore";
-import useWishlistStore from "../../stores/useWishlistStore";
-import useHomeStore from "../../stores/useHomeStore";
+import { useWishlist } from "../../hooks/queries/useWishlistQueries";
+import { useAnnouncements } from "../../hooks/queries/useHomeQueries";
 import LanguageSwitcher from "./LanguageSwitcher";
 import logger from '../../utils/logger';
 
@@ -25,19 +25,14 @@ const Hearder = () => {
   const user = useAuthStore((state) => state.user);
   const navigate = useNavigate();
   const cartItems = useCartStore((state) => state.getCartLength());
-  const wishlistCount = useWishlistStore((s) => s.getWishlistCount());
-  const fetchWishlist = useWishlistStore((s) => s.fetchWishlist);
-  const announcements = useHomeStore((s) => s.announcements);
-  const fetchAnnouncements = useHomeStore((s) => s.fetchAnnouncements);
+  const { data: wishlistData = [] } = useWishlist();
+  const wishlistCount = wishlistData.length;
+  const { data: announcements = [] } = useAnnouncements();
 
-  const isActive = (path) => {
+  const isActive = (path: string) => {
     if (path === '/') return location.pathname === '/';
     return location.pathname.startsWith(path);
   };
-
-  useEffect(() => { fetchAnnouncements(); }, []);
-
-  useEffect(() => { if (isAuthenticated) { fetchWishlist(); } }, [isAuthenticated]);
 
   const handleLogout = async () => {
     try {

@@ -1,22 +1,15 @@
-// ─── Store re-exports ─────────────────────────────────────────────────────────
-export { default as useProductStore } from './useProductStore';
-export { default as useHomeStore } from './useHomeStore';
-export { default as useWishlistStore } from './useWishlistStore';
-export { default as useReviewStore } from './useReviewStore';
+// ─── Store re-exports (Zustand kept for UI-only state) ────────────────────────
 export { default as useAuthStore } from '../hooks/authStore';
 
 // Type re-exports
-export type { ReviewStats } from './useReviewStore';
 export type { AuthState } from '../hooks/authStore';
 
 // ─── Cross-store subscriptions ────────────────────────────────────────────────
-// Wired here (not inside individual stores) to avoid circular imports.
-// Rule: when the user logs out, clear all user-specific data while keeping
-//       public caches (products, home) intact.
+// When the user logs out, clear user-specific React Query cache while keeping
+// public caches (products, home) intact.
 
 import useAuthStore from '../hooks/authStore';
-import useWishlistStore from './useWishlistStore';
-import useReviewStore from './useReviewStore';
+import { queryClient, queryKeys } from '../lib/queryClient';
 
 let _prevAuth = useAuthStore.getState().isAuthenticated;
 
@@ -25,7 +18,10 @@ useAuthStore.subscribe((state) => {
   _prevAuth = state.isAuthenticated;
 
   if (justLoggedOut) {
-    useWishlistStore.getState().clearWishlist();
-    useReviewStore.getState().clearUserData();
+    // Clear user-specific queries from React Query cache
+    queryClient.removeQueries({ queryKey: queryKeys.wishlist.all });
+    queryClient.removeQueries({ queryKey: queryKeys.reviews.mine() });
+    queryClient.removeQueries({ queryKey: queryKeys.orders.all });
+    queryClient.removeQueries({ queryKey: queryKeys.user.all });
   }
 });

@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Package, ChevronRight, Clock, CheckCircle, Truck, XCircle, RefreshCw, PackageCheck, Loader2, Star } from 'lucide-react';
-import { getOrders, cancelOrder } from '../services/orderService';
-import { getMyReviews } from '../services/reviewService';
+import { useOrders, useCancelOrder } from '../hooks/queries/useOrderQueries';
+import { useMyReviews } from '../hooks/queries/useReviewQueries';
 import useAuthStore from '../hooks/authStore';
 import Header from '../components/Common/Hearder';
 import toast from 'react-hot-toast';
@@ -33,52 +33,36 @@ interface Order {
 
 const OrdersPage = () => {
   const navigate = useNavigate();
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [cancellingId, setCancellingId] = useState<number | null>(null);
-  const [reviewedProductIds, setReviewedProductIds] = useState<Set<number>>(new Set());
+  const [refreshing, setRefreshing] = useState(false);
 
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+
+  // React Query – auto-fetch, cached, refetch on focus/reconnect
+  const { data: orders = [], isLoading: loading, error: ordersError, refetch: refetchOrders } = useOrders();
+  const { data: myReviews = [] } = useMyReviews(isAuthenticated);
+  const cancelOrderMutation = useCancelOrder();
+
+  const error = ordersError ? 'Impossible de charger vos commandes' : null;
+
+  const reviewedProductIds = new Set<number>(
+    (myReviews as Array<{ product?: { id?: number } | number }>)
+      .map((r) => typeof r.product === 'object' ? r.product?.id : r.product)
+      .filter(Boolean) as number[]
+  );
 
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/login', { state: { from: '/orders' } });
-      return;
     }
-    fetchOrders();
   }, [isAuthenticated, navigate]);
 
   const fetchOrders = async (isRefresh = false) => {
-    try {
-      if (isRefresh) {
-        setRefreshing(true);
-      } else {
-        setLoading(true);
-      }
-      const [data, myReviews] = await Promise.all([
-        getOrders(),
-        getMyReviews().catch(() => [])
-      ]);
-      setOrders(data);
-      const ids = new Set<number>(
-        myReviews
-          .map((r: { product?: { id?: number } | number }) =>
-            typeof r.product === 'object' ? r.product?.id : r.product
-          )
-          .filter(Boolean) as number[]
-      );
-      setReviewedProductIds(ids);
-      if (isRefresh) {
-        toast.success('Commandes actualisees');
-      }
-    } catch (err) {
-      logger.error('Erreur lors du chargement des commandes:', err);
-      setError('Impossible de charger vos commandes');
-    } finally {
-      setLoading(false);
+    if (isRefresh) {
+      setRefreshing(true);
+      await refetchOrders();
       setRefreshing(false);
+      toast.success('Commandes actualisees');
     }
   };
 
@@ -161,9 +145,7 @@ const OrdersPage = () => {
 
     try {
       setCancellingId(orderId);
-      await cancelOrder(orderId);
-      // Rafraîchir la liste
-      fetchOrders();
+      await cancelOrderMutation.mutateAsync(orderId);
     } catch (err) {
       const e = err as { response?: { data?: { error?: string } } };
       logger.error('Erreur lors de l\'annulation:', err);

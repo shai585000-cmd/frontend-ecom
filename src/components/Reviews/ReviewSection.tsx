@@ -2,13 +2,12 @@ import { useState, useEffect } from 'react';
 import { Star, User, CheckCircle, Send } from 'lucide-react';
 import { canReview } from '../../services/reviewService';
 import useAuthStore from '../../hooks/authStore';
-import useReviewStore from '../../stores/useReviewStore';
+import { useProductReviews, useReviewStats, useCreateReview } from '../../hooks/queries/useReviewQueries';
 import logger from '../../utils/logger';
 
 const ReviewSection = ({ productId }: { productId: number }) => {
   const [canUserReview, setCanUserReview] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   
@@ -20,42 +19,36 @@ const ReviewSection = ({ productId }: { productId: number }) => {
 
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
-  const reviewsData = useReviewStore((s) => s.reviewsByProduct[productId]?.data);
-  const statsData = useReviewStore((s) => s.statsByProduct[productId]?.data);
-  const loading = useReviewStore((s) => s.loadingReviews[productId] === true);
-  const reviews = reviewsData ?? [];
-  const stats = statsData ?? null;
-  const fetchReviews = useReviewStore((s) => s.fetchReviews);
-  const fetchStoreStats = useReviewStore((s) => s.fetchStats);
-  const storeCreateReview = useReviewStore((s) => s.createReview);
+  // React Query – auto-fetch, cache, refetch on focus/reconnect
+  const { data: reviews = [], isLoading: loading } = useProductReviews(productId);
+  const { data: stats } = useReviewStats(productId);
+  const createReviewMutation = useCreateReview(productId);
 
   useEffect(() => {
-    const load = async () => {
-      try {
-        await Promise.all([fetchReviews(productId), fetchStoreStats(productId)]);
-        if (isAuthenticated) {
+    const checkCanReview = async () => {
+      if (isAuthenticated) {
+        try {
           const canReviewData = await canReview(productId);
           setCanUserReview(canReviewData.can_review);
+        } catch (err) {
+          logger.error('Erreur:', err);
         }
-      } catch (err) {
-        logger.error('Erreur:', err);
       }
     };
-    load();
+    checkCanReview();
   }, [productId, isAuthenticated]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.comment.trim()) {
       setError('Le commentaire est requis');
       return;
     }
 
-    setSubmitting(true);
     setError(null);
 
     try {
-      await storeCreateReview(productId, {
+      await createReviewMutation.mutateAsync({
         rating: formData.rating,
         title: formData.title,
         comment: formData.comment,
@@ -66,8 +59,6 @@ const ReviewSection = ({ productId }: { productId: number }) => {
     } catch (err: unknown) {
       const e = err as { response?: { data?: { error?: string } } };
       setError(e.response?.data?.error || 'Erreur lors de la soumission');
-    } finally {
-      setSubmitting(false);
     }
   };
 
@@ -210,10 +201,10 @@ const ReviewSection = ({ productId }: { productId: number }) => {
             </button>
             <button
               type="submit"
-              disabled={submitting}
+              disabled={createReviewMutation.isPending}
               className="flex-1 sm:flex-none px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50 flex items-center justify-center gap-2"
             >
-              {submitting ? 'Envoi...' : (
+              {createReviewMutation.isPending ? 'Envoi...' : (
                 <>
                   <Send size={16} />
                   Publier

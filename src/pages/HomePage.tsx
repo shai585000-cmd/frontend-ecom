@@ -1,8 +1,7 @@
-import { useEffect } from "react";
 import Footer from "../components/Common/Footer";
 import Hearder from "../components/Common/Hearder";
-import useProductStore from "../stores/useProductStore";
-import useHomeStore from "../stores/useHomeStore";
+import { useProducts, usePromoProducts, useTopSellingProducts } from "../hooks/queries/useProductQueries";
+import { useHomeData } from "../hooks/queries/useHomeQueries";
 import useCartStore from "../hooks/useCartStore";
 import { Link } from "react-router-dom";
 import WishlistButton from "../components/Common/WishlistButton";
@@ -48,27 +47,18 @@ const DEFAULT_SOLUTIONS = [
 const HomePage = () => {
   const { t } = useTranslation();
 
-  const products = useProductStore((s) => s.products);
-  const promoProducts = useProductStore((s) => s.promoProducts);
-  const topSellingProducts = useProductStore((s) => s.topSellingProducts);
-  const loadingList = useProductStore((s) => s.loadingList);
-  const storeError = useProductStore((s) => s.error);
-  const fetchProducts = useProductStore((s) => s.fetchProducts);
-  const fetchPromoProducts = useProductStore((s) => s.fetchPromoProducts);
-  const fetchTopSellingProducts = useProductStore((s) => s.fetchTopSellingProducts);
-
-  const categories = useHomeStore((s) => s.categories);
-  const heroData = useHomeStore((s) => s.hero);
-  const featuresData = useHomeStore((s) => s.features);
-  const solutionsData = useHomeStore((s) => s.solutions);
-  const fetchAll = useHomeStore((s) => s.fetchAll);
+  // React Query – data fetched automatically, cached, refetched on focus/reconnect
+  const { data: products = [], isLoading: loadingProducts, error: productsError } = useProducts();
+  const { data: promoProducts = [] } = usePromoProducts();
+  const { data: topSellingProducts = [] } = useTopSellingProducts(30, 10);
+  const { categories, hero: heroData, features: featuresData, solutions: solutionsData, isLoading: loadingHome } = useHomeData();
 
   const hero = heroData ?? DEFAULT_HERO;
   const features = featuresData.length > 0 ? featuresData : DEFAULT_FEATURES;
   const solutionCards = solutionsData.length > 0 ? solutionsData : DEFAULT_SOLUTIONS;
   const promotions = promoProducts;
-  const loading = loadingList && products.length === 0;
-  const error = storeError;
+  const loading = (loadingProducts || loadingHome) && products.length === 0;
+  const error = productsError ? (productsError as Error).message : null;
 
   const addToCart = useCartStore((state) => state.addToCart);
 
@@ -76,7 +66,7 @@ const HomePage = () => {
     addToCart(product as never);
   };
 
-  const getImageUrl = (image) => {
+  const getImageUrl = (image: string | undefined) => {
     if (!image) return '/placeholder.svg';
     if (image.startsWith('http://') || image.startsWith('https://')) return image;
     if (image.includes('https%3A') || image.includes('https:/') || image.includes('http%3A') || image.includes('http:/')) {
@@ -89,13 +79,6 @@ const HomePage = () => {
     }
     return `${import.meta.env.VITE_API_URL}${image}`;
   };
-
-  useEffect(() => {
-    fetchProducts();
-    fetchPromoProducts();
-    fetchTopSellingProducts(30, 10);
-    fetchAll();
-  }, []);
 
 
   if (loading) {
