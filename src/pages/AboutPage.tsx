@@ -1,39 +1,35 @@
 import Header from "../components/Common/Hearder";
 import Footer from "../components/Common/Footer";
+import { useTranslation } from "react-i18next";
 
 const AboutPage = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       <Header />
       <div className="max-w-6xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
         <h1 className="text-4xl md:text-5xl font-bold text-center text-gray-800 mb-16 relative">
-          Notre Excellence Technologique
+          {t("about.title")}
           <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-red-500 mt-4"></div>
         </h1>
 
         <section className="grid md:grid-cols-2 gap-12 mb-16">
           <div className="bg-white rounded-2xl shadow-xl p-8 transform hover:scale-105 transition-transform duration-300">
             <h2 className="text-2xl font-semibold text-red-700 mb-4">
-              Notre Mission
+              {t("about.mission.title")}
             </h2>
             <p className="text-gray-600 leading-relaxed">
-              Nous nous engageons à proposer les meilleurs smartphones et accessoires 
-              du marché, avec un service client exceptionnel et des conseils d&apos;experts 
-              pour vous accompagner dans votre expérience technologique.
+              {t("about.mission.description")}
             </p>
           </div>
 
           <div className="bg-white rounded-2xl shadow-xl p-8 transform hover:scale-105 transition-transform duration-300">
             <h2 className="text-2xl font-semibold text-red-700 mb-4">
-              Nos Valeurs
+              {t("about.values.title")}
             </h2>
             <ul className="space-y-3">
-              {[
-                "Innovation et qualité",
-                "Satisfaction client garantie",
-                "Prix compétitifs",
-                "Service après-vente réactif",
-              ].map((value, index) => (
+              {t("about.values.items", { returnObjects: true })?.map((value: string, index: number) => (
                 <li key={index} className="flex items-center text-gray-600">
                   <svg
                     className="w-5 h-5 text-red-500 mr-2"
@@ -55,23 +51,20 @@ const AboutPage = () => {
 
         <section className="bg-white rounded-2xl shadow-xl p-8 mb-16">
           <h2 className="text-2xl font-semibold text-red-700 mb-4">
-            Notre Expertise
+            {t("about.expertise.title")}
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
             <p className="text-gray-600 leading-relaxed">
-              Notre équipe de spécialistes suit en permanence les dernières 
-              tendances technologiques pour vous offrir les produits les plus 
-              innovants et performants du marché, avec des conseils personnalisés.
+              {t("about.expertise.description")}
             </p>
             <div className="bg-red-50 rounded-lg p-6">
               <h3 className="text-lg font-medium text-red-700 mb-2">
-                Nos Services Premium
+                {t("about.expertise.servicesTitle")}
               </h3>
               <ul className="list-disc list-inside text-gray-600 space-y-2">
-                <li>Protection d&apos;écran offerte à l&apos;achat</li>
-                <li>Garantie étendue disponible</li>
-                <li>Configuration personnalisée de votre appareil</li>
-                <li>Programme de fidélité avantageux</li>
+                {t("about.expertise.services", { returnObjects: true })?.map((service: string, index: number) => (
+                  <li key={index}>{service}</li>
+                ))}
               </ul>
             </div>
           </div>
@@ -79,7 +72,7 @@ const AboutPage = () => {
 
         <div className="text-center">
           <button className="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-8 rounded-full transition-colors duration-300 shadow-lg hover:shadow-xl">
-            Contactez-nous
+            {t("about.contactUs")}
           </button>
         </div>
       </div>

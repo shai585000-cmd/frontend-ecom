@@ -44,6 +44,34 @@
     "support": "Support 24/7",
     "supportDesc": "À votre écoute"
   },
+  "about": {
+    "title": "Notre Excellence Technologique",
+    "mission": {
+      "title": "Notre Mission",
+      "description": "Nous nous engageons à proposer les meilleurs smartphones et accessoires du marché, avec un service client exceptionnel et des conseils d'experts pour vous accompagner dans votre expérience technologique."
+    },
+    "values": {
+      "title": "Nos Valeurs",
+      "items": [
+        "Innovation et qualité",
+        "Satisfaction client garantie",
+        "Prix compétitifs",
+        "Service après-vente réactif"
+      ]
+    },
+    "expertise": {
+      "title": "Notre Expertise",
+      "description": "Notre équipe de spécialistes suit en permanence les dernières tendances technologiques pour vous offrir les produits les plus innovants et performants du marché, avec des conseils personnalisés.",
+      "servicesTitle": "Nos Services Premium",
+      "services": [
+        "Protection d'écran offerte à l'achat",
+        "Garantie étendue disponible",
+        "Configuration personnalisée de votre appareil",
+        "Programme de fidélité avantageux"
+      ]
+    },
+    "contactUs": "Contactez-nous"
+  },
   "home": {
     "newsletter": {
       "title": "Abonnez-vous à notre newsletter",
