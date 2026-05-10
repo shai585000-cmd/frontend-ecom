@@ -55,7 +55,7 @@ const Hearder = () => {
   const productCategories = [
     { name: t('nav.allProducts'), path: "/produit", icon: null },
     { name: t('nav.smartphones'), path: "/produit?category=1", icon: <Smartphone size={16} className="text-red-500" /> },
-    { name: t('nav.computers'), path: "/produit?category=7", icon: <Monitor size={16} className="text-red-500" /> },
+    { name: t('nav.computers'), path: "/produit?category=5", icon: <Monitor size={16} className="text-red-500" /> },
     { name: t('nav.accessories'), path: "/produit?category=2", icon: <Headphones size={16} className="text-red-500" /> },
     { name: t('nav.promotions'), path: "/produit?promo=true", icon: <Flame size={16} className="text-red-500" /> },
   ];

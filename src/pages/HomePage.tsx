@@ -39,8 +39,8 @@ const DEFAULT_FEATURES = [
 
 const DEFAULT_SOLUTIONS = [
   { id: 1, title: "Smartphones Premium", description: "Les derniers modèles iPhone & Samsung", icon: "smartphone", link: "/produit?category=1", bg_gradient: "from-gray-800 to-gray-900" },
-  { id: 2, title: "Accessoires Tech", description: "Coques, chargeurs, écouteurs...", icon: "headphones", link: "/produit?category=3", bg_gradient: "from-gray-700 to-gray-800" },
-  { id: 3, title: "Ordinateurs", description: "Laptops et PC performants", icon: "monitor", link: "/produit?category=2", bg_gradient: "from-gray-600 to-gray-700" },
+  { id: 2, title: "Accessoires Tech", description: "Coques, chargeurs, écouteurs...", icon: "headphones", link: "/produit?category=2", bg_gradient: "from-gray-700 to-gray-800" },
+  { id: 3, title: "Ordinateurs", description: "Laptops et PC performants", icon: "monitor", link: "/produit?category=5", bg_gradient: "from-gray-600 to-gray-700" },
   { id: 4, title: "Promotions", description: "Jusqu'à -50% sur une sélection", icon: "flame", link: "/produit?promo=true", bg_gradient: "from-red-500 to-red-600" },
 ];
 
