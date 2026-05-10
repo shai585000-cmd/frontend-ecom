@@ -12,14 +12,11 @@ const Dashboard = () => {
   const [error, setError] = useState(null);
   const { id } = useParams();
   const { user } = useAuthStore();
-  logger.log(user.nom_cli);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await publicApi.get(`users/dashboard/${id}`);
-
-        logger.log(res.data);
         setData(res.data);
       } catch (error) {
         setError(error.message);

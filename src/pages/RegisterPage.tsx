@@ -126,10 +126,7 @@ const RegisterPage = () => {
     };
 
     try {
-      logger.log("Données du formulaire envoyées:", userData);
-
       const response = await publicApi.post("/users/signup/", userData);
-      logger.log("Réponse de l'API :", response.data);
 
       if (response.data) {
         navigate("/login");

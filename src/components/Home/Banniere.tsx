@@ -10,7 +10,6 @@ const Banniere = () => {
     const fetchBanniere = async () => {
       try {
         const response = await publicApi.get("/home/banner");
-        logger.log("Bannières reçues:", response.data);
         setBanniere(response.data);
       } catch (error) {
         logger.error("Erreur lors de la récupération de la bannière :", error);
