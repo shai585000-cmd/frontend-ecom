@@ -1,7 +1,7 @@
 import axios from 'axios';
 import logger from '../utils/logger';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000';
 
 // Intervalle de ping en millisecondes (10 minutes = 600000ms)
 // Render met en veille après 15 minutes d'inactivité, donc on ping toutes les 10 minutes pour plus de sécurité

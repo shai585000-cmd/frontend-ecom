@@ -2,7 +2,7 @@ import axios from 'axios';
 import useAuthStore from '../auth/authStore';
 import logger from '../utils/logger';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000';
 
 // Cache mémoire pour les requêtes GET publiques
 const TTL_MS = 5 * 60 * 1000; // 5 minutes
