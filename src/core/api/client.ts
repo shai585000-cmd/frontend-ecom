@@ -17,7 +17,7 @@ export function clearApiCache(urlPattern?: string) {
 
 const apInstance = axios.create({
     baseURL: `${API_URL}/api`,
-    timeout: 10000,
+    timeout: 15000,
     withCredentials: true,
     headers: {
         'Content-Type': 'application/json',
@@ -27,7 +27,7 @@ const apInstance = axios.create({
 
 export const publicApi = axios.create({
     baseURL: `${API_URL}/api`,
-    timeout: 10000,
+    timeout: 15000,
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
